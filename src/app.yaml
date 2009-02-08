@@ -6,6 +6,12 @@ api_version: 1
 default_expiration: "3d"
 
 handlers:
+
+# backup/restore data handler
+- url: /remote-admin
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+
 # css files handler
 - url: /css/(.*\.css)
   static_files: client/css/\1

@@ -5,8 +5,18 @@ from libs.models.article import Article
 from google.appengine.api import db
 
 
-class ArticleAdder(webapp.RequestHandler):
+class ArticleHandler(webapp.RequestHandler):
     """ Adapts article and stores it to data storage. """
+
+    def get(self):
+        command = self.request.get('cmd')
+        if not cmd:
+            
+        article = db.get(key)
+
+        self.response.headers['Content-Type'] = 'text/xml'
+        return self.response.out.write(self.__getArticleXML())
+
 
     def post(self):
         """ Extracts article from DataStore and retrieves it
@@ -20,22 +30,14 @@ class ArticleAdder(webapp.RequestHandler):
         return self.response.out.write(self.__getKeyXML());
 
 
-
-class ArticleGetter(webapp.RequestHandler):
-    """ Retrieves approptiate article by its key. """
-
-    def get(self):
-        key = self.request.get('id')
-        article = db.get(key)
-
-        self.response.headers['Content-Type'] = 'text/xml'
-        return self.response.out.write(self.__getArticleXML())
+    def _parse_request(self):
+        """ Extracts request params and validate them. """
+        self._request['cmd'] = self.request.get('cmd')
+        
 
 
 application = webapp.WSGIApplication(
-    [('/add', AddArticle),
-     ('/get', GetArticle)],
-    debug = True)
+    [('.*', ArticleHandler)], debug = True)
         
         
 def main():
