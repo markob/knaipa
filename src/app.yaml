@@ -1,11 +1,12 @@
 application: knaipa-ua
-version: 1
+version: 2
 runtime: python
-api_version: 2
+api_version: 1
 
 handlers:
 - url: /stylesheets
   static_dir: stylesheets
   
 - url: /.*
-  script: knaipa.py
+  #script: knaipa.py - this handler is banned up to service start
+  script: coming-soon.py
