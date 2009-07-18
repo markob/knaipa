@@ -1,3 +1,5 @@
+import logging
+
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -12,6 +14,7 @@ def loginRequired(func):
         user = users.get_current_user()
         
         if not user:
+            logging.debug('Anonymous user tried to get access.')
             self.redirect(users.create_login_url(self.request.uri))
         else:
             func(self, *args, **kw)
