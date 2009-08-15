@@ -24,10 +24,12 @@
 			<hr/>
 			<div>
 			{% if greeting.author %}
-				<b><i>{{ greeting.author.nickname }}</i></b> wrote:
+				<b><i>{{ greeting.author.nickname }}</i></b>
 			{% else %}
-				An anonymous person wrote:
+				An anonymous person
 			{% endif %}
+			wrote at <i>{{ greeting.date.hour }}:{{ greeting.date.minute }}
+			{{ greeting.date.day }}.{{ greeting.date.month }}.{{ greeting.date.year }}</i>:
 			<blockquote><i>{{ greeting.content|escape }}</i></blockquote>
 			</div>
 			{% if greeting.editTextLink and greeting.deleteTextLink %}
