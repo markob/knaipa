@@ -8,19 +8,6 @@ from google.appengine.ext import db
 import os
 from google.appengine.ext.webapp import template
 
-# Login decorator
-def loginRequired(func):
-    def wrapper(self, *args, **kw):
-        user = users.get_current_user()
-        
-        if not user:
-            logging.debug('Anonymous user tried to get access.')
-            self.redirect(users.create_login_url(self.request.uri))
-        else:
-            func(self, *args, **kw)
-    
-    return wrapper
-
 
 class Greeting(db.Model):
     author = db.UserProperty()
@@ -29,7 +16,6 @@ class Greeting(db.Model):
 
     
 class MainPage(webapp.RequestHandler):
-    @loginRequired
     def get(self):
         greetingsQuery = Greeting.all().order('-date')
         greetings = greetingsQuery.fetch(16)
