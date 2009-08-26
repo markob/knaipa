@@ -4,9 +4,30 @@ runtime: python
 api_version: 1
 
 handlers:
+
+# static handlers such as stylesheets or images
+
 - url: /stylesheets
   static_dir: stylesheets
   
-- url: /.*
+# application handlers
+
+- url: /search/.*
+  script: apps/search/search.py
+  
+- url: /info/.*
+  script: apps/info/info.py
+  
+- url: /notes/.*
+  script: apps/notes/notes.py
+
+# default page handler
+  
+- url: /
   script: knaipa.py
+  
+# handler of requests with nonexisting uri
+
+- url: /.*
+  script: /apps/404/404.py
   
