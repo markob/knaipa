@@ -11,10 +11,16 @@ from libs.utils import genLazyClassLoaderProxy as getHandler
 from google.appengine.ext.webapp import WSGIApplication
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-# application handlers import
+from google.appengine.ext import webapp
 
-# application instance with main routing table
-routingTable = [('/search[/](.*)', getHandler('SearchProcessor', 'apps.search')),
+class TestPage(webapp.RequestHandler):
+    def get(self):
+        
+        self.response.out.write("Test handler was done.")
+
+# application main routing table
+routingTable = [('/search(?:/(.*))?', getHandler('SearchProcessor', 'apps.search')),
+                ('/test/?', TestPage),
                 ('.*', getHandler('Page404', 'apps.404'))]
 application = WSGIApplication(routingTable, debug=True)
 
