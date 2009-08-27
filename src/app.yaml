@@ -7,8 +7,8 @@ handlers:
 
 # static handlers such as stylesheets or images
 
-- url: /stylesheets
-  static_dir: stylesheets
+##- url: /stylesheets
+##  static_dir: stylesheets
   
 # main router script
   
