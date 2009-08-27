@@ -10,24 +10,8 @@ handlers:
 - url: /stylesheets
   static_dir: stylesheets
   
-# application handlers
-
-- url: /search/.*
-  script: apps/search/search.py
+# main router script
   
-- url: /info/.*
-  script: apps/info/info.py
-  
-- url: /notes/.*
-  script: apps/notes/notes.py
-
-# default page handler
-  
-- url: /
-  script: knaipa.py
-  
-# handler of requests with nonexisting uri
-
 - url: /.*
-  script: /apps/404/404.py
+  script: approuter.py
   
