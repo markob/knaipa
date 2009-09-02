@@ -17,23 +17,3 @@ def loginRequired(func):
             func(self, *args, **kw)
     
     return wrapper
-
-
-def genLazyClassLoaderProxy(clsName, modName):
-    
-    class LazyClassLoaderProxy(object):
-
-        __classProperties = (clsName, modName)
-
-        @staticmethod
-        def __getClassObject():
-            (clsName, modName) = LazyClassLoaderProxy.__classProperties
-            
-            _tmp = __import__(modName, globals(), locals(), [clsName], -1)
-            return _tmp.__dict__[clsName]
-
-        def __new__(cls, *args, **kwds):
-            cls = LazyClassLoaderProxy.__getClassObject()
-            return object.__new__(cls, *args, **kwds)
-
-    return LazyClassLoaderProxy
