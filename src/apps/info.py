@@ -7,9 +7,11 @@ class GetFullInfo(webapp.RequestHandler):
     """ This handler is responsible for insertion of a new item to the store. """
     
     def get(self):
-        knaipa = Knaipa(title='Жратва')
-        modelName = knaipa._class[0]
-        return self.response.out.write("Model name is '%s'." % modelName)
+        knaipa = Knaipa(name='Cafetery', phone='380634363924')
+        
+        self.response.headers["Content-Type"] = "text/xml"
+        
+        return self.response.out.write(knaipa.getXML())
     
 
 application = webapp.WSGIApplication([('.*', GetFullInfo)], debug=True)
