@@ -7,7 +7,7 @@ class GetFullInfo(webapp.RequestHandler):
     """ This handler is responsible for insertion of a new item to the store. """
     
     def get(self):
-        knaipa = Knaipa(name='Cafetery', phone='380634363924')
+        knaipa = Knaipa(name='Mess', phone='380634363925')
         
         self.response.headers["Content-Type"] = "text/xml"
         
