@@ -4,8 +4,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 class NotFoundPage(webapp.RequestHandler):
-    def get(self):
-        
+    def get(self):        
         self.response.out.write("Requested resource was not found.")
 
 
@@ -17,3 +16,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
