@@ -4,27 +4,9 @@ runtime: python
 api_version: 1
 
 handlers:
-
-# static handlers such as stylesheets or images
-
-##- url: /stylesheets
-##  static_dir: stylesheets
+- url: /stylesheets
+  static_dir: stylesheets
   
-# applications routing
-
-# get full info about certain item  
-- url: /info(/.*)?
-  script: apps/info.py
-  
-# add/edit info about certain item
-- url: /note(/.*)?
-  script: apps/note.py
- 
-# get brief info about items with appropriate properties
-- url: /search(/.*)?
-  script: apps/search.py
-  
-# get "404 - Not Found" error page in all other cases 
 - url: /.*
-  script: apps/404.py
+  script: knaipa.py
   

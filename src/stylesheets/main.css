@@ -1,0 +1,15 @@
+body {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 12pt;
+	background-color: #DDDDDD;
+}
+
+.text {
+	padding-left: 2px;
+	padding-top: 3px;
+	padding-bottom: 2px;
+}
+
+.main_table {
+	max-width: 740px;
+}
