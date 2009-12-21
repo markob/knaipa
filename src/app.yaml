@@ -3,7 +3,18 @@ version: 3
 runtime: python
 api_version: 1
 
+default_expiration: "3d"
+
 handlers:
+# css files handler
+- url: /(.*\.css)
+  static_files: css/\1
+  upload: css/.*\.css
+
+# javascript files handler
+- url: /(.*\.js)
+  static_files: js/\1
+  upload: js/.*\.js
   
 - url: /.*
   script: knaipa.py
