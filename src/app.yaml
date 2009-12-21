@@ -6,16 +6,26 @@ api_version: 1
 default_expiration: "3d"
 
 handlers:
+# style images handler
+- url: /css/(.*\.(png|gif))
+  static_files: css/\1
+  upload: css/.*\.(png|gif)
+
 # css files handler
-- url: /(.*\.css)
+- url: /css/(.*\.css)
   static_files: css/\1
   upload: css/.*\.css
 
 # javascript files handler
-- url: /(.*\.js)
+- url: /js/(.*\.js)
   static_files: js/\1
   upload: js/.*\.js
   
+# main application entry point
+- url: /index\.html
+  static_files: content/index.html
+  upload: content/index\.html
+
 - url: /.*
   script: knaipa.py
   
