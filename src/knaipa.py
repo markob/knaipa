@@ -20,7 +20,7 @@ def loginRequired(func):
 
 
 application = webapp.WSGIApplication(
-    [('/app', MainPage)],
+    [('/cmd/login', MainPage)],
     debug=True)
 
 def main():
