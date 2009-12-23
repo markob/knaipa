@@ -1,6 +1,6 @@
 body { height: 100%; background-color: #f9f7f4; color: #000; font: 0.75em/1.5 Arial, Helvetica, sans-serif; }
 
-#globalWrapper	{background-color: White; position: relative; margin: 0px auto; float: none; min-height: 100%; height: auto;}
+#globalWrapper	{background-color: White; position: relative; margin: 0px auto; float: none; min-height: 100%; height: auto; border:1px solid transparent;}
 
 #header	{ background:#ECB255 url(img/main-back.png) no-repeat scroll right -119px; height:195px;}
 	#header #logo { background: transparent url(img/logo.png) no-repeat left 0; height:195px; width:500px;}
@@ -9,7 +9,7 @@ body { height: 100%; background-color: #f9f7f4; color: #000; font: 0.75em/1.5 Ar
 	#header em.tr	{ right: 0;background-position: -10px 0; }
 	#header	em.bl	{ left: 0; background-position: 0 0 ;}
 	#header	em.br	{ right: 0;background-position: -10px 0;}
-#content	{ background-color: #ffffff; margin-bottom: 50px; position: relative;}
+#content	{ background-color: #ffffff; margin-bottom: 100px; position: relative;}
 
 #extraDiv1	{ left: -11px; top: 0px; height: auto; position: absolute; height: 100%; width: 11px; background: transparent url(img/horizontal-back.png) repeat scroll 0 0;}
 #extraDiv2	{ right: -11px; top: 0px; bottom: 0px; position: absolute; width: 11px; background: transparent url(img/horizontal-back.png) repeat scroll -12px 0;}
@@ -55,7 +55,7 @@ body { height: 100%; background-color: #f9f7f4; color: #000; font: 0.75em/1.5 Ar
 .img-wrapper	{ overflow: hidden; margin: 5px;}
 .img-wrapper img	{ margin:0 !important; padding: 0!important;}
 
-#footer	{ position: absolute; height: 50px; bottom: 0px;}
+#footer	{ position: absolute; height: 50px; bottom: 20px; left:20px; right:20px; background:#f0f0f0;}
 
 #textInfo { width: 570px; float: left; z-index: 2; position: relative;}
 
