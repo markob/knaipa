@@ -7,15 +7,25 @@ default_expiration: "3d"
 
 handlers:
 # css files handler
-- url: /(.*\.css)
+- url: /css/(.*\.css)
   static_files: css/\1
   upload: css/.*\.css
 
+# css files handler
+- url: /css/(.*\.(png|gif))
+  static_files: css/\1
+  upload: css/.*\.(png|gif)
+
 # javascript files handler
-- url: /(.*\.js)
+- url: /js/(.*\.js)
   static_files: js/\1
   upload: js/.*\.js
-  
+
+# main entry point - index.html
+- url: /index\.html
+  static_files: content/index.html
+  upload: content/index\.html  
+
 - url: /.*
   script: knaipa.py
   
