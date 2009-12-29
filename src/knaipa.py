@@ -6,13 +6,15 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 
-def AddLibsToPath():
+def AddPaths():
     """ Appends lib content to Python system path. """
 
     # get project root first
     projRoot = os.curdir
     # append library path to system path
-    sys.path.apend(projRoot + '/libs')
+    sys.path.append(projRoot + '/libs')
+    # append applications path to system path
+    sys.path.append(projRoot + '/apps')
 
 
 class CommandRounter(webapp.RequestHandler):
@@ -25,7 +27,7 @@ class CommandRounter(webapp.RequestHandler):
         """ Selects appropriate handler and pass request to it. """
         try:
             handler = self.__handlers[self.request.get('cmd')]
-        except:
+        except KeyError:
             handler = self.__handlers['invalid']
 
         # load appropriate handler and launch it

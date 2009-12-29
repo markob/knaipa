@@ -26,6 +26,7 @@ handlers:
   static_files: content/index.html
   upload: content/index\.html  
 
-- url: /cmd/.*
-  script: knaipa.py
+# work with articles (store, get and edit)
+- url: /article/.*
+  script: /apps/article.py
   
