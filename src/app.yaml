@@ -29,4 +29,7 @@ handlers:
 # work with articles (store, get and edit)
 - url: /article/.*
   script: /apps/article.py
-  
+
+# test app which adds required data to datastore
+- url: /test/.*
+  script: /apps/tests.py  

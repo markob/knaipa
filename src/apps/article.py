@@ -16,7 +16,8 @@ class ArticleAdder(webapp.RequestHandler):
         article.text = self.request.get('text')
         article.put()
 
-        return self.response.write
+        self.response.headers['Content-Type'] = 'text/xml'
+        return self.response.out.write(self.__getKeyXML());
 
 
 
@@ -26,12 +27,14 @@ class ArticleGetter(webapp.RequestHandler):
     def get(self):
         key = self.request.get('id')
         article = db.get(key)
-        return self.response.write()
+
+        self.response.headers['Content-Type'] = 'text/xml'
+        return self.response.out.write(self.__getArticleXML())
 
 
 application = webapp.WSGIApplication(
-    [('/add/', AddArticle),
-     ('/get/', GetArticle)],
+    [('/add', AddArticle),
+     ('/get', GetArticle)],
     debug = True)
         
         

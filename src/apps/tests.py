@@ -34,7 +34,7 @@ class AddArticleModelTest(webapp.RequestHandler):
         return self.response.out.write(msg);
 
 
-application = webapp.WSGIApplication([('.*', AddArticleModelTest)],
+application = webapp.WSGIApplication([('model', AddArticleModelTest)]
                                      debug=True)
 
 def main():
