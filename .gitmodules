@@ -1,0 +1,3 @@
+[submodule "client"]
+	path = src/client
+	url = git@github.com:neformal13/knaipa.git
