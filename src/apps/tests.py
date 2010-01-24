@@ -10,31 +10,41 @@ class AddArticleModelTest(webapp.RequestHandler):
     """ Just adds article model description. """
 
     def get(self):
-        # try to get stored object scheme for 'article'
-        query = db.Query(ObjectScheme)
+        response = """
+        <html>
+          <head>
+            <title>Add Article</title>
+          </head>
+          <body>
+            <form action=\"/article/\" method=\"post\">
+              <input type=\"hidden\" name=\"cmd\" value=\"post\" />
+              <p/>Кнайпа:
+              <input type=\"textarea\" name=\"knaipa\" />
+              <p/>Заголовок:
+              <input type=\"textarea\" name=\"title\" />
+              <p/>Опис:
+              <input type=\"textarea\" name=\"description\" />
+              <p/>Тект:
+              <input type=\"textarea\" name=\"text\" />
+              <p/>
+              <input type=\"submit\" value=\"Post\" />
+            </form>
+            <p/>
+            <form action=\"/article/\" method=\"get\">
+              <input type=\"hidden\" name=\"cmd\" value=\"get\" />
+              <p/>Id:
+              <input type=\"textarea\" name=\"id\" />
+              <p/>
+              <input type=\"submit\" value=\"Get\" />
+            </form>            
+          </body>
+        </html>
+        """
+          
+        return self.response.out.write(response)
 
-        if 0 == query.count():
-            msg = "Article object description doesn't exist."
 
-            query = ObjectScheme(name='article')
-            query.objects.append('author')
-            query.objects.append('description')
-            query.objects.append('text')
-
-            query.put()
-        else:
-            query = query.get()
-            
-            msg = "Article object type description already exists."
-            msg = "%s</p>Name: %s" % (msg, query.name)
-
-            for attr in query.objects:
-                msg = "%s</p>Attribute: %s" % (msg, attr)
-
-        return self.response.out.write(msg);
-
-
-application = webapp.WSGIApplication([('model', AddArticleModelTest)]
+application = webapp.WSGIApplication([('.*', AddArticleModelTest)],
                                      debug=True)
 
 def main():

@@ -5,10 +5,12 @@ from google.appengine.ext import db
 class Article(db.Model):
     """ Describes data model for storing articles """
 
+    # TODO: following property should be replaced by reference
+    knaipa = db.StringProperty(required=True)
+    title = db.StringProperty(required=True)
+    description = db.StringProperty(required=True)
     text = db.TextProperty(required=True)
-    # currently users functionality isn't implemented
-    # so appropriate fields is commented
     #author = db.ReferenceProperty(required=True)
-    created = db.DateTimeProperty(required=True, auto_now_add=True)
+    modified = db.DateTimeProperty(auto_now=True)
 
 
