@@ -28,9 +28,14 @@ handlers:
   upload: client/js/.*\.js
 
 # content files handler
-- url: /content/(.*\.(png|gif|xml|xsl))
+- url: /content/(.*\.(png|gif|xml))
   static_files: client/content/\1
-  upload: client/content/.*\.(png|gif|xml|xsl)
+  upload: client/content/.*\.(png|gif|xml)
+
+# xsl files handler
+- url: /xsl/(.*\.xsl)
+  static_files: client/xsl/\1
+  upload: client/xsl/.*\.xsl
 
 # user images handler
 - url: /images/.*

@@ -32,11 +32,11 @@ class ArticleHandler(webapp.RequestHandler):
             handler = self._get_cmd_handler()
             resp_data = handler(self.request)
 
-        except InvalidRequestError, err:
-            self.error(404)
+            self.response.headers['Content-Type'] = 'text/xml'
+            return self.response.out.write(resp_data)
 
-        self.response.headers['Content-Type'] = 'text/xml'
-        return self.response.out.write(resp_data)
+        except InvalidRequestError, err:
+            return self.error(404)
 
 
     def _get_cmd_handler(self):
@@ -48,6 +48,8 @@ class ArticleHandler(webapp.RequestHandler):
             return self._store_article
         elif 'get' == cmd:
             return self._read_article
+        elif 'list' == cmd:
+            return self._get_articles_list
         else:
             raise(InvalidRequestError('invalid command requested'))
 
@@ -69,12 +71,12 @@ class ArticleHandler(webapp.RequestHandler):
     def _write_article(self, request):
         """ Parses request data and store article object. """
     
-        key = request.get('id')
+        article_id = request.get('id')
         processor = ModelProcessor(Article)
         
-        if key:
+        if article_id:
             # get article from datastore
-            article = self._get_article(key)
+            article = self._get_article(article_id)
             
             #update the article
             processor.update_from_request(request, article)
@@ -85,32 +87,49 @@ class ArticleHandler(webapp.RequestHandler):
         # save article
         article.put()
             
-        return str(article.key())
+        return str(article.key().id())
 
 
     def _read_article(self, request):
         """ Retrieves requested article from datastore. """
 
-        key = request.get('id')
+        article_id = request.get('id')
 
-        if not key:
+        if not article_id:
             raise(InvalidRequestError('invalid article id requested'))
 
-        article = self._get_article(key)
+        article = self._get_article(article_id)
 
         processor = ModelProcessor(Article)
         
         return processor.gen_xml(article)
 
 
-    def _get_article(self, key):
+    def _get_article(self, id):
         """ Retrieves article with the specified key from datastore. """
         
-        article = Article.get(key)
+        article = Article.get_by_id(int(id))
         if not article:
             raise(InvalidRequestError('requested article does not exists'))
 
         return article
+
+
+    def _get_articles_list(self, request):
+        """ Retieves a list of all articles. """
+
+        xmlDoc = XMLTools.createXmlDoc('response')
+        root = xmlDoc.documentElement
+        
+        articles = Article.all()
+
+        for article in articles:
+            node = XMLTools.genStringNode(xmlDoc,
+                                          str(article.key().id()),
+                                          'id')
+            root.appendChild(node)
+
+        return xmlDoc.toxml('utf-8')
     
     
 application = webapp.WSGIApplication(

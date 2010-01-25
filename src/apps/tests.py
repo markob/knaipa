@@ -12,18 +12,6 @@ class AddArticleModelTest(webapp.RequestHandler):
     """ Just adds article model description. """
 
     def get(self):
-
-        index = self.request.url.index(self.request.path)
-        upload_url = self.request.url[0:index - 2] + '00/images/upload-url'
-        result = urlfetch.fetch(upload_url)
-
-        xmlDoc = minidom.parseString(result.content)
-
-        nodeList = xmlDoc.getElementsByTagName('upload-url')
-        upload_url = nodeList[0].firstChild.data
-
-        nodeList = xmlDoc.getElementsByTagName('enctype')
-        enctype = nodeList[0].firstChild.data
         
         response = """
         <html>
@@ -52,16 +40,9 @@ class AddArticleModelTest(webapp.RequestHandler):
               <p/>
               <input type=\"submit\" value=\"Get\" />
             </form>
-            <p/>
-            <form action=\"%s\" method=\"post\" enctype=\"%s\" />
-              <p/>Image:
-              <input type=\"file\" name=\"file\" />
-              <p/>
-              <input type=\"submit\" value=\"Upload\" />
-            </form>            
           </body>
         </html>
-        """ % (upload_url, enctype)
+        """
           
         return self.response.out.write(response)
 
