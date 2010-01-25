@@ -14,7 +14,7 @@ class AddArticleModelTest(webapp.RequestHandler):
     def get(self):
 
         index = self.request.url.index(self.request.path)
-        upload_url = self.request.url[0:index - 2] + '00/images/upload-url'
+        upload_url = self.request.url[0:index] + '/images/upload-url'
         result = urlfetch.fetch(upload_url)
 
         xmlDoc = minidom.parseString(result.content)
