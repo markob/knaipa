@@ -1,17 +1,30 @@
-# -*- coding: utf-8 -*-
-
 import logging
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
-from libs.models.object import ObjectScheme
+from google.appengine.api import urlfetch
+
+from xml.dom import minidom
 
 
 class AddArticleModelTest(webapp.RequestHandler):
     """ Just adds article model description. """
 
     def get(self):
+
+        index = self.request.url.index(self.request.path)
+        upload_url = self.request.url[0:index - 2] + '00/images/upload-url'
+        result = urlfetch.fetch(upload_url)
+
+        xmlDoc = minidom.parseString(result.content)
+
+        nodeList = xmlDoc.getElementsByTagName('upload-url')
+        upload_url = nodeList[0].firstChild.data
+
+        nodeList = xmlDoc.getElementsByTagName('enctype')
+        enctype = nodeList[0].firstChild.data
+        
         response = """
         <html>
           <head>
@@ -20,13 +33,13 @@ class AddArticleModelTest(webapp.RequestHandler):
           <body>
             <form action=\"/article/\" method=\"post\">
               <input type=\"hidden\" name=\"cmd\" value=\"post\" />
-              <p/>Кнайпа:
+              <p/>Knaipa:
               <input type=\"textarea\" name=\"knaipa\" />
-              <p/>Заголовок:
+              <p/>Title:
               <input type=\"textarea\" name=\"title\" />
-              <p/>Опис:
+              <p/>Description:
               <input type=\"textarea\" name=\"description\" />
-              <p/>Тект:
+              <p/>Text:
               <input type=\"textarea\" name=\"text\" />
               <p/>
               <input type=\"submit\" value=\"Post\" />
@@ -38,10 +51,17 @@ class AddArticleModelTest(webapp.RequestHandler):
               <input type=\"textarea\" name=\"id\" />
               <p/>
               <input type=\"submit\" value=\"Get\" />
+            </form>
+            <p/>
+            <form action=\"%s\" method=\"post\" enctype=\"%s\" />
+              <p/>Image:
+              <input type=\"file\" name=\"file\" />
+              <p/>
+              <input type=\"submit\" value=\"Upload\" />
             </form>            
           </body>
         </html>
-        """
+        """ % (upload_url, enctype)
           
         return self.response.out.write(response)
 

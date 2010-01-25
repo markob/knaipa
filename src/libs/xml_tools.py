@@ -81,3 +81,12 @@ def genTextNode(dom, text, name='text'):
     root.appendChild(node)
 
     return root
+
+
+def createXmlDoc(rootName):
+    xmlDoc = minidom.Document()
+
+    root = xmlDoc.createElement(rootName)
+    xmlDoc.appendChild(root)
+
+    return xmlDoc

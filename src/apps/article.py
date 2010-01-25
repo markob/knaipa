@@ -33,17 +33,7 @@ class ArticleHandler(webapp.RequestHandler):
             resp_data = handler(self.request)
 
         except InvalidRequestError, err:
-            xmlDoc = minidom.Document()
-
-            root = xmlDoc.createElement('response')
-            xmlDoc.appendChild(root)
-
-            node = XMLTools.genStringNode(xmlDoc,
-                                          err.message,
-                                          'error')
-            root.appendChild(node)
-            
-            resp_data = xmlDoc.toxml('utf-8')
+            self.error(404)
 
         self.response.headers['Content-Type'] = 'text/xml'
         return self.response.out.write(resp_data)
@@ -67,10 +57,8 @@ class ArticleHandler(webapp.RequestHandler):
 
         key = self._write_article(request)
 
-        xmlDoc = minidom.Document()
-
-        root = xmlDoc.createElement('response')
-        xmlDoc.appendChild(root)
+        xmlDoc = XMLTools.createXmlDoc('response')
+        root = xmlDoc.documentElement
 
         node = XMLTools.genStringNode(xmlDoc, key, 'id')
         root.appendChild(node)

@@ -32,6 +32,10 @@ handlers:
   static_files: client/content/\1
   upload: client/content/.*\.(png|gif|xml|xsl)
 
+# user images handler
+- url: /images/.*
+  script: apps/images.py
+
 # main entry point - index.html
 - url: /index\.html
   static_files: client/index.html
