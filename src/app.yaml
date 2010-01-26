@@ -47,7 +47,7 @@ handlers:
   upload: client/index\.html  
 
 # work with articles (store, get and edit)
-- url: /article/.*
+- url: /article.*
   script: apps/article.py
 
 # test app which adds required data to datastore

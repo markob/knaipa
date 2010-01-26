@@ -133,7 +133,7 @@ class ArticleHandler(webapp.RequestHandler):
     
     
 application = webapp.WSGIApplication(
-    [('.*', ArticleHandler)], debug = True)
+    [('/article', ArticleHandler)], debug = True)
         
         
 def main():
