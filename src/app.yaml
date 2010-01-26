@@ -1,9 +1,9 @@
 application: knaipa-ua
-version: 3
+version: dev-4
 runtime: python
 api_version: 1
 
-default_expiration: "3d"
+default_expiration: "999d"
 
 handlers:
 
