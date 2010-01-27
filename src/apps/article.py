@@ -2,12 +2,18 @@ import logging
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
+from google.appengine.ext.webapp import template
 
 from libs.models.article import Article
 from libs.utils import ModelProcessor, InvalidRequestError
 
 from xml.dom import minidom
 from libs import xml_tools as XMLTools
+
+import os
+
+
+templates_path = os.path.join(os.path.dirname(__file__), '../templates')
 
 
 class ArticleHandler(webapp.RequestHandler):
@@ -29,11 +35,14 @@ class ArticleHandler(webapp.RequestHandler):
         """ Processes input request and creates appropriate reqponse. """
 
         try:
-            handler = self._get_cmd_handler()
+            handler, template_name = self._get_cmd_handler()
             resp_data = handler(self.request)
 
+            template_path = os.path.join(templates_path, template_name)
+            
             self.response.headers['Content-Type'] = 'text/xml'
-            return self.response.out.write(resp_data)
+            return self.response.out.write(
+                template.render(template_path, resp_data))
 
         except InvalidRequestError, err:
             return self.error(404)
@@ -45,27 +54,13 @@ class ArticleHandler(webapp.RequestHandler):
         cmd = self.request.get('cmd')
         
         if 'post' == cmd:
-            return self._store_article
+            return (self._write_article, 'article-post.xml')
         elif 'get' == cmd:
-            return self._read_article
+            return (self._read_article, 'article-get.xml')
         elif 'list' == cmd:
-            return self._get_articles_list
+            return (self._get_articles_list, 'articles-list.xml')
         else:
             raise(InvalidRequestError('invalid command requested'))
-
-
-    def _store_article(self, request):
-        """ Stores an article from request and retieves it id. """
-
-        key = self._write_article(request)
-
-        xmlDoc = XMLTools.createXmlDoc('response')
-        root = xmlDoc.documentElement
-
-        node = XMLTools.genStringNode(xmlDoc, key, 'id')
-        root.appendChild(node)
-        
-        return xmlDoc.toxml('utf-8');
 
 
     def _write_article(self, request):
@@ -87,7 +82,7 @@ class ArticleHandler(webapp.RequestHandler):
         # save article
         article.put()
             
-        return str(article.key().id())
+        return {'article_id': article.key().id()}
 
 
     def _read_article(self, request):
@@ -99,10 +94,9 @@ class ArticleHandler(webapp.RequestHandler):
             raise(InvalidRequestError('invalid article id requested'))
 
         article = self._get_article(article_id)
-
-        processor = ModelProcessor(Article)
         
-        return processor.gen_xml(article)
+        return {'article':
+                ModelProcessor(Article).gen_model_data(article)}
 
 
     def _get_article(self, id):
@@ -118,18 +112,15 @@ class ArticleHandler(webapp.RequestHandler):
     def _get_articles_list(self, request):
         """ Retieves a list of all articles. """
 
-        xmlDoc = XMLTools.createXmlDoc('response')
-        root = xmlDoc.documentElement
-        
         articles = Article.all()
+        articles_list = []
 
+        model_processor = ModelProcessor(Article)
+        
         for article in articles:
-            node = XMLTools.genStringNode(xmlDoc,
-                                          str(article.key().id()),
-                                          'id')
-            root.appendChild(node)
-
-        return xmlDoc.toxml('utf-8')
+            articles_list.append(model_processor.gen_model_data(article))
+                    
+        return {'articles_list': articles_list}
     
     
 application = webapp.WSGIApplication(

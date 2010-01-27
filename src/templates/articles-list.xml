@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+{% for article in articles_list %}
+  <article>
+    <id>{{ article.id }}</id>
+    <title>{{ article.title }}</title>
+    <modified>{{ article.modified }}</modified>
+    <description>{{ article.description }}</description>
+  </article>
+{% endfor %}
+</response>

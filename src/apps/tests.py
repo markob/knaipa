@@ -19,7 +19,7 @@ class AddArticleModelTest(webapp.RequestHandler):
             <title>Add Article</title>
           </head>
           <body>
-            <form action=\"/article/\" method=\"post\">
+            <form action=\"/article\" method=\"post\">
               <input type=\"hidden\" name=\"cmd\" value=\"post\" />
               <p/>Knaipa:
               <input type=\"textarea\" name=\"knaipa\" />
@@ -33,7 +33,7 @@ class AddArticleModelTest(webapp.RequestHandler):
               <input type=\"submit\" value=\"Post\" />
             </form>
             <p/>
-            <form action=\"/article/\" method=\"get\">
+            <form action=\"/article\" method=\"get\">
               <input type=\"hidden\" name=\"cmd\" value=\"get\" />
               <p/>Id:
               <input type=\"textarea\" name=\"id\" />

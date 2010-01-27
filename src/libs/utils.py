@@ -57,24 +57,15 @@ class ModelProcessor(object):
             raise(InvalidRequestError, 'empty request retrieved')
 
 
-    def gen_xml(self, model_instance):
-        xmlDoc = minidom.Document()
-
-        root = xmlDoc.createElement(self._cls_model.kind().lower())
-        xmlDoc.appendChild(root)
+    def gen_model_data(self, model_instance):
 
         properties = self._cls_model.properties()
-
+        model_data = {'id': model_instance.key().id()}
+        
         for prop_name in properties:
-            prop_type = properties[prop_name]
-            
-            node = self._gen_xml_for_prop(xmlDoc,
-                                          prop_name,
-                                          getattr(model_instance, prop_name),
-                                          prop_type.data_type)
-            root.appendChild(node)
+            model_data[prop_name] = getattr(model_instance, prop_name)
 
-        return xmlDoc.toxml('utf8')
+        return model_data
 
 
     def _parse_request(self, request, allParamsRequired):
