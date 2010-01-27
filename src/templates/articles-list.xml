@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+{% for article in articles_list %}
+	<item id="{{ article.id }}">
+		<title>{{ article.title }}</title>
+		<modified>{{ article.modified }}</modified>
+		<description><p>{{ article.description }}</p></description>
+		<cut>читати далі</cut>
+		<marker ia="49.857131626112476" ja="24.020319380737302" />
+	</item>
+{% endfor %}
+</content>

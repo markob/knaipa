@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+	<article id="{{ article.id }}">
+		<title>{{ article.title }}</title>
+		<modified> {{ article.modified }} </modified>
+		<description><p>{{ article.description }}</p></description>
+		<text><p>{{ article.text }}</p></text>
+		<marker ia="49.835657" ja="24.048901" />
+	</article>
+	<comments>
+		<item autor="UAnik" value="" id="00001" for='acticle'>Вкладення 0.001
+			<item autor="Пищ" value="" id="00001" for='acticle'> Вкладення 1.001
+				<item autor="Опачгі">Вкладення 2.001</item>
+				<item autor="UAnik" value="" id="00001" for='acticle'>
+					Вкладення 2.002
+					<item autor="Гриць" value="" id="00001" for='acticle'>Вкладення 3.001</item>
+				</item>
+				<item autor="UAnik">
+					Приміщення ресторану вміщає до 300 осіб і просто ідеально пристосовано для як для застілля так і
+					длязабави. Для Вас великий танц-майданчик, енергійні музики з величезним репертуаром як української
+					так і зарубіжної музики, просторий зал, світлове шоу, багато живих рослин, штучний водоспад із
+					струмочком.
+				</item>
+			</item>
+			<item autor="UAnik">Вкладення 1.002</item>
+			<item autor="UAnik">Вкладення 1.003</item>
+		</item>
+		<item autor="UAnik" value="" id="00001" for='acticle'>
+			Сходіть, зкуштуйте макарони з мжвячнє %))  oлололо!!11
+		</item>
+		<item autor="UAnik" value="" id="00001" for='acticle'>
+			Нижче ідуть п’ять абзаців тексу.. невидимим шрифтом:
+		</item>
+	</comments>
+</content>
