@@ -1,5 +1,5 @@
 application: knaipa-ua
-version: dev-5
+version: dev-6
 runtime: python
 api_version: 1
 
@@ -7,10 +7,14 @@ default_expiration: "999d"
 
 handlers:
 
-# backup/restore data handler
-- url: /remote-admin
-  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
-  login: admin
+####################################################################
+# Static File Handlers Section
+####################################################################
+
+# entry points to the service - *.html
+- url: /(.*\.html)
+  static_files: client/\1
+  upload: client/.*\.html  
 
 # css files handler
 - url: /css/(.*\.css)
@@ -37,14 +41,9 @@ handlers:
   static_files: client/xsl/\1
   upload: client/xsl/.*\.xsl
 
-# user images handler
-- url: /images/.*
-  script: apps/images.py
-
-# entry points to the service - *.html
-- url: /(.*\.html)
-  static_files: client/\1
-  upload: client/.*\.html  
+####################################################################
+# Script Handlers Section
+####################################################################
 
 # work with articles (store, get and edit)
 - url: /article.*
@@ -53,3 +52,8 @@ handlers:
 # test app which adds required data to datastore
 - url: /test/.*
   script: apps/tests.py
+
+# backup/restore data handler
+- url: /remote-admin
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
