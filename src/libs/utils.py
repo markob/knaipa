@@ -3,6 +3,7 @@ for them """
 
 import logging
 
+from google.appengine.ext import webapp
 from google.appengine.ext import db
 from xml.dom import minidom
 from libs import xml_tools as XMLTools
@@ -101,3 +102,102 @@ class ModelProcessor(object):
            db.DateTimeProperty.data_type: XMLTools.genDateTimeNode }
 
         return handlersMap[data_type](xmlDoc, value, name)
+
+
+    
+class ObjectHandler(webapp.RequestHandler):
+    def __init__(self, data_model):
+        self._data_model = data_model
+
+
+    def _handle_request(self):
+        """ Processes input request and creates appropriate reqponse. """
+
+        try:
+            handler, template_name = self._get_cmd_handler()
+            resp_data = handler(self.request)
+
+            template_path = os.path.join(templates_path, template_name)
+            
+            self.response.headers['Content-Type'] = 'text/xml'
+            return self.response.out.write(
+                template.render(template_path, resp_data))
+
+        except InvalidRequestError, err:
+            return self.error(404)
+
+
+    def _get_cmd_handler(self):
+        """ Selects appropriate handler for the requested command. """
+
+        cmd = self.request.get('cmd')
+        
+        if 'post' == cmd:
+            return (self._write_article, 'article-post.xml')
+        elif 'get' == cmd:
+            return (self._read_article, 'article-get.xml')
+        elif 'list' == cmd:
+            return (self._get_articles_list, 'articles-list.xml')
+        else:
+            raise(InvalidRequestError('invalid command requested'))
+
+
+    def _write(self, request):
+        """ Parses request data and store instance object. """
+    
+        instance_id = request.get('id')
+        processor = ModelProcessor(self._data_model)
+        
+        if instance_id:
+            # get instance from datastore
+            instance = self._get(instance_id)
+            
+            #update the instance
+            processor.update_from_request(request, instance)
+        else:
+            # create new instance
+            instance = processor.create_from_request(request)
+
+        # save instance
+        instance.put()
+            
+        return {'instance_id': instance.key().id()}
+
+
+    def _read(self, request):
+        """ Retrieves requested instance from datastore. """
+
+        instance_id = request.get('id')
+
+        if not instance_id:
+            raise(InvalidRequestError('Invalid instance id requested'))
+
+        instance = self._get(instance_id)
+        
+        return {'instance':
+                ModelProcessor(self._data_model).gen_model_data(instance)}
+
+
+    def _get(self, id):
+        """ Retrieves instance with the specified key from datastore. """
+        
+        instance = self._data_model.get_by_id(int(id))
+        if not instance:
+            raise(InvalidRequestError('Requested instance does not exists'))
+
+        return instance
+
+
+    def _get_list(self, request):
+        """ Retieves a list of all instances. """
+
+        instances = self._data_model.all()
+        out_list = []
+
+        model_processor = ModelProcessor(self._data_model)
+        
+        for item in items:
+            out_list.append(model_processor.gen_model_data(item))
+                    
+        return {'items_list': out_list}
+
