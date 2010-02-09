@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
-{% for article in articles_list %}
+{% for article in instances_list %}
 	<item id="{{ article.id }}">
 		<title>{{ article.title }}</title>
 		<modified>{{ article.modified }}</modified>

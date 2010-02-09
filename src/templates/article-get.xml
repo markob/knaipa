@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
-	<article id="{{ article.id }}">
-		<title>{{ article.title }}</title>
-		<modified> {{ article.modified }} </modified>
-		<description><p>{{ article.description }}</p></description>
-		<text><p>{{ article.text }}</p></text>
+	<article id="{{id }}">
+		<title>{{title }}</title>
+		<modified> {{modified }} </modified>
+		<description><p>{{description }}</p></description>
+		<text><p>{{text }}</p></text>
 		<marker ia="49.835657" ja="24.048901" />
 	</article>
 	<comments>
