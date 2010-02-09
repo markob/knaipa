@@ -60,11 +60,18 @@ class ModelProcessor(object):
 
     def gen_model_data(self, model_instance):
 
-        properties = self._cls_model.properties()
         model_data = {'id': model_instance.key().id()}
-        
+
+        # get all mandatory properties from instance
+        properties = self._cls_model.properties()
         for prop_name in properties:
             model_data[prop_name] = getattr(model_instance, prop_name)
+
+        # get all optional properties from instance
+        if issubclass(self._cls_model, db.Expando):
+            properties = model_instance.instance_properties()
+            for prop_name in properties:
+                model_data[prop_name] = getattr(model_instance, prop_name)
 
         return model_data
 
@@ -74,8 +81,8 @@ class ModelProcessor(object):
 
         data = {}
 
+        # extract all mandatory data
         properties = self._cls_model.properties()
-        
         for prop_name in properties:
             value = request.get(prop_name)
 
@@ -83,12 +90,17 @@ class ModelProcessor(object):
 
             if not value and not prop_type.default_value():
                 if allParamsRequired:
-                    raise(InvalidRequestError,
-                          'request data is not completed')
+                    raise(InvalidRequestError, 'request data is not completed')
                 else:
                     continue
 
             data[prop_name] = value
+
+        # extract optional data if required
+        if issubclass(self._cls_model, db.Expando):
+            for field_name in request.fields:
+                if field_name not in data:
+                    data[field_name] = request.get(field_name)
 
         return data
 
