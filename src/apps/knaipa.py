@@ -21,11 +21,11 @@ class KnaipaHandler(webapp.RequestHandler):
         cmd = self.request.get('cmd')
         
         if 'post' == cmd:
-            return (self._write_article, 'knaipa-post.xml')
+            return (self._write, 'knaipa-post.xml')
         elif 'get' == cmd:
-            return (self._read_article, 'knaipa-get.xml')
+            return (self._read, 'knaipa-get.xml')
         elif 'list' == cmd:
-            return (self._get_articles_list, 'knaipa-list.xml')
+            return (self._get_list, 'knaipa-list.xml')
         else:
             raise(InvalidRequestError('invalid command requested'))
 
