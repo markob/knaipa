@@ -34,7 +34,7 @@ class ModelProcessor(object):
         instance. """
 
         # extract model data from request
-        data = self._parse_request(request)
+        data = self._parse_request(request, True)
         
         # create and return model instance
         model_instance = self._cls_model(**data)
@@ -47,34 +47,28 @@ class ModelProcessor(object):
         instance. """
 
         # extract model data from request
-        data = self._parse_request(request)
+        data = self._parse_request(request, False)
 
-        # update model instance data
-        for name, value in data:
-            setattr(model_instance, name, value)
+        if len(data) > 0:
+            # update model instance data
+            for name, value in data:
+                setattr(model_instance, name, value)
+        else:
+            raise(InvalidRequestError, 'empty request retrieved')
 
 
-    def gen_xml(self, model_instance):
-        xmlDoc = minidom.Document()
-
-        root = xmlDoc.createElement(self._cls_model.kind().lower())
-        xmlDoc.appendChild(root)
+    def gen_model_data(self, model_instance):
 
         properties = self._cls_model.properties()
-
+        model_data = {'id': model_instance.key().id()}
+        
         for prop_name in properties:
-            prop_type = properties[prop_name]
-            
-            node = self._gen_xml_for_prop(xmlDoc,
-                                          prop_name,
-                                          getattr(model_instance, prop_name),
-                                          prop_type.data_type)
-            root.appendChild(node)
+            model_data[prop_name] = getattr(model_instance, prop_name)
 
-        return xmlDoc.toxml('utf8')
+        return model_data
 
 
-    def _parse_request(self, request):
+    def _parse_request(self, request, allParamsRequired):
         """ Extract data from request and fill them into dict. """
 
         data = {}
@@ -87,7 +81,11 @@ class ModelProcessor(object):
             prop_type = properties[prop_name]
 
             if not value and not prop_type.default_value():
-                raise(InvalidRequestError, 'request data is not completed')
+                if allParamsRequired:
+                    raise(InvalidRequestError,
+                          'request data is not completed')
+                else:
+                    continue
 
             data[prop_name] = value
 

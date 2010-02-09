@@ -1,9 +1,9 @@
 application: knaipa-ua
-version: 3
+version: 5
 runtime: python
 api_version: 1
 
-default_expiration: "3d"
+default_expiration: "999d"
 
 handlers:
 
@@ -28,27 +28,28 @@ handlers:
   upload: client/js/.*\.js
 
 # content files handler
-- url: /content/(.*\.(png|gif|xml|xsl))
+- url: /content/(.*\.(png|gif|xml))
   static_files: client/content/\1
-  upload: client/content/.*\.(png|gif|xml|xsl)
+  upload: client/content/.*\.(png|gif|xml)
+
+# xsl files handler
+- url: /xsl/(.*\.xsl)
+  static_files: client/xsl/\1
+  upload: client/xsl/.*\.xsl
 
 # user images handler
 - url: /images/.*
   script: apps/images.py
 
-# main entry point - index.html
-- url: /index\.html
-  static_files: client/index.html
-  upload: client/index\.html  
+# entry points to the service - *.html
+- url: /(.*\.html)
+  static_files: client/\1
+  upload: client/.*\.html  
 
 # work with articles (store, get and edit)
-- url: /article/.*
+- url: /article.*
   script: apps/article.py
 
 # test app which adds required data to datastore
 - url: /test/.*
   script: apps/tests.py
-
-# simple test app - clock
-- url: /tests/clock
-  script: tests/clock.py

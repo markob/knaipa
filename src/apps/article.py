@@ -2,12 +2,18 @@ import logging
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
+from google.appengine.ext.webapp import template
 
 from libs.models.article import Article
 from libs.utils import ModelProcessor, InvalidRequestError
 
 from xml.dom import minidom
 from libs import xml_tools as XMLTools
+
+import os
+
+
+templates_path = os.path.join(os.path.dirname(__file__), '../templates')
 
 
 class ArticleHandler(webapp.RequestHandler):
@@ -29,14 +35,17 @@ class ArticleHandler(webapp.RequestHandler):
         """ Processes input request and creates appropriate reqponse. """
 
         try:
-            handler = self._get_cmd_handler()
+            handler, template_name = self._get_cmd_handler()
             resp_data = handler(self.request)
 
-        except InvalidRequestError, err:
-            self.error(404)
+            template_path = os.path.join(templates_path, template_name)
+            
+            self.response.headers['Content-Type'] = 'text/xml'
+            return self.response.out.write(
+                template.render(template_path, resp_data))
 
-        self.response.headers['Content-Type'] = 'text/xml'
-        return self.response.out.write(resp_data)
+        except InvalidRequestError, err:
+            return self.error(404)
 
 
     def _get_cmd_handler(self):
@@ -45,36 +54,24 @@ class ArticleHandler(webapp.RequestHandler):
         cmd = self.request.get('cmd')
         
         if 'post' == cmd:
-            return self._store_article
+            return (self._write_article, 'article-post.xml')
         elif 'get' == cmd:
-            return self._read_article
+            return (self._read_article, 'article-get.xml')
+        elif 'list' == cmd:
+            return (self._get_articles_list, 'articles-list.xml')
         else:
             raise(InvalidRequestError('invalid command requested'))
-
-
-    def _store_article(self, request):
-        """ Stores an article from request and retieves it id. """
-
-        key = self._write_article(request)
-
-        xmlDoc = XMLTools.createXmlDoc('response')
-        root = xmlDoc.documentElement
-
-        node = XMLTools.genStringNode(xmlDoc, key, 'id')
-        root.appendChild(node)
-        
-        return xmlDoc.toxml('utf-8');
 
 
     def _write_article(self, request):
         """ Parses request data and store article object. """
     
-        key = request.get('id')
+        article_id = request.get('id')
         processor = ModelProcessor(Article)
         
-        if key:
+        if article_id:
             # get article from datastore
-            article = self._get_article(key)
+            article = self._get_article(article_id)
             
             #update the article
             processor.update_from_request(request, article)
@@ -85,36 +82,49 @@ class ArticleHandler(webapp.RequestHandler):
         # save article
         article.put()
             
-        return str(article.key())
+        return {'article_id': article.key().id()}
 
 
     def _read_article(self, request):
         """ Retrieves requested article from datastore. """
 
-        key = request.get('id')
+        article_id = request.get('id')
 
-        if not key:
+        if not article_id:
             raise(InvalidRequestError('invalid article id requested'))
 
-        article = self._get_article(key)
-
-        processor = ModelProcessor(Article)
+        article = self._get_article(article_id)
         
-        return processor.gen_xml(article)
+        return {'article':
+                ModelProcessor(Article).gen_model_data(article)}
 
 
-    def _get_article(self, key):
+    def _get_article(self, id):
         """ Retrieves article with the specified key from datastore. """
         
-        article = Article.get(key)
+        article = Article.get_by_id(int(id))
         if not article:
             raise(InvalidRequestError('requested article does not exists'))
 
         return article
+
+
+    def _get_articles_list(self, request):
+        """ Retieves a list of all articles. """
+
+        articles = Article.all()
+        articles_list = []
+
+        model_processor = ModelProcessor(Article)
+        
+        for article in articles:
+            articles_list.append(model_processor.gen_model_data(article))
+                    
+        return {'articles_list': articles_list}
     
     
 application = webapp.WSGIApplication(
-    [('.*', ArticleHandler)], debug = True)
+    [('/article', ArticleHandler)], debug = True)
         
         
 def main():

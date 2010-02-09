@@ -9,6 +9,7 @@ class Article(db.Model):
     knaipa = db.StringProperty(required=True)
     title = db.StringProperty(required=True)
     description = db.StringProperty(required=True)
+    cut = db.StringProperty(required=True)
     text = db.TextProperty(required=True)
     #author = db.ReferenceProperty(required=True)
     modified = db.DateTimeProperty(auto_now=True)
