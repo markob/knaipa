@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <response>
   <article>
-    <id>{{ article.id }}</id>
-    <title>{{ article.title }}</title>
-    <modified> {{ article.modified }} </modified>
-    <description>{{ article.description }}</description>
-    <text>{{ article.text }}</text>
+    <id>{{ id }}</id>
+    <title>{{ title }}</title>
+    <modified> {{ modified }} </modified>
+    <description>{{ description }}</description>
+    <text>{{ text }}</text>
   </article>
 </response>

@@ -27,6 +27,8 @@ class AddArticleModelTest(webapp.RequestHandler):
               <input type=\"textarea\" name=\"title\" />
               <p/>Description:
               <input type=\"textarea\" name=\"description\" />
+              <p/>Cut:
+              <input type=\"textarea\" name=\"cut\" />
               <p/>Text:
               <input type=\"textarea\" name=\"text\" />
               <p/>

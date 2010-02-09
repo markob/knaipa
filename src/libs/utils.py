@@ -5,8 +5,14 @@ import logging
 
 from google.appengine.ext import webapp
 from google.appengine.ext import db
+from google.appengine.ext.webapp import template
+
 from xml.dom import minidom
 from libs import xml_tools as XMLTools
+
+import os
+
+templates_path = os.path.join(os.path.dirname(__file__), '../templates')
 
 
 class InvalidRequestError(Exception):
@@ -110,6 +116,18 @@ class ObjectHandler(webapp.RequestHandler):
         self._data_model = data_model
 
 
+    def get(self):
+        """ Just hooks all GET requests and passes it to processor. """
+        
+        return self._handle_request()
+
+
+    def post(self):
+        """ Just hooks all POST requests and passes it to processor. """
+
+        return self._handle_request()
+
+
     def _handle_request(self):
         """ Processes input request and creates appropriate reqponse. """
 
@@ -125,22 +143,7 @@ class ObjectHandler(webapp.RequestHandler):
 
         except InvalidRequestError, err:
             return self.error(404)
-
-
-    def _get_cmd_handler(self):
-        """ Selects appropriate handler for the requested command. """
-
-        cmd = self.request.get('cmd')
         
-        if 'post' == cmd:
-            return (self._write_article, 'article-post.xml')
-        elif 'get' == cmd:
-            return (self._read_article, 'article-get.xml')
-        elif 'list' == cmd:
-            return (self._get_articles_list, 'articles-list.xml')
-        else:
-            raise(InvalidRequestError('invalid command requested'))
-
 
     def _write(self, request):
         """ Parses request data and store instance object. """
@@ -174,8 +177,7 @@ class ObjectHandler(webapp.RequestHandler):
 
         instance = self._get(instance_id)
         
-        return {'instance':
-                ModelProcessor(self._data_model).gen_model_data(instance)}
+        return ModelProcessor(self._data_model).gen_model_data(instance)
 
 
     def _get(self, id):
@@ -196,8 +198,7 @@ class ObjectHandler(webapp.RequestHandler):
 
         model_processor = ModelProcessor(self._data_model)
         
-        for item in items:
+        for item in instances:
             out_list.append(model_processor.gen_model_data(item))
                     
-        return {'items_list': out_list}
-
+        return {'instances_list': out_list}
