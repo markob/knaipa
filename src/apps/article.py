@@ -4,7 +4,8 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from libs.models.article import Article
-from libs.utils import ObjectHandler, InvalidRequestError
+from libs.objhandler import ObjectHandler
+from libs.utils import InvalidRequestError
 
 
 class ArticleHandler(ObjectHandler):
