@@ -12,7 +12,7 @@ class CommentHandler(ObjectHandler):
     """ Adapts comment and stores it to data storage. """
 
 
-    def _get_cmd_handler(self):
+    def _select_cmd_handler(self):
         """ Selects appropriate handler for the requested command. """
 
         cmd = self.request.get('cmd')
