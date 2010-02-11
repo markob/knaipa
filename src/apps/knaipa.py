@@ -15,7 +15,7 @@ class KnaipaHandler(webapp.RequestHandler):
         ObjectHandler.__init__(self, Knaipa)
         
 
-    def _get_cmd_handler(self):
+    def _select_cmd_handler(self):
         """ Selects appropriate handler for the requested command. """
 
         cmd = self.request.get('cmd')

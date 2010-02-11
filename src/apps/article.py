@@ -15,7 +15,7 @@ class ArticleHandler(ObjectHandler):
         ObjectHandler.__init__(self, Article)
 
     
-    def _get_cmd_handler(self):
+    def _select_cmd_handler(self):
         """ Selects appropriate handler for the requested command. """
 
         cmd = self.request.get('cmd')

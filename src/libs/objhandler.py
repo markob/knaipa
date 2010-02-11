@@ -31,7 +31,7 @@ class ObjectHandler(webapp.RequestHandler):
         """ Processes input request and creates appropriate reqponse. """
 
         try:
-            handler, template_name = self._get_cmd_handler()
+            handler, template_name = self._select_cmd_handler()
             resp_data = handler(self.request)
 
             template_path = os.path.join(templates_path, template_name)
