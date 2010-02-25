@@ -42,6 +42,13 @@ class AddArticleModelTest(webapp.RequestHandler):
               <p/>
               <input type=\"submit\" value=\"Get\" />
             </form>
+            <form action=\"/image\" enctype=\"multipart/form-data\" method=\"post\">
+              <p/>Image:
+              <input type=\"file\" name=\"image\" />
+              <p/>
+              <input type=\"submit\" value=\"Upload\" />
+            </form>
+
           </body>
         </html>
         """

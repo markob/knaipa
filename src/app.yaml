@@ -49,6 +49,10 @@ handlers:
 - url: /article.*
   script: apps/article.py
 
+# work with uploaded images (just upload)
+- url: /image.*
+  script: apps/image.py
+
 # test app which adds required data to datastore
 - url: /test/.*
   script: apps/tests.py
