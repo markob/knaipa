@@ -3,6 +3,8 @@ import logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+from google.appengine.ext.webapp import template
+
 from libs.utils import InvalidRequestError
 
 # add gdata library to python path
@@ -14,24 +16,60 @@ sys.path.append(os.path.abspath(os.curdir) + '/../libs/gdata')
 from gdata.photos import service as GDService
 from gdata import media as GDMedia
 
+from xml.dom import minidom
+
+# global properties definitions to deal with picasaweb
+
 user_id = 'knaipa.service@gmail.com'
 user_passwd = 'qaswedfrtghy'
 album_id = 'default'
 
-source_str = 'knaipa-knaipa-dev_7'
+source_str = 'knaipa-knaipa-service'
 image_name = 'Knaipa Service\'s Image'
 
 photos_uri = 'http://picasaweb.google.com/data/feed/api'
 album_uri = photos_uri + "/user/%s/albumid/%s" % (user_id, album_id)
 
+template_path = os.path.join(os.path.dirname(__file__),
+                             '../templates/image-post.xml')
+
 
 class ImageHandler(webapp.RequestHandler):
-    """ Forwards image to webpicasa service. """
+    """ Forwards image to picasaweb service. """
 
     def post(self):
-        img_handle = self.request.POST.get('image').file
+        try:
+            photo_entry = self._post_image()
+            photo_info = {'photo_url': photo_entry.GetMediaURL()}
+            
+            photo_xml = minidom.parseString(str(photo_entry))
+            
+            node = photo_xml.getElementsByTagName('ns1:albumid')            
+            node = node[0].firstChild
+            photo_info['album_id'] = node.nodeValue
+            
+            node = photo_xml.getElementsByTagName('ns1:id')
+            node = node[0].firstChild
+            photo_info['photo_id'] = node.nodeValue
+            
+            thumb_prefix = 'thumb_'
+            thumbs_list = []
+            for thumb in photo_entry.media.thumbnail:
+                thumb_name = thumb_prefix + str(thumb.width) + 'x' + str(thumb.height)
+                thumbs_list.append({'name': thumb_name, 'url': thumb.url})
+                
+            photo_info['thumbs_list'] = thumbs_list
+            
+            self.response.headers['Content-Type'] = 'text/xml'
+            return self.response.out.write(
+                template.render(template_path, photo_info))
         
-        #content_type = img_handle.
+        except:
+            return self.error(404)
+        
+        
+    def _post_image(self):
+        img_handle = self.request.POST.get('image').file
         
         gd_client = GDService.PhotosService()
         gd_client.email = user_id
@@ -39,14 +77,12 @@ class ImageHandler(webapp.RequestHandler):
         gd_client.source = source_str
         gd_client.ProgrammaticLogin()
         
-        #logging.info("Image content type is %s.\n" % content_type)
-        
         photo_entry = gd_client.InsertPhotoSimple(album_uri,
                                                   image_name,
                                                   None,
                                                   img_handle)
         
-        return self.response.out.write(photo_entry.GetMediaURL())
+        return photo_entry
 
         
 application = webapp.WSGIApplication(
