@@ -3,7 +3,7 @@ import logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from libs.models.comment import Comment
+from libs.models.comments import Comment
 from libs.objhandler import ObjectHandler
 from libs.utils import InvalidRequestError
 
@@ -29,7 +29,7 @@ class CommentHandler(ObjectHandler):
     
     
 application = webapp.WSGIApplication(
-    [('/comment', CommentHandler)], debug = True)
+    [('/comments', CommentHandler)], debug = True)
         
         
 def main():

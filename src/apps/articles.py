@@ -3,7 +3,7 @@ import logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from libs.models.article import Article
+from libs.models.articles import Article
 from libs.objhandler import ObjectHandler
 from libs.utils import InvalidRequestError
 
@@ -32,7 +32,7 @@ class ArticleHandler(ObjectHandler):
     
         
 application = webapp.WSGIApplication(
-    [('/article', ArticleHandler)], debug = True)
+    [('/articles', ArticleHandler)], debug = True)
         
         
 def main():

@@ -2,7 +2,7 @@ import logging
 
 from google.appengine.ext import db
 
-class Knaipa(db.Epando):
+class Service(db.Epando):
     """ Describes data model for storing information about knaipa. """
 
     name = db.StringProperty(required=True)

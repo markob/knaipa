@@ -1,5 +1,5 @@
 application: knaipa-ua
-version: dev-8
+version: dev-9
 runtime: python
 api_version: 1
 
@@ -46,12 +46,20 @@ handlers:
 ####################################################################
 
 # work with articles (store, get and edit)
-- url: /article.*
-  script: apps/article.py
+- url: /articles.*
+  script: apps/articles.py
+
+# work with comments (store, get and edit)
+- url: /comments.*
+  script: apps/comments.py
 
 # work with uploaded images (just upload)
-- url: /image.*
-  script: apps/image.py
+- url: /images.*
+  script: apps/images.py
+
+# work with services (store, get and edit)
+- url: /services.*
+  script: apps/services.py  
 
 # test app which adds required data to datastore
 - url: /test/.*

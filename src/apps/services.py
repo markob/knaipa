@@ -3,7 +3,7 @@ import logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from libs.models.knaipa import Knaipa
+from libs.models.services import Service
 from libs.objhandler import ObjectHandler
 from libs.utils import InvalidRequestError
 
@@ -12,7 +12,7 @@ class KnaipaHandler(webapp.RequestHandler):
     """ Adapts knaipa info and stores it to data storage. """
 
     def __init__(self):
-        ObjectHandler.__init__(self, Knaipa)
+        ObjectHandler.__init__(self, Service)
         
 
     def _select_cmd_handler(self):
@@ -32,7 +32,7 @@ class KnaipaHandler(webapp.RequestHandler):
     
     
 application = webapp.WSGIApplication(
-    [('/knaipa', KnaipaHandler)], debug = True)
+    [('/services', KnaipaHandler)], debug = True)
         
         
 def main():

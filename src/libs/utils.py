@@ -22,7 +22,7 @@ class InvalidRequestError(Exception):
 
 
 class ModelProcessor(object):
-    """ Contans tools simlify models processing. """
+    """ Contains tools simlify models processing. """
 
     def __init__(self, cls_model):
         """ Binds processor to the specified model type. """
