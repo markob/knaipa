@@ -56,11 +56,12 @@ class AddArticleModelTest(webapp.RequestHandler):
         return self.response.out.write(response)
 
 
+
 application = webapp.WSGIApplication([('.*', AddArticleModelTest)],
                                      debug=True)
 
 def main():
-	run_wsgi_app(application)
+    run_wsgi_app(application)
 
 if __name__ == '__main__':
-	main()
+    main()

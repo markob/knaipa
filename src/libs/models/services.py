@@ -9,4 +9,5 @@ class Service(db.Epando):
     category = db.CategoryProperty(required=True)
     location = db.GeoPtProperty(required=True)
     description = db.StringProperty(required=True)
+    added = db.DateTimeProperty(auto_add_now=True)
     updated = db.DateTimeProperty(auto_now=True)

@@ -2,14 +2,13 @@ import logging
 
 from google.appengine.ext import db
 
+from libs.models.articles import Article
+from libs.uzvers import Uzver
+
 class Comment(db.Model):
     """ Describes data model for storing articles """
-
-    # TODO: following property should be replaced by reference
-    article = db.StringProperty(required=True)
-    title = db.StringProperty(required=True)
-    description = db.StringProperty(required=True)
-    cut = db.StringProperty(required=True)
+    
+    article = db.ReferenceProperty(Article, required=True)
+    author = db.ReferenceProperty(Uzver, required=True)
+    created = db.DateTimeProperty(auto_now=True)
     text = db.TextProperty(required=True)
-    #author = db.ReferenceProperty(required=True)
-    modified = db.DateTimeProperty(auto_now=True)
