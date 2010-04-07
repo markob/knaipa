@@ -9,6 +9,11 @@ from xml.dom import minidom
 from libs import xml_tools as XMLTools
 
 
+def login_required():
+    """ Redirects user to login page if it's not logged in. """
+    pass
+
+
 class InvalidRequestError(Exception):
     """ Invalid request exception. """
 

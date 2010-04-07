@@ -19,15 +19,23 @@ class ArticleHandler(ObjectHandler):
         """ Selects appropriate handler for the requested command. """
 
         cmd = self.request.get('cmd')
-        
-        if 'post' == cmd:
-            return (self._write, 'articles-post.xml')
+
+        # get list of all articles (short info and id)
+        if 'list' == cmd:
+            return (self._get_list, 'articles-list.xml')
+        # add new article to storage (for authorized users only)
+        elif 'add' == cmd:
+            return (self._write, 'articles-add.xml')
+        # get article with the specified article id
         elif 'get' == cmd:
             return (self._read, 'articles-get.xml')
-        elif 'list' == cmd:
-            return (self._get_list, 'articles-list.xml')
+        # remove article with the specified id from storage (for authorized users only)
+        elif 'del' == cmd:
+            return (self._delete, 'articles-del.xml')
+        # get static info about articles service
         elif 'info' == cmd:
             return (lambda self: None, 'articles-info.xml')
+        # return 404 error in all other cases
         else:
             raise(InvalidRequestError('invalid command requested'))
 

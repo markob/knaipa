@@ -3,6 +3,8 @@ import logging
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
+from google.appengine.ext import db
+
 from libs.utils import InvalidRequestError, ModelProcessor
 
 import os
@@ -84,7 +86,7 @@ class ObjectHandler(webapp.RequestHandler):
         
         instance = self._data_model.get_by_id(int(id))
         if not instance:
-            raise(InvalidRequestError('Requested instance does not exists'))
+            raise(InvalidRequestError('Requested instance does not exist'))
 
         return instance
 
@@ -101,3 +103,15 @@ class ObjectHandler(webapp.RequestHandler):
             out_list.append(model_processor.gen_model_data(item))
                     
         return {'instances_list': out_list}
+
+
+    def _delete(self, request):
+        """ Removes an article with the specified id from the storage. """
+
+        instance_id = request.get(id)
+
+        if instance_id:
+            self._data_model.delete(instance_id)
+            return instance_id
+        else:
+            raise(InvalidRequestError('Requested instance does not exist'))
