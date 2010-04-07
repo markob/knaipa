@@ -8,8 +8,8 @@ from libs.objhandler import ObjectHandler
 from libs.utils import InvalidRequestError
 
 
-class KnaipaHandler(webapp.RequestHandler):
-    """ Adapts knaipa info and stores it to data storage. """
+class ServiceHandler(ObjectHandler):
+    """ Adapts service info and stores it to data storage. """
 
     def __init__(self):
         ObjectHandler.__init__(self, Service)
@@ -21,18 +21,18 @@ class KnaipaHandler(webapp.RequestHandler):
         cmd = self.request.get('cmd')
         
         if 'post' == cmd:
-            return (self._write, 'knaipa-post.xml')
+            return (self._write, 'service-post.xml')
         elif 'get' == cmd:
-            return (self._read, 'knaipa-get.xml')
+            return (self._read, 'service-get.xml')
         elif 'list' == cmd:
-            return (self._get_list, 'knaipa-list.xml')
+            return (self._get_list, 'service-list.xml')
         else:
             raise(InvalidRequestError('invalid command requested'))
 
     
     
 application = webapp.WSGIApplication(
-    [('/services', KnaipaHandler)], debug = True)
+    [('/services', ServiceHandler)], debug = True)
         
         
 def main():

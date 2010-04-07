@@ -13,7 +13,7 @@ class ArticleHandler(ObjectHandler):
 
     def __init__(self):
         ObjectHandler.__init__(self, Article)
-
+    
     
     def _select_cmd_handler(self):
         """ Selects appropriate handler for the requested command. """
@@ -21,11 +21,13 @@ class ArticleHandler(ObjectHandler):
         cmd = self.request.get('cmd')
         
         if 'post' == cmd:
-            return (self._write, 'article-post.xml')
+            return (self._write, 'articles-post.xml')
         elif 'get' == cmd:
-            return (self._read, 'article-get.xml')
+            return (self._read, 'articles-get.xml')
         elif 'list' == cmd:
             return (self._get_list, 'articles-list.xml')
+        elif 'info' == cmd:
+            return (lambda self: None, 'articles-info.xml')
         else:
             raise(InvalidRequestError('invalid command requested'))
 
