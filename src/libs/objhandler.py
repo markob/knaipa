@@ -12,7 +12,13 @@ import os
 templates_path = os.path.join(os.path.dirname(__file__), '../templates')
 
 
+# Object Handler Exception that means that the resource does not exist
+class ResourceNotExist(Exception): pass
+
+
 class ObjectHandler(webapp.RequestHandler):
+    _cmd_handlers = { }
+    
     def __init__(self, data_model):
         self._data_model = data_model
 
@@ -29,21 +35,27 @@ class ObjectHandler(webapp.RequestHandler):
         return self._handle_request()
 
 
+    def _render_response(self, resp_data, template_name):
+        """ Renders responce with the appropriate data and template """
+        template_path = os.path.join(templates_path, template_name)
+
+        self.response.headers['Content-Type'] = 'text/xml'
+        return self.response.out.write(template.render(template_path, resp_data))
+
+
+
     def _handle_request(self):
         """ Processes input request and creates appropriate reqponse. """
-
         try:
             handler, template_name = self._select_cmd_handler()
             resp_data = handler(self.request)
 
-            template_path = os.path.join(templates_path, template_name)
-            
-            self.response.headers['Content-Type'] = 'text/xml'
-            return self.response.out.write(
-                template.render(template_path, resp_data))
+            return self._render_response(resp_data, template_name)
 
         except InvalidRequestError, err:
             return self.error(404)
+        except ResourceNotExist, err:
+            return self._render_response({'error': err}, self._cmd_handlers['error'][1])
         
 
     def _write(self, request):
@@ -74,7 +86,7 @@ class ObjectHandler(webapp.RequestHandler):
         instance_id = request.get('id')
 
         if not instance_id:
-            raise(InvalidRequestError('Invalid instance id requested'))
+            raise(ResourceNotExist('Invalid instance id requested'))
 
         instance = self._get(instance_id)
         
@@ -86,7 +98,7 @@ class ObjectHandler(webapp.RequestHandler):
         
         instance = self._data_model.get_by_id(int(id))
         if not instance:
-            raise(InvalidRequestError('Requested instance does not exist'))
+            raise(ResourceNotExist('Requested instance does not exist'))
 
         return instance
 
@@ -108,10 +120,14 @@ class ObjectHandler(webapp.RequestHandler):
     def _delete(self, request):
         """ Removes an article with the specified id from the storage. """
 
-        instance_id = request.get(id)
+        instance_id = request.get('id')
 
         if instance_id:
-            self._data_model.delete(instance_id)
+            instance = self._data_model.get_by_id(int(instance_id))
+            if instance:
+                db.delete(instance)
+            else:
+                raise(ResourceNotExist('Requested instance does not exit'))
             return instance_id
         else:
-            raise(InvalidRequestError('Requested instance does not exist'))
+            raise(ResourceNotExist('Requested instance does not exist'))
