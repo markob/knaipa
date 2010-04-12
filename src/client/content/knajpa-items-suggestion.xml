@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suggestion>
+	<item value='Ім`я' />
+	<item value='Тип закладу' />
+	<item value='Час роботи' />
+	<item value='Адреса' />
+	<item value='Телефон' />
+	<item value='Сайт' />
+	<item value='E-mail' />
+	<item value='Кухня' />
+	<item value='Цінова категорія, грн' />
+	<item value='Способи розрахунку' />
+	<item value='Попереднє замовлення столика' />
+	<item value='Кількість залів' />
+	<item value='Кількість посадочних місць' />
+	<item value='Організація банкетів' />
+	<item value='Сніданки' />
+	<item value='Бізнес-ланчі' />
+	<item value='Літній майдан' />
+	<item value='Музика' />
+	<item value='Wi-Fi' />
+	<item value='ТВ' />
+	<item value='Танцмайданчик' />
+	<item value='Доставка їжі' />
+	<item value='Стоянка' />
+	<item value='Зал для курців' />
+	<item value='Дитяче меню' />
+	<item value='Дитяча кімната або майданчик' />
+	<item value='Обслуговування дитячих свят' />
+	<item value='Вхід' />
+	<item value='Фірмові страви' />
+	<item value='Фірмові напої' />
+</suggestion>
