@@ -71,8 +71,8 @@
 				var target = $(this);
 				var transformed = false;
 
-				var xm = {readyState: 4};
-				var xs = {readyState: 4};
+				var xm = {};
+				var xs = {};
 
 				var change = function() {
 					if (xm.readyState == 4 && xs.readyState == 4  && !transformed) {
@@ -92,19 +92,19 @@
 					}
 				};
 
-				if (xml.documentElement) {xm.responseXML = xml}
-				else if (dataAsText.test(xml)) { xm.responseXML = new DOMParser().parseFromString(xml, "text/xml");}
+				if (xml.documentElement) {xm.responseXML = xml; xm.readyState = 4; change()}
+				else if (dataAsText.test(xml)) {xm.readyState = 4; xm.responseXML = new DOMParser().parseFromString(xml, "text/xml");}
 				else {
 					xm = $.ajax({ dataType: "xml", url: xml});
 					xm.onreadystatechange = change;
 				}
 
-				if (xslt.documentElement) {xs.responseXML = xslt}
+				if (xslt.documentElement) {xs.responseXML = xslt; xs.readyState = 4; change()}
 				else if (dataAsText.test(xslt)) {
+					xs.readyState = 4;
 					xs.responseXML = new DOMParser().parseFromString(xslt, "text/xml");
 					change();
-				}
-				else {
+				}else {
 					xs = $.ajax({ dataType: "xml", url: xslt});
 					xs.onreadystatechange = change;
 				}

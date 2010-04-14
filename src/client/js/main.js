@@ -6,7 +6,7 @@
 /**
  * Global object for Knajpa.
  */
-$(document).ready(function(){
+$(function(){
 	window.Knajpa = (function(){
 		var _this = this;
 
@@ -29,6 +29,10 @@ $(document).ready(function(){
 				}
 			}
 
+			/**
+			 * Feel data from xml documents.
+			 * @param {Document} xml Document who contained some data, for example "Knajpa" articles.
+			 */
 			function feelData (xml){ //TODO test this in IE;
 				_this.contentXML = xml;
 
@@ -51,7 +55,7 @@ $(document).ready(function(){
 			else { $.ajax({ dataType: "xml", url: 'article?cmd=list', success: feelData}); }
 		}
 
-		this.init = function() {
+		this.init = function(){
 
 			// init corners
 			$('img').wrap("<div class='img-wrapper corners corners-5 f-right'></div>");
@@ -77,26 +81,54 @@ $(document).ready(function(){
 		this.init();
 		return this;
 	})();
+
+
+	var knajpaMap = (function (initObj){
+		var _this = this;
+
+		/**
+		 * Events
+		 *    select - when user select some item.
+		 */
+		this.events={};
+		/**
+		 *
+		 * @param {String} ev Event name can use without "on" "onSelect" == "onselect" == "select"
+		 * @param {Function} fn
+		 */
+		this.bind = function (ev,fn){
+			ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			_this.events[ev] ? _this.events[ev].push(fn) : (_this.events[ev]=[]).push(fn)
+			return _this;
+		}
+
+		this.trigger = function (ev){
+			ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			for (var i=0; _this.events[ev] && i<_this.events[ev].length;i++){_this.events[ev][i](_this)}
+			return _this;
+		}
+
+		this.map = {};
+		this.markers ={};
+
+		this.addMarker = function(){
+			
+		}
+
+		this.hideMarkers = function(){
+			for (var tmp in _this.markers){ _this.markers[tmp].setVisible(false);}
+		}
+
+		this.init = function(initObj){
+			for (var tmp in initObj){ _thisp[tmp]=initObj.tmp;}
+
+			var latlng = new google.maps.LatLng(49.835657,24.048901);
+			_this.map = new google.maps.Map(document.getElementById("map"), { zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
+		}
+		this.init(initObj);
+		return this
+	})()
+
 });
-
-var suggestions = function (initObj){
-	var _this = this;
-	this.container = $('#suggestions');
-	this.data = 'For,each,language,the,client,library,provides,tools,and,an,abstraction,layer,letting,you,construct,' +
-				'queries,and,use,response,data,without,having,to,create,HTTP,requests,or,process,HTTP,responses,by,' +
-				'hand,Each,client,library,provides,classes,that,correspond,to,the,elements,and,data,types,that,the,API,' +
-				'uses,Each,client,library,also,provides,extensions,for,specific,Google,services,that,have,Data,APIs'.split(',');
-	/**
-	 *
-	 * @param {Event} e
-	 */
-	this.showSuggestions = function (e){
-		console.log(e.target.value);
-	};
-
-	this.init = function(){
-		for (var tmp in initObj){_this[tmp]=initObj[tmp];}
-		_this.container.bind('keyup',_this.showSuggestions);
-	};
-	this.init();
-};
