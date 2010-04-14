@@ -11,6 +11,16 @@ handlers:
 # Static File Handlers Section
 ####################################################################
 
+# favicon handler
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+# entry point to the main service page
+- url: /
+  static_files: client/index.html
+  upload: client/index\.html
+
 # entry points to the service - *.html
 - url: /(.*\.html)
   static_files: client/\1
