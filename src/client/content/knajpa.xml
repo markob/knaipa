@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knajpa name="Атмосфера" id="000001">
+	<addres type="list" subtype="markers">
+		<item ia="49.857131626112476" ja="24.020319380737302"> Кульпарківська 45 </item>
+		<item ia="49.857131626112436" ja="24.020319380737302"> Винниченка 45 </item>
+	</addres>
+
+	<item name='Тип закладу' type="string">Кав`ярня</item>
+	<item name='Час роботи' type="string">нд-чт 12-24, пт-сб 12-03</item>
+	<item name='Телефон' type="string">нд-чт 12-24, пт-сб 12-03</item>
+</knajpa>
