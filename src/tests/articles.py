@@ -1,24 +1,35 @@
 """ Checks base functionality of the articles engine """
 import unittest
+import urllib
 import urllib2
 
 from xml.dom import minidom
 
 # List of test cases
-
-# 1) common service tests
-#   a) get service url (get service info page)
 class BaseArticleTest(unittest.TestCase):
     """ Checks common service functionality. """
 
-    def getResponse(self, params):
-        """ Requests appropriate data and retrieves DOM response object. """
-        return urllib2.urlopen('http://localhost:8080/articles?' + params)
+
+    def getResponse(self, get_params, post_params=None):
+        """ Requests appropriate data and response object. """
+        url = 'http://localhost:8080/articles?' + get_params
+        
+        if post_params:
+            data = urllib.urlencode(post_params)
+            return urllib2.urlopen(url, data)
+        
+        return urllib2.urlopen(url)
     
     
-    def getResponseContent(self, params):
+    def getResponseContent(self, get_params, post_params=None):
         """ Requests appropriate data and retrieves DOM response object """
-        return minidom.parse(self.getResponse(params))
+        return minidom.parse(self.getResponse(get_params, post_params))
+
+
+# 1) common service tests
+#   a) get service url (get service info page)
+class ArticleInfoTest(BaseArticleTest):
+    """ Checks common service functionality. """
 
 
     def testInfoURL(self):
@@ -50,6 +61,7 @@ class ArticlesGetListTest(BaseArticleTest):
 class ArticleManipulationTest(BaseArticleTest):
     """ Checks articles manipualtion commands (get, add, del) """    
     
+
     def testGetArticle(self):
         """ 'cmd=get&id=<article_id> should return article or empty xml """
         dom = self.getResponseContent('cmd=get&id=0001')
@@ -68,15 +80,22 @@ class ArticleManipulationTest(BaseArticleTest):
 
     def testAddArticle(self):
         """ 'cmd=add' should return a created article id """
-        dom = self.getResponseContent('cmd=add')
+        data = { 'services': 'service#1',
+                 'title': 'Knajpa',
+                 'description': 'Just a knajpa',
+                 'cut': 'Just a knajpa',
+                 'text': 'Text about knajpa. Just a text.',
+                 'author': 'Guest' }
+        
+        dom = self.getResponseContent('cmd=add', data)
 
         root = dom.documentElement
         self.assertEquals('content', root.tagName)
         
-        node = root.firstChild
-        self.assertEquals('id', node.tagName)
+        nodes = dom.getElementsByTagName('id')
+        self.assertEquals('id', nodes[0].tagName)
 
-        article_id = node.firstChild.data
+        article_id = nodes[0].firstChild.data
         self.assertTrue(article_id)
     
 
