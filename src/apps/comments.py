@@ -11,6 +11,15 @@ from libs.utils import InvalidRequestError
 class CommentHandler(ObjectHandler):
     """ Adapts comment and stores it to data storage. """
 
+    def __init__(self):
+        """ Initializes object handler with the comments specific data """
+        ObjectHandler.__init__(self, Comment)
+
+        # add command handlers
+        self._cmd_handlers_ = { 'get': None,
+                                'add': None,
+                                'info': None}
+
 
     def _select_cmd_handler(self):
         """ Selects appropriate handler for the requested command. """
