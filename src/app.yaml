@@ -1,5 +1,5 @@
 application: knaipa-ua
-version: 9
+version: dev-10-comments
 runtime: python
 api_version: 1
 
