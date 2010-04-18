@@ -1,14 +1,9 @@
-""" Checks base functionality of the articles engine """
+""" Checks base functionality of the comments engine """
 import unittest
 from base_test import ServiceTest
 
 
-base_url = 'http://localhost:8080/articles'
-
-
-# 1) common service tests
-#   a) get service url (get service info page)
-class ArticleInfoTest(ServiceTest):
+class CommentsInfoTest(ServiceTest):
     """ Checks common service functionality. """
 
     def setUp(self):
