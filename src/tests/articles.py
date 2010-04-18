@@ -52,15 +52,24 @@ class ArticlesGetListTest(BaseArticleTest):
 
 
 # 3) article manipulation tests:
-#   a) add a new article with bad data
-#   b) update an existing article with bad data
-#   d) try to remove an nonexisting article
-
-# 3) get list of articles
-#   a) get list of articles
+#   a) add a new article
+#   b) update an existing article
+#   d) try to remove an article
 class ArticleManipulationTest(BaseArticleTest):
-    """ Checks articles manipualtion commands (get, add, del) """    
-    
+    """ Checks articles manipualtion commands (get, add, del) """
+
+
+    def _getTestArticleData(self):
+        """ Generates simple article data to send it to service. """
+        article_data = { 'services': 'Test Service',
+                         'title': 'Test Restaurant',
+                         'description': 'It is just a test content.',
+                         'cut': 'It may be same as description or may be not.',
+                         'text': 'This is text about the restaurant. But it is also a mock.',
+                         'author': 'Anonymous' }
+
+        return article_data
+
 
     def testGetArticle(self):
         """ 'cmd=get&id=<article_id> should return article or empty xml """
@@ -79,15 +88,8 @@ class ArticleManipulationTest(BaseArticleTest):
 
 
     def testAddArticle(self):
-        """ 'cmd=add' should return a created article id """
-        data = { 'services': 'service#1',
-                 'title': 'Knajpa',
-                 'description': 'Just a knajpa',
-                 'cut': 'Just a knajpa',
-                 'text': 'Text about knajpa. Just a text.',
-                 'author': 'Guest' }
-        
-        dom = self.getResponseContent('cmd=add', data)
+        """ 'cmd=add' should return a created article id """        
+        dom = self.getResponseContent('cmd=add', self._getTestArticleData())
 
         root = dom.documentElement
         self.assertEquals('content', root.tagName)
@@ -97,6 +99,21 @@ class ArticleManipulationTest(BaseArticleTest):
 
         article_id = nodes[0].firstChild.data
         self.assertTrue(article_id)
+
+
+    # this test doesn't look as enough simple and currently it's skipped
+    ##def testUpdateArticle(self):
+        """ 'cmd=add&id=<article_id>' with specified id should update the article """
+        # fisrst we should add an article to the service and extract it id
+        ##dom = self.getResponseContent('cmd=add', self._getTestArticleData())
+
+        ##root = dom.documentElement
+        ##nodes = dom.getElementsByTagName('id')
+        ##article_id = nodes[0].firstChild.data
+
+        # end now get the article data
+        ##dom = self.getResponseContent('cmd=get&id=%s' % article_id)
+        
     
 
 if __name__ == '__main__':
