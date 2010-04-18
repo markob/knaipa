@@ -1,19 +1,14 @@
 """ Checks base functionality of the articles engine """
 import unittest
-from base_test import ServiceTest
+import base_service as baseServiceTests
 
 
-base_url = 'http://localhost:8080/articles'
-
-
-# 1) common service tests
-#   a) get service url (get service info page)
-class ArticleInfoTest(ServiceTest):
+class ArticleInfoTest(baseServiceTests.ServiceTest):
     """ Checks common service functionality. """
 
     def setUp(self):
         """ Initializes test with service specific data """
-        self._url_ = base_url
+        self._url_ = 'http://localhost:8080/articles'
         self._data_ = { 'services': 'Test Service',
                         'title': 'Test Restaurant',
                         'description': 'It is just a test content.',

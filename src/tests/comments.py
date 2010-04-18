@@ -1,14 +1,14 @@
 """ Checks base functionality of the comments engine """
 import unittest
-from base_test import ServiceTest
+import base_service as baseServiceTests
 
 
-class CommentsInfoTest(ServiceTest):
+class CommentsInfoTest(baseServiceTests.ServiceTest):
     """ Checks common service functionality. """
 
     def setUp(self):
         """ Initializes test with service specific data """
-        self._url_ = base_url
+        self._url_ = 'http://localhost:8080/comments'
         self._data_ = { 'services': 'Test Service',
                         'title': 'Test Restaurant',
                         'description': 'It is just a test content.',
