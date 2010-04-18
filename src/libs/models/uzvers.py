@@ -1,20 +1,19 @@
 from google.appengine.ext import db
-from google.appengine.ext.db.polymodel import PolyModel
+
 
 import hashlib
 
-class Uzver(PolyModel):
+class Uzver(db.Model):
     """ It's base user class. All system users should be its descendants. """
     
-    first_name = db.StringProperty(default='Anonymous')
-    last_name = db.StringProperty(default='Unknown')
-    email = db.EmailProperty(default='anonymous@knajpa.com.ua')
+    first_name = db.StringProperty(required=True)
+    last_name = db.StringProperty(required=True)
+    email = db.EmailProperty(required=True)
     nick_name = db.StringProperty(required=True)
+    password = db.StringProperty(required=True)
+    password_is_hashed = db.BooleanProperty(default=False)
     avatar = db.LinkProperty(default=None)
-    password = db.StringProperty(default='qaswedfrtghy')
     created = db.DateTimeProperty(required=True, auto_now_add=True)
-    
-    _password_is_hashed = False
     
     
     def put(self):
@@ -28,9 +27,9 @@ class Uzver(PolyModel):
         """ Generates SHA1 hash for the password. """
         hash = self.password
         
-        if not self._password_is_hashed:
+        if not self.password_is_hashed:
             hash = hashlib.sha1(password).hexdigest()
-            self._password_is_hashed = True
+            self.password_is_hashed = True
         
         return hash
     
@@ -38,12 +37,12 @@ class Uzver(PolyModel):
     def set_password(self, password):
         """ Sets user password to the specified value. """
         self.password = password
-        self._password_is_hashed = False
+        self.password_is_hashed = False
     
     
     def is_password(self, password):
         """ Checks that provided password is equal to user password. """
-        if not self._password_is_hashed:
+        if not self.password_is_hashed:
             self.password = self._gen_password_hash(self.password)
         
         hash = hashlib.sha1(password).hexdigest()
@@ -58,5 +57,3 @@ class Uzver(PolyModel):
         """ Returns user ID. """
         return self.key().id()
 
-
-    # TODO: needed functionality which checks that user aren't duplicated
