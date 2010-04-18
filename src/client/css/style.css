@@ -96,17 +96,19 @@
 
 	#addItem	{font: 24px Verdana; float:left; color: green; cursor:pointer;}
 
-	#suggestion-test	{
-		position:absolute; font: 11px Tahoma;
-		z-index:999; display: none;
-		margin:22px 0 0;padding-bottom:6px;
-		background: #FFFFFF;
-		border:1px solid #61CEF9;
-		border-top:none;
-	}
-	#suggestion-test	li	{list-style : none; margin: auto 2px; padding: 1px 7px;}
-	#suggestion-test	li.active	{background:#fedb74;}
-	#suggestion-test	li:hover	{background:#c9e8f4;}
+	.suggestion	{ position:absolute; font: 11px Tahoma; z-index:999; display: none; margin:22px 0 0;padding-bottom:6px; background: #f3f3f3; border-top:none;}
+
+		.suggestion	em	{position:absolute; height:14px; width:10px; background: url(img/controls-main-back.png)}
+			.suggestion	em.bl	{background-position:0 -207px; bottom:-14px; left:-10px;}
+			.suggestion	em.br	{background-position:-11px -207px; bottom:-14px; right:-12px; width:12px;}
+
+			.suggestion	em.r	{background:url("img/controls-horizontal-back.png") repeat scroll -13px 0 transparent; height:100%;position:absolute; right:-12px; top:0; width:12px;}
+			.suggestion	em.b	{background:url("img/controls-vertical-back.png") repeat scroll 0 -14px transparent; bottom:-16px; height:18px; position:absolute; right:0; width:100%;}
+
+		.suggestion	ul	{border-left:1px solid #CFCFCF; background-color:#F3F3F3; margin-bottom:-6px; margin-left:-10px;}
+			.suggestion	li	{list-style : none; margin: auto 2px; padding: 1px 7px;}
+			.suggestion	li.active	{background:#fedb74;}
+			.suggestion	li:hover	{background:#c9e8f4;}
 
 	#textInfo	input	{ background:#f3f3f3; border: none; border-top:1px solid #cfcfcf; height: 19px; color: #292929; font:11px Tahoma; width:100%; margin:0 16px; padding-bottom:4px;}
 	#textInfo	.input	{float:left; position:relative; width:65%; margin:3px 30px 3px auto; z-index:1;}

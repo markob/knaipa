@@ -6,17 +6,27 @@
 var suggestions = function (initObj){
 	var _this = this;
 	this.container = $('#suggestions');
-	this.suggestElement = $('#suggestion-test')[0]?$('#suggestion-test'):$('<ul id="suggestion-test"></ul>')
+	this.suggestElement = $('#suggestion-test')[0]?
+								$('#suggestion-test'):
+								$('<div class="suggestion"></div>')
 	this.data = {};
 	this.dataURL = 'content/knajpa-suggestion.xml';
 	this.dataFilter = {};
 	this.dataFilterURL = 'xsl/suggestion.xsl';
 
+	this.styleModifier = {
+		width:0,
+		top: 0,
+		left:1
+	}
+
 	this.selected = false;
 
 	/**
 	 * Events
-	 *    select - when user select some item.
+	 *  	select - When user select some item.
+	 *  	show - When showed suggestions
+	 *  	hide - When hided suggestions
 	 */
 	this.events={};
 	/**
@@ -44,54 +54,69 @@ var suggestions = function (initObj){
 	 */
 	this.keyEvents = function(e){
 		e.stopPropagation();
-		if (e.keyCode == 13) {_this.setSuggestion();} //enter;
 
-		else if (e.keyCode == 38) { //up;
-			_this.setActivElement(_this.getActivElement().prev()[0]||_this.suggestElement.find('li:last'));
-		}
+		//Enter;
+		if (e.keyCode == 13) {_this.setSuggestion();}
 
-		else if (e.keyCode == 40) { //down;
-			_this.setActivElement(_this.getActivElement().next()[0]||_this.suggestElement.find('li:first'));
+		//Escape;
+		if (e.keyCode == 27) {_this.hide();}
+
+		//Up;
+		else if (e.keyCode == 38) {_this.setActivElement(_this.getActivElement().prev()[0]||_this.suggestElement.find('li:last'));}
+
+ 		//Down;
+		else if (e.keyCode == 40) { _this.setActivElement(_this.getActivElement().next()[0]||_this.suggestElement.find('li:first'));}
+
+		else {
+			if (!_this.showed) _this.show(e)
+			_this.pasteData();
 		}
-		else _this.showSuggestions(e)
 	};
 
 	/**
 	 *
 	 * @param {Event} e
 	 */
-	this.hideSuggestion = function(e){
+	this.hide = function(e){
+		_this.showed = false;
 		_this.suggestElement
-				.css ('display','none');
-		_this.suggestElement
+				.css ('display','none')
 				.unbind('mousedown',_this.setSuggestion)
+		_this.trigger("hide");
 	}
 
 	/**
-	 *
+	 * Show suggestion popup.
 	 * @param {Event} e
 	 */
-	this.showSuggestions = function (e){
+	this.show = function (e){
+		_this.showed = true;
+		_this.suggestElement
+				.css ({
+					left: _this.container.offset().left +_this.styleModifier.left + 'px',
+					top: _this.container.offset().top + _this.styleModifier.top + 'px',
+					width: _this.container.width() + _this.styleModifier.width + 'px',
+					display: 'block'
+				})
+				.bind('mousedown',_this.setSuggestion)
+		_this.trigger("show");
+	};
+
+	/**
+	 * Generate and insert data to {@link suggestElement}
+	 */
+	this.pasteData = function(){
 		function closure (){
-			_this.dataFilter.getElementsByTagName('xsl:variable')[0].firstChild.nodeValue = e.target.value.toLowerCase();
+			_this.dataFilter.getElementsByTagName('xsl:variable')[0].firstChild.nodeValue = _this.container.attr('value').toLowerCase();
 			_this.suggestElement
-					.css ('display','block')
-					.xslt (_this.data, _this.dataFilter)
+					.xslt (_this.data, _this.dataFilter) // Make transformation
 					.find ('li')
-					.each (function(){this.innerHTML = this.innerHTML.replace((new RegExp('('+e.target.value+')','i')),'<b>$1</b>');});
+					.each (function(){this.innerHTML = this.innerHTML.replace((new RegExp('('+_this.container.attr('value')+')','i')),'<b>$1</b>');}); // To highlight search query.
 
 			_this.setActivElement($(_this.suggestElement).find('li')[0]);
 		}
-		window.setTimeout(closure,10);
-
-		_this.suggestElement
-				.css ({
-					left: _this.container.offset().left + 'px',
-					top: _this.container.offset().top + 'px',
-					width: _this.container.width() + 'px'
-				})
-				.bind('mousedown',_this.setSuggestion)
-	};
+		window.setTimeout(closure,10); //Wait for event data
+	}
 
 	/**
 	 *
@@ -113,7 +138,7 @@ var suggestions = function (initObj){
 		if (e) {_this.setActivElement(e.target)}
 		_this.container.attr('value', _this.getActivElement().text());
 		_this.trigger('select');
-		_this.hideSuggestion();
+		_this.hide();
 	}
 
 	this.init = function(){
@@ -126,8 +151,8 @@ var suggestions = function (initObj){
 
 		_this.container
 			.bind('keydown',_this.keyEvents)
-			.bind('focus',_this.showSuggestions)
-			.bind('blur',_this.hideSuggestion);
+			.bind('focus',_this.show)
+			.bind('blur',_this.hide);
 	};
 	this.init();
 };

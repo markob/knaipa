@@ -7,15 +7,24 @@
 	<xsl:variable name="up-case">АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 
 	<xsl:template match="suggestion">
-		<xsl:for-each select="item [contains(translate(@value,$up-case,$lover-case) , $filter)]">
-			<xsl:sort order="descending" select="starts-with(translate(@value,$up-case,$lover-case) , $filter)" />
-			<xsl:sort order="descending" select="contains(translate(@value,$up-case,$lover-case) , $filter)" />
 
-			<xsl:if test="position() &lt;= 10">
-				<li><xsl:value-of select="@value"/></li>
-			</xsl:if>
+		<em class="br"></em>
+		<em class="bl"></em>
 
-		</xsl:for-each>
+		<em class="b"></em>
+		<em class="r"></em>
+
+		<ul>
+			<xsl:for-each select="item [contains(translate(@value,$up-case,$lover-case) , $filter)]">
+				<xsl:sort order="descending" select="starts-with(translate(@value,$up-case,$lover-case) , $filter)" />
+				<xsl:sort order="descending" select="contains(translate(@value,$up-case,$lover-case) , $filter)" />
+
+				<xsl:if test="position() &lt;= 10">
+					<li><xsl:value-of select="@value"/></li>
+				</xsl:if>
+
+			</xsl:for-each>
+		</ul>
 	</xsl:template>
 </xsl:stylesheet>
 

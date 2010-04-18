@@ -51,7 +51,9 @@
 									$('#knajpa-template-test').xslt(data,'xsl/admin.xsl')
 								}
 							});
-						});
+						})
+						.bind('show',function(){console.log("show")})
+						.bind('hide',function(){console.log("hide")})
 
 //				var b = new suggestions({container : $('#search-item'),dataURL: 'content/knajpa-items-suggestion.xml'})
 //						.bind('select',function (_this){alert(_this.container.attr('value'))});
