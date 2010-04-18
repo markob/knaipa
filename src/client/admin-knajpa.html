@@ -38,7 +38,7 @@
 						.bind('blur',function(){$(this.parentNode).removeClass('focus')})
 						.wrap('<div class="input '+this.className+'"></div>');
 				})
-				$('#textInfo div.input').append('<em class="l"></em><em class="r"></em>');
+				$('#textInfo div.input').append('<em class="l"></em><em class="r"></em><em class="t"></em><em class="b"></em>');
 
 				// Create suggestion elements
 				var a = new suggestions({container : $('#admin-main input:first')})
@@ -52,11 +52,23 @@
 								}
 							});
 						})
-						.bind('show',function(){console.log("show")})
-						.bind('hide',function(){console.log("hide")})
+						.bind('show',function(_this){
+							_this.container.parent().addClass('i-suggestion-grey');
+						})
+						.bind('hide',function(_this){
+							_this.container.parent().removeClass('i-suggestion-grey');
+						})
 
-//				var b = new suggestions({container : $('#search-item'),dataURL: 'content/knajpa-items-suggestion.xml'})
-//						.bind('select',function (_this){alert(_this.container.attr('value'))});
+				var b = new suggestions({container : $('#search-item'),dataURL: 'content/knajpa-items-suggestion.xml'})
+						.bind('select',function (_this){alert(_this.container.attr('value'))})
+						.bind('show',function(_this){
+							_this.container.parent().addClass('i-suggestion-white');
+							_this.suggestElement.addClass('white');
+						})
+						.bind('hide',function(_this){
+							_this.container.parent().removeClass('i-suggestion-white');
+							_this.suggestElement.removeClass('white');
+						})
 
 			});
 		</script>
@@ -95,7 +107,7 @@
 
 					<div id="admin-main" class="w-100 admin-main">
 						<label>Назва кнайпи</label> <input type="text" />
-						<label>Адреса</label> <input type="text" />
+						<label>Адреса</label> <input id="address" type="text" />
 					</div>
 
 					<ul class="admin-items">
