@@ -40,20 +40,35 @@
 			var target = $(this);
 
 			var change = function() {
-				if (xm.readyState == 'complete' && xs.readyState == 'complete') {
+				if(xm.readyState == 'complete' && xs.readyState == 'complete')  {
 					window.setTimeout(function() {
 						target.html(xm.transformNode(xs.XMLDocument));
 					}, 50);
 				}
+				if ((xm && xm.readyState == 4) && (xs && xs.readyState == 4)){
+					target.html(xm.transformNode(xs));
+				}
 			};
 
-			var xm = document.createElement('xml');
-			xm.onreadystatechange = change;
-			xm[dataAsText.test(xml) ? "innerHTML" : "src"] = xml;
+			if (xml.documentElement){
+				xm = xml;
+				change();
+			}
+			else {
+				var xm = document.createElement('xml');
+				xm.onreadystatechange = change;
+				xm[dataAsText.test(xml) ? "innerHTML" : "src"] = xml;
+			}
 
-			var xs = document.createElement('xml');
-			xs.onreadystatechange = change;
-			xs[dataAsText.test(xslt) ? "innerHTML" : "src"] = xslt;
+			if (xslt.documentElement){
+				xs = xslt;
+				change();
+			}
+			else {
+				var xs = document.createElement('xml');
+				xs.onreadystatechange = change;
+				xs[dataAsText.test(xslt) ? "innerHTML" : "src"] = xslt;
+			}
 
 			$('body').append(xm).append(xs);
 			return this;

@@ -12,7 +12,20 @@ var suggestions = function (initObj){
 	this.data = {};
 	this.dataURL = 'content/knajpa-suggestion.xml';
 	this.dataFilter = {};
+	/**
+	 * URL of data filter
+	 */
 	this.dataFilterURL = 'xsl/suggestion.xsl';
+
+	/**
+	 * Contains suggestion "empty result" string.
+	 *  Need for compare empty result 
+	 */
+	this.emptySuggestion = '';
+	/**
+	 * Contains the initial data input
+	 */
+	this.bufer = {};
 
 	this.styleModifier = {
 		width:0,
@@ -22,6 +35,13 @@ var suggestions = function (initObj){
 
 	this.selected = false;
 
+
+	var specialKeys = {
+		13: 'Enter',
+		27: 'Escape',
+		38: 'Up',
+		40: 'Down'
+	}
 	/**
 	 * Events
 	 *  	select - When user select some item.
@@ -59,19 +79,32 @@ var suggestions = function (initObj){
 		if (e.keyCode == 13) {_this.setSuggestion();}
 
 		//Escape;
-		if (e.keyCode == 27) {_this.hide();}
+		if (e.keyCode == 27) {
+			_this.hide();
+			_this.container.attr('value',_this.bufer);
+		}
 
 		//Up;
-		else if (e.keyCode == 38) {_this.setActivElement(_this.getActivElement().prev()[0]||_this.suggestElement.find('li:last'));}
+		else if (e.keyCode == 38) {
+			_this.setActiveElement(_this.getActiveElement().prev()[0]||_this.suggestElement.find('li:last'));
+			_this.container.attr('value',_this.getActiveElement().text());
+		}
 
  		//Down;
-		else if (e.keyCode == 40) { _this.setActivElement(_this.getActivElement().next()[0]||_this.suggestElement.find('li:first'));}
-
-		else {
-			if (!_this.showed) _this.show(e)
-			_this.pasteData();
+		else if (e.keyCode == 40) {
+			_this.setActiveElement(_this.getActiveElement().next()[0]||_this.suggestElement.find('li:first'));
+			_this.container.attr('value',_this.getActiveElement().text());
 		}
+
+		else {_this.bufer = _this.container.attr('value');}
 	};
+
+	this.searchInit = function(e){
+		if (e.keyCode in specialKeys) { return;}
+
+		_this.searchAndRender (_this.container.attr('value'));
+		if (!_this.showed) _this.show()
+	}
 
 	/**
 	 *
@@ -103,40 +136,36 @@ var suggestions = function (initObj){
 	};
 
 	/**
-	 * Generate and insert data to {@link suggestElement}
+	 * Generate and insert data to {@link this.suggestElement}
 	 */
-	this.pasteData = function(){
-		function closure (){
-			_this.dataFilter.getElementsByTagName('xsl:variable')[0].firstChild.nodeValue = _this.container.attr('value').toLowerCase();
-			_this.suggestElement
-					.xslt (_this.data, _this.dataFilter) // Make transformation
-					.find ('li')
-					.each (function(){this.innerHTML = this.innerHTML.replace((new RegExp('('+_this.container.attr('value')+')','i')),'<b>$1</b>');}); // To highlight search query.
+	this.searchAndRender = function(query){
+		_this.dataFilter.getElementsByTagName('xsl:variable')[0].firstChild.nodeValue = query.toLowerCase();
+		_this.suggestElement
+				.xslt (_this.data, _this.dataFilter) // Make transformation
+				.find ('li')
+				.each (function(){this.innerHTML = this.innerHTML.replace((new RegExp('('+query+')','i')),'<b>$1</b>');}); // To highlight search query.
 
-			_this.setActivElement($(_this.suggestElement).find('li')[0]);
-		}
-		window.setTimeout(closure,10); //Wait for event data
+		_this.setActiveElement($(_this.suggestElement).find('li')[0]);
 	}
 
 	/**
-	 *
 	 * @param {Element} el
 	 */
-	this.setActivElement = function(el){
+	this.setActiveElement = function(el){
 		if (_this.selected) _this.selected.removeClass('active');
 		_this.selected = $(el)
 		_this.selected.addClass('active');
 	}
 
-	this.getActivElement = function(){return _this.selected}
+	this.getActiveElement = function(){return _this.selected}
 
 	/**
 	 *
 	 * @param {Event} e
 	 */
 	this.setSuggestion = function (e){
-		if (e) {_this.setActivElement(e.target)}
-		_this.container.attr('value', _this.getActivElement().text());
+		if (e) {_this.setActiveElement(e.target)}
+		_this.container.attr('value', _this.getActiveElement().text());
 		_this.trigger('select');
 		_this.hide();
 	}
@@ -151,6 +180,7 @@ var suggestions = function (initObj){
 
 		_this.container
 			.bind('keydown',_this.keyEvents)
+			.bind('keyup', _this.searchInit)
 			.bind('focus',_this.show)
 			.bind('blur',_this.hide);
 	};
