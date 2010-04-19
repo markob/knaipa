@@ -12,12 +12,18 @@ def UserProxy(object):
     """ It's wrapper for users implementation which gets some additional functionality """
         
 
-    def __init__(self, user_data, is_new=True):
+    def __init__(self, user_data, is_new=True, user_id=None):
         """ Creates new user or loads an existing user data from datastore """
-        if None == user_data or None == user_data['nick_name']:
-            raise(BadUserData, 'user nickname is required')
+        if (None == user_id) and (None == user_data or None == user_data['nick_name']):
+            raise(BadUserData, 'user nickname or id is required')
+
+        if None != user_id:
+            # existing user requested, try to get it
+            user = db.get(user_id)
+            if None == user:
+                raise(BadUserData, 'user with the specified nickname does not exist')
         
-        if is_new:
+        elif is_new:
             # create new user but check for duplicates first
             if not self._is_unique(user_data):
                 raise(BadUserRequest, 'user with such nickname or email exists')
@@ -78,10 +84,19 @@ def UserProxy(object):
             if user_data.has_key(prop_name):
                 setattr(self._user_, prop_name, user_data[prop_name])
 
+        # password should be updated in other way
+        if user_data.has_key('password'):
+            self._user_.set_password(user_data['password'])
+
 
     def get_user_id(self):
         """ Simple retrieves user id """
         self._user_.key().id_or_name()
+
+
+    def is_password(self, password):
+        """ Checks user password and retrieves True or False """
+        return self._user_.is_password(password)
 
 
 
