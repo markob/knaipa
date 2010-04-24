@@ -37,40 +37,47 @@
 
 	if (document.recalc) { // IE 5+
 		$.fn.xslt = function(xml, xslt) { //TODO: test it in IE
+			var xs = {};
+			var xm = {};
+
 			var target = $(this);
 
 			var change = function() {
-				if(xm.readyState == 'complete' && xs.readyState == 'complete')  {
+				if(xm && xs && (xm.readyState == 'complete' || xm.readyState == 4 )&& (xs.readyState == 'complete' || xs.readyState == 4 ))  {
+//				if(xm.readyState == 4 && xs.readyState == 4) {
 					window.setTimeout(function() {
-						target.html(xm.transformNode(xs.XMLDocument));
+						target.html(xm.transformNode(xs.XMLDocument||xs));
 					}, 50);
-				}
-				if ((xm && xm.readyState == 4) && (xs && xs.readyState == 4)){
-					target.html(xm.transformNode(xs));
 				}
 			};
 
-			if (xml.documentElement){
-				xm = xml;
-				change();
-			}
-			else {
+			if (xml.documentElement){ var xm = xml; change();} //DOM
+			else if (!dataAsText.test(xml)){ // URL
+					$.ajax({
+						dataType : 'xml', url:xml,
+						success : function (data){ xm = data;change();}
+					});
+
+			} else { //Text
 				var xm = document.createElement('xml');
 				xm.onreadystatechange = change;
-				xm[dataAsText.test(xml) ? "innerHTML" : "src"] = xml;
+				xm.innerHTML = xml;
+				$('body').append(xm);
 			}
 
-			if (xslt.documentElement){
-				xs = xslt;
-				change();
-			}
-			else {
+			if (xslt.documentElement){ var xs = xslt; change(); } //DOM
+			else if (!dataAsText.test(xslt)){ //URL
+				$.ajax({
+					dataType : 'xml', url:xslt,
+					success : function (data){xs = data; change();}
+				});
+			} else { //Text
 				var xs = document.createElement('xml');
 				xs.onreadystatechange = change;
-				xs[dataAsText.test(xslt) ? "innerHTML" : "src"] = xslt;
+				xs.innerHTML= xslt;
+				$('body').append(xs);
 			}
 
-			$('body').append(xm).append(xs);
 			return this;
 		};
 	}
