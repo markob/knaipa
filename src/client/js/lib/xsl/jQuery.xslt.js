@@ -36,7 +36,7 @@
 	var dataAsText = /^\s*</;
 
 	if (document.recalc) { // IE 5+
-		$.fn.xslt = function(xml, xslt) { //TODO: test it in IE
+		$.fn.xslt = function(xml, xslt, callback) {
 			var xs = {};
 			var xm = {};
 
@@ -44,9 +44,9 @@
 
 			var change = function() {
 				if(xm && xs && (xm.readyState == 'complete' || xm.readyState == 4 )&& (xs.readyState == 'complete' || xs.readyState == 4 ))  {
-//				if(xm.readyState == 4 && xs.readyState == 4) {
 					window.setTimeout(function() {
 						target.html(xm.transformNode(xs.XMLDocument||xs));
+						callback && callback(target);
 					}, 50);
 				}
 			};
@@ -89,7 +89,7 @@
 		else { support = true;}
 
 		if (support) {
-			$.fn.xslt = function(xml, xslt) {
+			$.fn.xslt = function(xml, xslt, callback) {
 				var target = $(this);
 				var transformed = false;
 
@@ -110,6 +110,7 @@
 							resultDoc = processor.transformToFragment(xm.responseXML, document);
 							target.empty().append(resultDoc);
 						}
+						callback && callback(target);
 						transformed = true;
 					}
 				};

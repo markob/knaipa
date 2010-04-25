@@ -54,9 +54,12 @@
 
 //					$("<fieldset class='w-25'><legend></legend><div></div></fieldset>").appendTo($(document.body)).find('div').xslt(listXML['DOM[XML]'],listXSL['URL [XSL]']);
 
-					for (i in listXML){
-						for (j in listXSL){
-							$("<fieldset class='w-25'><legend>"+i+" - "+j+"</legend><div></div></fieldset>").appendTo($(document.body)).find('div').xslt(listXML[i],listXSL[j]);
+					for (var i in listXML){
+						for (var j in listXSL){
+							$("<fieldset class='w-25'><legend>"+i+" - "+j+"</legend><div></div></fieldset>")
+									.appendTo($(document.body))
+									.find('div')
+									.xslt( listXML[i],listXSL[j], function(target){ alert (target.parent().find('legend').html());});
 						}
 					}
 

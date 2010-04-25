@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
 
 
 		<script type="text/javascript" src="js/lib/xsl/jQuery.xslt.js"></script>
@@ -29,7 +29,6 @@
 					container : $('.admin-items:first')
 				});
 
-
 				// Decoration thing
 				//TODO: remove temporary code;
 				$('#textInfo input:text').each(function(){
@@ -39,7 +38,9 @@
 						.wrap('<div class="input '+this.className+'"></div>');
 				})
 				$('#textInfo div.input').append('<em class="l"></em><em class="r"></em><em class="t"></em><em class="b"></em>');
+			});
 
+			$(window).bind('load',function (){
 				// Create suggestion elements
 				var a = new suggestions({container : $('#admin-main input:first')})
 						.bind('select',function (_this){
@@ -69,8 +70,7 @@
 							_this.container.parent().removeClass('i-suggestion-white');
 							_this.suggestElement.removeClass('white');
 						})
-
-			});
+			})
 		</script>
 
 		<title>Knajpa - admin </title>

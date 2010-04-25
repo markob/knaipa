@@ -25,7 +25,7 @@ var suggestions = function (initObj){
 	/**
 	 * Contains the initial data input
 	 */
-	this.bufer = {};
+	this.bufer = "";
 
 	this.styleModifier = {
 		width:0,
@@ -34,7 +34,6 @@ var suggestions = function (initObj){
 	}
 
 	this.selected = false;
-
 
 	var specialKeys = {
 		13: 'Enter',
@@ -86,24 +85,33 @@ var suggestions = function (initObj){
 
 		//Up;
 		else if (e.keyCode == 38) {
-			_this.setActiveElement(_this.getActiveElement().prev()[0]||_this.suggestElement.find('li:last'));
-			_this.container.attr('value',_this.getActiveElement().text());
+			if (!_this.showed) {_this.searchAndRender (_this.container.attr('value')); return}
+			if (!_this.getActiveElement()) {
+				_this.setActiveElement($(_this.suggestElement).find('li:last'));
+			}
+			else {
+				if (!_this.getActiveElement().prev()[0]){ _this.clearActiveElement();}
+				else{_this.setActiveElement(_this.getActiveElement().prev());}
+			}
 		}
 
  		//Down;
 		else if (e.keyCode == 40) {
-			_this.setActiveElement(_this.getActiveElement().next()[0]||_this.suggestElement.find('li:first'));
-			_this.container.attr('value',_this.getActiveElement().text());
+			if (!_this.showed) {_this.searchAndRender (_this.container.attr('value')); return}
+
+			if (!_this.getActiveElement()) {_this.setActiveElement($(_this.suggestElement).find('li:first'));}
+			else {
+				if (!_this.getActiveElement().next()[0]){ _this.clearActiveElement();}
+				else{ _this.setActiveElement(_this.getActiveElement().next());}
+			}
 		}
 
-		else {_this.bufer = _this.container.attr('value');}
 	};
 
 	this.searchInit = function(e){
 		if (e.keyCode in specialKeys) { return;}
-
 		_this.searchAndRender (_this.container.attr('value'));
-		if (!_this.showed) _this.show()
+		_this.bufer = _this.container.attr('value');
 	}
 
 	/**
@@ -139,13 +147,20 @@ var suggestions = function (initObj){
 	 * Generate and insert data to {@link this.suggestElement}
 	 */
 	this.searchAndRender = function(query){
-		_this.dataFilter.getElementsByTagName('xsl:variable')[0].firstChild.nodeValue = query.toLowerCase();
+		(_this.dataFilter.getElementsByTagName('xsl:variable')[0] || _this.dataFilter.getElementsByTagName('variable')[0])
+			.firstChild.nodeValue = query.toLowerCase();
 		_this.suggestElement
-				.xslt (_this.data, _this.dataFilter) // Make transformation
-				.find ('li')
-				.each (function(){this.innerHTML = this.innerHTML.replace((new RegExp('('+query+')','i')),'<b>$1</b>');}); // To highlight search query.
+				.xslt (_this.data, _this.dataFilter, function (suggestElement){
+					if (suggestElement.html() == ""){_this.hide(); return}
+					else {
+						suggestElement
+								.find ('li')
+								.each (function(){this.innerHTML = this.innerHTML.replace((new RegExp('('+query+')','i')),'<b>$1</b>');}); // To highlight search query.
+						_this.show()
+						_this.selected = false;
+					}
+				}) // Make transformation
 
-		_this.setActiveElement($(_this.suggestElement).find('li')[0]);
 	}
 
 	/**
@@ -153,8 +168,15 @@ var suggestions = function (initObj){
 	 */
 	this.setActiveElement = function(el){
 		if (_this.selected) _this.selected.removeClass('active');
-		_this.selected = $(el)
+		_this.selected = $(el);
 		_this.selected.addClass('active');
+		_this.container.attr('value',_this.selected.text());
+	}
+
+	this.clearActiveElement = function(){
+		if (_this.selected) _this.selected.removeClass('active');
+		_this.selected = false;
+		_this.container.attr('value', _this.bufer)
 	}
 
 	this.getActiveElement = function(){return _this.selected}
@@ -165,24 +187,36 @@ var suggestions = function (initObj){
 	 */
 	this.setSuggestion = function (e){
 		if (e) {_this.setActiveElement(e.target)}
-		_this.container.attr('value', _this.getActiveElement().text());
+		if (_this.getActiveElement()) _this.container.attr('value', _this.getActiveElement().text());
+		_this.bufer = _this.container.attr('value');
+		_this.container.trigger('blur').trigger('focus'); //Need for reset some specific behavior of input control. (Escape button for example)
 		_this.trigger('select');
-		_this.hide();
 	}
 
 	this.init = function(){
 		for (var tmp in initObj){_this[tmp]=initObj[tmp];}
 
-		$.ajax({url: _this.dataURL, success : function (data){_this.data = data;}});
-		$.ajax({url: _this.dataFilterURL, success : function (data){_this.dataFilter = data;}})
+		$.ajax({
+			url: _this.dataURL,
+			dataType: "xml",
+			success : function (data){_this.data = data; },
+			error: function (XMLHttpRequest, textStatus, errorThrown){
+					alert(XMLHttpRequest.status);
+					alert(XMLHttpRequest.responseText);
+				}
+		});
+
+		$.ajax({url: _this.dataFilterURL,  dataType: "xml", success : function (data){_this.dataFilter = data;}})
 
 		$(document.body).append(_this.suggestElement);
 
 		_this.container
 			.bind('keydown',_this.keyEvents)
 			.bind('keyup', _this.searchInit)
-			.bind('focus',_this.show)
+//			.bind('focus',_this.show)
 			.bind('blur',_this.hide);
+	
+		_this.bufer = _this.container.attr('value');
 	};
 	this.init();
 };

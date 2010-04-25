@@ -7,25 +7,26 @@
 	<xsl:variable name="up-case">АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 
 	<xsl:template match="suggestion">
+		<xsl:if test="count(item [contains(translate(@value,$up-case,$lover-case) , $filter)])">
+			<em class="br"></em>
+			<em class="bl"></em>
 
-		<em class="br"></em>
-		<em class="bl"></em>
+			<em class="t"></em>
+			<em class="b"></em>
+			<em class="r"></em>
 
-		<em class="t"></em>
-		<em class="b"></em>
-		<em class="r"></em>
+			<ul>
+				<xsl:for-each select="item [contains(translate(@value,$up-case,$lover-case) , $filter)]">
+					<xsl:sort order="descending" select="starts-with(translate(@value,$up-case,$lover-case) , $filter)" />
+					<xsl:sort order="descending" select="contains(translate(@value,$up-case,$lover-case) , $filter)" />
 
-		<ul>
-			<xsl:for-each select="item [contains(translate(@value,$up-case,$lover-case) , $filter)]">
-				<xsl:sort order="descending" select="starts-with(translate(@value,$up-case,$lover-case) , $filter)" />
-				<xsl:sort order="descending" select="contains(translate(@value,$up-case,$lover-case) , $filter)" />
+					<xsl:if test="position() &lt;= 10">
+						<li><xsl:value-of select="@value"/></li>
+					</xsl:if>
 
-				<xsl:if test="position() &lt;= 10">
-					<li><xsl:value-of select="@value"/></li>
-				</xsl:if>
-
-			</xsl:for-each>
-		</ul>
+				</xsl:for-each>
+			</ul>
+		</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>
 
