@@ -43,12 +43,12 @@
 			#search	.input	input	{ height:17px; width:310px; background-color:transparent; border:medium none; margin:6px 0 0 10px; padding-left: 31px !important; position:absolute; z-index:3; color: #b2b2b2; font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif;}
 
 		/* Search submit button */
-		#search	button	{ padding:0 0 5px; float:right; height: 28px; width: 66px; margin:13px 9px; border:none; background:#F9C45F url(img/vertical-back.png) repeat-x scroll 0px -169px; color:#FFFFFF; font-family:Tahoma; font-size:15px; z-index:2 }
-			#search	button	em	{ width: 14px; height: 14px; z-index: -1;}
-			#search	button	em.tl	{ background-position:0 -63px; left:-3px; top:-4px; }
-			#search	button	em.tr	{ background-position:-14px -63px; right:3px; top:-4px; }
-			#search	button	em.bl	{ background-position:0 -77px; bottom:4px; left:-3px;}
-			#search	button	em.br	{  background-position:-14px -77px;  bottom: 4px; right: 3px;}
+		#search	a.button	{ background:url("img/vertical-back.png") repeat-x scroll 0 -169px #F9C45F; color:#FFFFFF; float:right; font:15px Tahoma; height:20px; margin:13px 14px; padding:4px 8px; z-index:2;}
+			#search	a.button	em	{ width: 14px; height: 14px; z-index: -1;}
+			#search	a.button	em.tl	{ background-position:0 -63px;}
+			#search	a.button	em.tr	{ background-position:-14px -63px;}
+			#search	a.button	em.bl	{ background-position:0 -77px;}
+			#search	a.button	em.br	{  background-position:-14px -77px;}
 
 	#searchTips	{ color: #4895b2; font: italic 12px Georgia; position:absolute; z-index: 3; top: 150px; left: 600px;}
 
