@@ -36,26 +36,48 @@
 	var dataAsText = /^\s*</;
 
 	if (document.recalc) { // IE 5+
-		$.fn.xslt = function(xml, xslt) { //TODO: test it in IE
+		$.fn.xslt = function(xml, xslt, callback) {
+			var xs = {};
+			var xm = {};
+
 			var target = $(this);
 
 			var change = function() {
-				if (xm.readyState == 'complete' && xs.readyState == 'complete') {
+				if(xm && xs && (xm.readyState == 'complete' || xm.readyState == 4 )&& (xs.readyState == 'complete' || xs.readyState == 4 ))  {
 					window.setTimeout(function() {
-						target.html(xm.transformNode(xs.XMLDocument));
+						target.html(xm.transformNode(xs.XMLDocument||xs));
+						callback && callback(target);
 					}, 50);
 				}
 			};
 
-			var xm = document.createElement('xml');
-			xm.onreadystatechange = change;
-			xm[dataAsText.test(xml) ? "innerHTML" : "src"] = xml;
+			if (xml.documentElement){ var xm = xml; change();} //DOM
+			else if (!dataAsText.test(xml)){ // URL
+					$.ajax({
+						dataType : 'xml', url:xml,
+						success : function (data){ xm = data;change();}
+					});
 
-			var xs = document.createElement('xml');
-			xs.onreadystatechange = change;
-			xs[dataAsText.test(xslt) ? "innerHTML" : "src"] = xslt;
+			} else { //Text
+				var xm = document.createElement('xml');
+				xm.onreadystatechange = change;
+				xm.innerHTML = xml;
+				$('body').append(xm);
+			}
 
-			$('body').append(xm).append(xs);
+			if (xslt.documentElement){ var xs = xslt; change(); } //DOM
+			else if (!dataAsText.test(xslt)){ //URL
+				$.ajax({
+					dataType : 'xml', url:xslt,
+					success : function (data){xs = data; change();}
+				});
+			} else { //Text
+				var xs = document.createElement('xml');
+				xs.onreadystatechange = change;
+				xs.innerHTML= xslt;
+				$('body').append(xs);
+			}
+
 			return this;
 		};
 	}
@@ -67,12 +89,12 @@
 		else { support = true;}
 
 		if (support) {
-			$.fn.xslt = function(xml, xslt) {
+			$.fn.xslt = function(xml, xslt, callback) {
 				var target = $(this);
 				var transformed = false;
 
-				var xm = {readyState: 4};
-				var xs = {readyState: 4};
+				var xm = {};
+				var xs = {};
 
 				var change = function() {
 					if (xm.readyState == 4 && xs.readyState == 4  && !transformed) {
@@ -88,23 +110,24 @@
 							resultDoc = processor.transformToFragment(xm.responseXML, document);
 							target.empty().append(resultDoc);
 						}
+						callback && callback(target);
 						transformed = true;
 					}
 				};
 
-				if (xml.documentElement) {xm.responseXML = xml}
-				else if (dataAsText.test(xml)) { xm.responseXML = new DOMParser().parseFromString(xml, "text/xml");}
+				if (xml.documentElement) {xm.responseXML = xml; xm.readyState = 4; change()}
+				else if (dataAsText.test(xml)) {xm.readyState = 4; xm.responseXML = new DOMParser().parseFromString(xml, "text/xml");}
 				else {
 					xm = $.ajax({ dataType: "xml", url: xml});
 					xm.onreadystatechange = change;
 				}
 
-				if (xslt.documentElement) {xs.responseXML = xslt}
+				if (xslt.documentElement) {xs.responseXML = xslt; xs.readyState = 4; change()}
 				else if (dataAsText.test(xslt)) {
+					xs.readyState = 4;
 					xs.responseXML = new DOMParser().parseFromString(xslt, "text/xml");
 					change();
-				}
-				else {
+				}else {
 					xs = $.ajax({ dataType: "xml", url: xslt});
 					xs.onreadystatechange = change;
 				}
