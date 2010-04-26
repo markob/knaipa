@@ -51,8 +51,8 @@ $(function(){
 //				content/content-list-template.xml
 
 			else if ($.address.path() && $.address.path() != '/'){
-				$.ajax({ dataType: "xml", url: 'article?cmd=get;id='+$.address.path().replace('/',''), success: feelData});}
-			else { $.ajax({ dataType: "xml", url: 'article?cmd=list', success: feelData}); }
+				$.ajax({ dataType: "xml", url: 'articles?cmd=get;id='+$.address.path().replace('/',''), success: feelData});}
+			else { $.ajax({ dataType: "xml", url: 'articles?cmd=list', success: feelData}); }
 		}
 
 		this.init = function(){
