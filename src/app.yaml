@@ -1,5 +1,5 @@
 application: knaipa-ua
-version: dev-10-master
+version: 10-master
 runtime: python
 api_version: 1
 
@@ -51,10 +51,6 @@ handlers:
   static_files: client/xsl/\1
   upload: client/xsl/.*\.xsl
 
-# favicon handler
-- url: /favicon.\ico
-  static_files: favicon.ico
-  upload: favicon\.ico
 
 ####################################################################
 # Script Handlers Section
