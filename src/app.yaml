@@ -21,6 +21,12 @@ handlers:
   static_files: client/index.html
   upload: client/index\.html
 
+# entry points to the administration services - admin-*.html
+- url: /(.*\.html)
+  static_files: client/\1
+  upload: client/.*\.html  
+  login: admin
+
 # entry points to the service - *.html
 - url: /(.*\.html)
   static_files: client/\1
