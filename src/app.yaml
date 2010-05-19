@@ -22,10 +22,15 @@ handlers:
   upload: client/index\.html
 
 # entry points to the administration services - admin-*.html
+- url: /(admin-.*\.html)
+  static_files: client/\1
+  upload: client/admin-.*\.html  
+  login: admin
+
+# entry points to the services - *.html  
 - url: /(.*\.html)
   static_files: client/\1
   upload: client/.*\.html  
-  login: admin
 
 # entry points to the service - *.html
 - url: /(.*\.html)
