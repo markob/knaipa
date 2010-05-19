@@ -39,7 +39,7 @@ $(function(){
 				$('#textInfo').xslt(_this.contentXML,'xsl/content-template.xsl');
 				feelMap($('marker',_this.contentXML));
 			}
-			if (/admin/gim.test(window.location)){ //TODO:Remove this temporary admin check
+			if (/admin|knajpa/gim.test(window.location)){ //TODO:Remove this temporary admin check
 				$.ajax({
 					type: "GET",
 					url: "js/admin.js",
