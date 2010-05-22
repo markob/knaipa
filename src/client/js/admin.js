@@ -12,7 +12,7 @@ Knajpa.admin = new function(){
 		_this.dataForm.bind('submit',function(){
 			//test
 
-			_this.data.cmd = 'post' ;
+			_this.data.cmd = 'add' ;
 			_this.data.knaipa = Math.random() ;
 			_this.data.title = _this.dataForm[0]['knajpa-title'].value;
 			_this.data.description = _this.dataForm[0]['knajpa-description'].value;
@@ -29,7 +29,7 @@ Knajpa.admin = new function(){
 			$.ajax({
 				type: "POST",
 				data: _this.data,
-				url: 'article',
+				url: 'articles',
 				success: function(msg){alert(msg);}
 			});
 
