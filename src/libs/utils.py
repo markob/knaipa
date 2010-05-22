@@ -1,5 +1,4 @@
-""" Utilities are used in other modules and contain common solutions
-for them """
+""" Utilities are used in other modules and contain common solutions for them """
 
 import logging
 
