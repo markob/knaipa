@@ -15,6 +15,62 @@
 		<link media="all" rel="stylesheet" href="css/style.css">
 
 		<title>Knajpa - for your convenience </title>
+		<script type="text/javascript">
+			$(function(){
+				function makeExtended (el){
+					el.data('position','extended');
+					// Animation test
+					$('.description:first').animate({ top: 20, left:0});
+				}
+
+				function makeCompact (el){
+					el.data('position','compact');
+					$('.description:first').animate({top: 0, left:225 });
+					$('.knajpa-info ul li:first').stop().animate({ height: 14});
+				}
+
+				$('.description:first')
+					.data('position','compact')
+					.bind('keydown',function(e){
+						var el= $(this);
+						window.setTimeout(function(){
+							if (el.data('position') == 'compact') {
+								if (el.find('div').height() > 20 || el.width()-20 < el.find('div').width()) makeExtended(el);
+							}
+							if (el.data('position') == 'extended'){
+								$('.knajpa-info ul li:first').stop().animate({height:el.height()+40})
+								if (el.find('div').width() < 230 && el.find('div').height() < 20) { makeCompact(el); }
+							}
+						},10)
+					})
+					.bind('click',function(){
+						$('.description:first div').trigger('focus');
+					})
+				$('.description:first div')
+					.bind('keydown',function(e){
+						if (e.keyCode == 13){ //Return
+							document.execCommand('inserthtml',false,'<br>&nbsp;');
+//							alert (this.selectionStart);
+							var sel = window.getSelection();
+
+							if (!sel.isCollapsed)sel.collapseToEnd();
+							var r = sel.getRangeAt(0);
+							console.log(r.startOffset);
+							var offset = r.startOffset
+							var offsetElement = r.startContainer;
+
+							r.setStart(offsetElement,offset-1);
+							r.setEnd(offsetElement,offset);
+
+							document.execCommand('delete',false,false);
+							$('.description:first').trigger('keydown')
+							return false;
+						}
+					})
+					.bind('focus',function(){$(this).parent().css({'z-index':99});})
+					.bind('blur',function(){$(this).parent().css({'z-index':0});})
+			})
+		</script>
 	</head>
 	<!--Test comment for git-->
 	<body>
@@ -54,38 +110,55 @@
 
 						<h3>Загальні дані</h3>
 						<ul>
-							<li><span class="title">Адреса:</span><span class="description">вул.Вірменська 2</span> </li>
-							<li><span class="title">Години роботи:</span><span class="description">11:00 - 02:00</span> </li>
-							<li><span class="title">Телефон:</span><span class="description">2-100-500</span> </li>
-							<li><span class="title">Вебсайт:</span><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>
-							<li><span class="title">Середній чек:</span><span class="description">40-100грн</span> </li>
-							<li><span class="title">Форми розрахунку:</span><span class="description">Бартер</span> </li>
+							<li><h4>Адреса:</h4><div class="description"><div style="float:left;" contenteditable="true">вул.Вірменська 2</div></div> </li>
+							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span> </li>
+							<li><h4>Телефон:</h4><span class="description">2-100-500</span> </li>
+							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>
+							<li><h4>Середній чек:</h4><span class="description">40-100грн</span> </li>
+							<li><h4>Форми розрахунку:</h4><span class="description">Бартер</span> </li>
 						</ul>
 
 						<h3>Додаткові послуги</h3>
 						<ul>
-							<li><span class="title">Доставка їжі:</span><span class="description">-</span> </li>
-							<li><span class="title">Парковка:</span><span class="description">-</span> </li>
-							<li><span class="title">Організація бенкетів:</span><span class="description">-</span> </li>
-							<li><span class="title">Кількість посадочних мість:</span><span class="description">120-160</span> </li>
-							<li><span class="title">Кількість залів:</span><span class="description">5</span> </li>
+							<li><h4>Доставка їжі:</h4><span class="description">-</span> </li>
+							<li><h4>Парковка:</h4><span class="description">-</span> </li>
+							<li><h4>Організація бенкетів:</h4><span class="description">-</span> </li>
+							<li><h4>Кількість посадочних мість:</h4><span class="description">120-160</span> </li>
+							<li><h4>Кількість залів:</h4><span class="description">5</span> </li>
 						</ul>
 
 						<h3>Кухня</h3>
-							<ul>
-								<li><span class="title">Тип кухні:</span><span class="description">Українська</span> </li>
-								<li><span class="title">Фірмова страва/напій:</span><span class="description">Жорчіг</span> </li>
-								<li><span class="title">Додатково:</span><span class="description">Сочні пяні воєнам!</span> </li>
-							</ul>
+						<ul>
+							<li><h4>Тип кухні:</h4><span class="description">Українська</span> </li>
+							<li><h4>Фірмова страва/напій:</h4><span class="description">Жорчіг</span> </li>
+							<li><h4>Додатково:</h4><span class="description">Сочні пяні воєнам!</span> </li>
+						</ul>
+
 						<h3>Медіа та розваги</h3>
 
 						<ul>
-							<li><span class="title">Медіа та розваги:</span><span class="description">Українська</span> </li>
-							<li><span class="title">Тип музики та напрямок:</span><span class="description">мітооол \m/</span> </li>
-							<li><span class="title">Додатково:</span><span class="description">вздрожні ефєкт!</span> </li>
+							<li><h4>Медіа та розваги:</h4><span class="description">Українська</span> </li>
+							<li><h4>Тип музики та напрямок:</h4><span class="description">мітооол \m/</span> </li>
+							<li><h4>Додатково:</h4><span class="description">вздрожні ефєкт!</span> </li>
 						</ul>
 
 						<h3>Інше</h3>
+						<ul>
+							<li><h4>Медіа та розваги:</h4><span class="description">Українська</span> </li>
+							<li class="long-description">
+								<h4>Хвото:</h4>
+								<span class="img-description">
+									<img src="content/img/lampa-1.png" alt="lampa-1"/>
+									<img src="content/img/lampa-2.png" alt="lampa-2"/>
+									<img src="content/img/lampa-3.png" alt="lampa-3"/>
+									<img src="content/img/lampa-4.png" alt="lampa-4"/>
+									<img src="content/img/lampa-5.png" alt="lampa-5"/>
+									<img src="content/img/lampa-6.png" alt="lampa-6"/>
+									<img src="content/img/lampa-7.png" alt="lampa-7"/>
+								</span>
+							</li>
+							<li><h4>Додатково:</h4><span class="description">вздрожні ефєкт!</span> </li>
+						</ul>
 						<p></p>
 					</div>
 

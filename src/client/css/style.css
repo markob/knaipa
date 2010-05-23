@@ -56,7 +56,7 @@
 /* Content
 ------------------------------ */
 	#content	{ background-color: #ffffff; margin-bottom: 100px; position: relative;}
-	#textInfo { width: 570px; float: left; z-index: 2; position: relative; min-height:860px;}
+	#textInfo { width: 570px; float: left; z-index: 2; position: relative; min-height:860px; padding-bottom:30px;}
 
 	/* Comments*/
 		div.comments	{background:#f0f0f0; font: 11px Tahoma; padding: 5px 15px; margin: 10px;}
@@ -220,6 +220,8 @@
 		.knajpa-info	p	{ float:left;}
 
 		.knajpa-info	ul	{ float:left; background:#f7f7f7; width:100%; font: 12px Tahoma; margin:0; padding:10px 0 20px;}
-			.knajpa-info	ul	li	{list-style:none; background: url("img/points-on-list.png") repeat-x 0 bottom; float:left; font:12px Tahoma; margin:4px 100% 0 17px; position:relative; width:223px;}
-				.knajpa-info	ul	li	.title	{ padding-right:4px; background:none repeat scroll 0 0 #F7F7F7; color:#8E6744; display:inline;}
-				.knajpa-info	ul	li	.description	{ background:none repeat scroll 0 0 #F7F7F7; color:#1E1E1E; float:right; font-size:14px; position:absolute; right:-285px; text-align:left; width:280px;}
+			.knajpa-info	ul	li	{ overflow: visible !important;list-style:none; background: url("img/points-on-list.png") repeat-x 0 bottom; float:left; font:12px Tahoma; margin:4px 100% 0 17px; position:relative; width:223px;}
+				.knajpa-info	ul	li	h4	{ padding-right:4px; background:none repeat scroll 0 0 #F7F7F7; color:#8E6744; display:inline; font:12px Tahoma;}
+				.knajpa-info	ul	li	.description	{border:1px solid; top:0; left:225px; background:none repeat scroll 0 0 #F7F7F7; color:#1E1E1E; font-size:14px; position:absolute; right:-285px; text-align:left;}
+				.knajpa-info	ul	li	.img-description	{display:block;}
+			.knajpa-info	ul	li.long-description	{background: none;}
