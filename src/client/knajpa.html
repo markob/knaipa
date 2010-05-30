@@ -50,12 +50,10 @@
 					.bind('keydown',function(e){
 						if (e.keyCode == 13){ //Return
 							document.execCommand('inserthtml',false,'<br>&nbsp;');
-//							alert (this.selectionStart);
 							var sel = window.getSelection();
 
 							if (!sel.isCollapsed)sel.collapseToEnd();
 							var r = sel.getRangeAt(0);
-							console.log(r.startOffset);
 							var offset = r.startOffset
 							var offsetElement = r.startContainer;
 

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>JavaScript template</title>
+	<script type="text/javascript">
+
+		Function.prototype.inheritsFrom = function(superClass) {
+			var Inheritance = function(){};
+			Inheritance.prototype = superClass.prototype;
+
+			this.prototype = new Inheritance();
+			this.prototype.constructor = this;
+			this.superClass = superClass;
+		}
+
+//		Object.prototype.inheritsFrom = function(superClass) {
+//			var Inheritance = function(){};
+//			Inheritance.prototype = superClass.prototype;
+//
+//			this.prototype = new Inheritance();
+//			this.prototype.constructor = this;
+//			this.superClass = superClass;
+//		}
+
+		var eventCommander = function(){
+			this.events = {};
+			this.bind = function (ev,fn){
+					var ev = ev.toLocaleLowerCase();
+					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+					this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
+					return this;
+				}
+			this.trigger = function (ev){
+					var ev = ev.toLocaleLowerCase();
+					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+						for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
+							{this.events[ev][i](this)}
+					return this;
+				}
+			this.unbind = function (ev,fn){
+					var ev = ev.toLocaleLowerCase();
+					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+					if (this.events[ev])
+						for (var i=0; i < this.events[ev].length ;i++)
+						if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
+					return this;
+				}
+		}
+		var class2 = function (){ this.method3= function (){alert(3);}}
+//		eventCommander.prototype.events={}
+		var  myTemplate = function (initObj){
+
+			var tmpObj = new eventCommander();
+
+			for (var tmp in tmpObj){ this[tmp]=tmpObj[tmp]}
+
+			var tmpObj = new class2();
+			for (var tmp in tmpObj){ this[tmp]=tmpObj[tmp]}
+//			console.log(this.events,this.constructor,this.constructor.prototype ,this.constructor.prototype.constructor, new this.constructor.prototype.constructor, 11);
+
+//			this.constructor.prototype = new eventCommander();
+
+//			this.test = '1';
+//			var _this = this;
+//			var initSuccess=false;
+//
+//			this.init = function (initObj){
+//				if (initObj)
+//					for (parametr in initObj) _this[parametr] = initObj[parametr]
+//
+//				if (!initSuccess){
+//					if (myTemplate.elements) myTemplate.elements.push(_this);
+//					else myTemplate.elements = [_this];
+//				}
+//
+//				initSuccess = true;
+//			}
+//		  this.init(initObj);
+		}
+//		myTemplate.prototype = new eventCommander();
+
+		//myTemplate.inheritsFrom(eventCommander);
+		//new myTemplate()
+		a = new myTemplate()
+
+//		eventCommander.prototype.protoMethod = function(){alert('Prototyped method')}
+
+		a.bind('test',function(){alert (1+'a')})
+		a.method3()
+		console.log(a);
+		
+		b = new myTemplate()
+		b.bind('test',function(){alert (2+'b')})
+
+		b.trigger('test');
+
+		a.trigger('test');
+
+//		a.bind('test',function(){alert (3)})
+//		a.trigger('test');
+//		a.unbind('test',function(){alert(1)})
+
+	</script>
+</head>
+<body></body>
+</html>
