@@ -3,6 +3,14 @@
 import logging
 
 from libs.whoosh.reading import IndexReader as Reader
+from google.appengine.ext import db
+
+
+class IndexItem(db.Model):
+    """The model represents search engine index file."""
+
+    def __init__(self):
+        pass
 
 
 class GAE_Reader(Reader):
