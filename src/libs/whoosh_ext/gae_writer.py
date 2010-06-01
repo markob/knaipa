@@ -1,8 +1,7 @@
 """"""
 import logging
 
-from libs.whoosh.index import Index
-from src.libs.whoosh.writing import IndexWriter
+from libs.whoosh.writing import IndexWriter
 
 
 class GAE_IndexWriter(IndexWriter):
