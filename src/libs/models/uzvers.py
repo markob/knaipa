@@ -20,7 +20,7 @@ class Uzver(db.Model):
         """ Updates password hash if it's needed. """
         self.password = self._gen_password_hash(self.password)
         
-        PolyModel.put(self)
+        db.Model.put(self)
     
     
     def _gen_password_hash(self, password):
