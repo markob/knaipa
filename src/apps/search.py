@@ -3,4 +3,7 @@
 import logging as log
 
 class SearchHandler(object):
-     """Handles search request by using full text search functionality"""
+    """Handles search request by using full text search functionality"""
+    
+    def __init__(self):
+        log.debug("Search handler initialization")

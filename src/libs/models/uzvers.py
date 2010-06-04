@@ -1,6 +1,5 @@
 from google.appengine.ext import db
 
-
 import hashlib
 
 class Uzver(db.Model):
