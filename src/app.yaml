@@ -1,5 +1,5 @@
 application: knaipa-ua
-version: 11-pre
+version: 12-dev
 runtime: python
 api_version: 1
 
@@ -70,6 +70,10 @@ handlers:
 # work with articles (store, get and edit)
 - url: /articles.*
   script: apps/articles.py
+
+# handles search engine requests (to index and search)
+- url: /search.*
+  script: apps/search.py
 
 # work with comments (store, get and edit)
 - url: /comments.*

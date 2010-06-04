@@ -1,4 +1,4 @@
-import logging
+import logging as log
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -22,6 +22,8 @@ class ArticleHandler(ObjectHandler):
                                'del'   : (self._delete, 'articles-del.xml'),
                                'info'  : (lambda self: None, 'articles-info.xml'),
                                'error' : (lambda self: None, 'articles-error.xml') }
+        
+        log.debug("Article handler was initialized")
     
     
     def _select_cmd_handler(self):

@@ -463,7 +463,8 @@ class Index(DeletionMixin):
                 if num != self.generation:
                     try:
                         storage.delete_file(filename)
-                    except WindowsError:
+                    # note by marko.blck: 'WindowsError' exception was replaced with more general 'IOError' 
+                    except IOError:
                         # Another process still has this file open
                         pass
             else:
@@ -473,7 +474,8 @@ class Index(DeletionMixin):
                     if name not in current_segment_names:
                         try:
                             storage.delete_file(filename)
-                        except WindowsError:
+                        # note by marko.blck: 'WindowsError' exception was replaced with more general 'IOError'
+                        except IOError:
                             # Another process still has this file open
                             pass
     
