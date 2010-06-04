@@ -1,11 +1,9 @@
-import logging
+import logging as log
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from google.appengine.ext.webapp import template
-
-from libs.utils import InvalidRequestError
 
 # add gdata library to python path
 import os, sys
@@ -13,8 +11,7 @@ import os, sys
 sys.path.append(os.path.abspath(os.curdir) + '/../libs/gdata')
 
 # import gdata images and service API
-from gdata.photos import service as GDService
-from gdata import media as GDMedia
+import gdata.photos.service as GDService
 
 from xml.dom import minidom
 
@@ -71,16 +68,22 @@ class ImageHandler(webapp.RequestHandler):
     def _post_image(self):
         img_handle = self.request.POST.get('image').file
         
+        log.debug("Authorization is going")
+        
         gd_client = GDService.PhotosService()
         gd_client.email = user_id
         gd_client.password = user_passwd
         gd_client.source = source_str
         gd_client.ProgrammaticLogin()
         
+        log.debug("Image is posting")
+        
         photo_entry = gd_client.InsertPhotoSimple(album_uri,
                                                   image_name,
                                                   None,
                                                   img_handle)
+        
+        log.debug("Image was posted with id %d" % photo_entry)
         
         return photo_entry
 
