@@ -3,9 +3,13 @@ import logging as log
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from libs.models.articles import Article
-from libs.objhandler import ObjectHandler
-from libs.utils import InvalidRequestError
+# add libs to system path
+import os, sys
+sys.path.append(os.path.abspath(os.curdir) + '/../libs')
+
+from libs.models.articles import Article #@UnresolvedImport
+from libs.objhandler import ObjectHandler #@UnresolvedImport
+from libs.utils import InvalidRequestError #@UnresolvedImport
 
 
 # Articles service request handler

@@ -5,6 +5,7 @@ import logging as log
 # app engine imports
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
+from google.appengine.ext import db
 
 # whoosh library have to be added to system path before using
 import os, sys
@@ -19,6 +20,11 @@ from whoosh.qparser import QueryParser
 SCHEMA_ARTICLES = Schema(content=TEXT(stored=True))
 
 
+class DocumentsQueue(db.Model):
+    """Contains only links to documents which should be processed"""
+    uri = db.URLProperty(required=True)
+
+
 class SearchHandler(webapp.RequestHandler):
     """Handles search request by using full text search functionality"""
     
@@ -27,7 +33,7 @@ class SearchHandler(webapp.RequestHandler):
         log.debug("processing search request")
             
         index = getdatastoreindex("articles", schema=SCHEMA_ARTICLES)
-        parser = QueryParser("content", index.schema)
+        parser = QueryParser("content", schema=index.schema)
         query = parser.parse(self.request.get("query"))
         results = index.searcher().search(query)
         
@@ -38,15 +44,33 @@ class SearchHandler(webapp.RequestHandler):
         return self.response.out.write("<item>Founded 0 objects</item>")
 
 
-    def put(self):
-        """"""
-        index = getdatastoreindex("articles", schema=SCHEMA_ARTICLES)
-        writer = index.writer()
-        writer.add_document(content=self.request.get("content"))
-        writer.commit()
+class IndexProcessor(object):
+    """Processes requests of indexing operations"""
+    
+    def add_doc_to_index(self):
+        """Just stores document uri to queue and it will be processed by scheduler"""
+        doc_uri = DocumentsQueue(self.request.get('uri'))
+        doc_uri.put()
         
-        self.redirect("/")
-
+        return self.response.out.write("")
+    
+    
+    def exec_add_docs_to_index(self):
+        """It's temporary decision and have to be moved to task scheduler"""
+        # check unindexed documents queue
+        docs_in_queue = DocumentsQueue.all()
+        docs_uri = docs_in_queue.get()
+        
+        if None != docs_uri:
+            # get index writer and index required documents
+            index = getdatastoreindex("articles", schema=SCHEMA_ARTICLES)
+            writer = index.writer()
+            
+            for doc_uri in docs_uri:
+                # retrieve content of appropriate documents and write index it
+                writer.add_document(content=doc_uri)
+                writer.commit()
+    
 
 application = webapp.WSGIApplication([('/search', SearchHandler)], debug=True)
 
