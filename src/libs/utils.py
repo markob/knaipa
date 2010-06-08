@@ -4,8 +4,7 @@ import logging
 
 from google.appengine.ext import db
 
-from xml.dom import minidom
-from libs import xml_tools as XMLTools
+from libs import xml_tools as XMLTools #@UnresolvedImport
 
 
 def login_required():
@@ -26,7 +25,7 @@ class InvalidRequestError(Exception):
 
 
 class ModelProcessor(object):
-    """ Contains tools simlify models processing. """
+    """ Contains tools to simplify models processing. """
 
     def __init__(self, cls_model):
         """ Binds processor to the specified model type. """

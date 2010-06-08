@@ -5,7 +5,7 @@ from google.appengine.ext.webapp import template
 
 from google.appengine.ext import db
 
-from libs.utils import InvalidRequestError, ModelProcessor
+from libs.utils import InvalidRequestError, ModelProcessor #@UnresolvedImport
 
 import os
 
