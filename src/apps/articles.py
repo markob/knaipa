@@ -10,6 +10,7 @@ sys.path.append(os.path.abspath(os.curdir) + '/../libs')
 from libs.models.articles import Article #@UnresolvedImport
 from libs.objhandler import ObjectHandler #@UnresolvedImport
 from libs.utils import InvalidRequestError #@UnresolvedImport
+from libs.search import add_doc_to_index #@UnresolvedImport
 
 
 # Articles service request handler
@@ -28,6 +29,17 @@ class ArticleHandler(ObjectHandler):
                                'error' : (lambda self: None, 'articles-error.xml') }
         
         log.debug("Article handler was initialized")
+        
+    
+    def add(self, request):
+        """Adds a new article to datastore"""
+        # put article to datastore
+        response = self._write(request)
+        
+        # add the article to index queue
+        add_doc_to_index()
+        
+        return response
     
     
     def _select_cmd_handler(self):
