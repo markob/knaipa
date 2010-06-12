@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knajpa name="Атмосфера" id="000001">
-	<addres type="list" subtype="markers">
-		<item ia="49.857131626112476" ja="24.020319380737302"> Кульпарківська 45 </item>
-	</addres>
+<knajpa name="Гасафа Лямпо" id="000001" type="ресторан">
+	<group name="Загальні дані">
+		<item name="Адреса" type="address" ia="49.857131626112476" ja="24.020319380737302"> Кульпарківська 45 </item>
 
-	<item name='Тип закладу' type="string">Кав`ярня</item>
-	<item name='Час роботи' type="string">нд-чт 12-24, пт-сб 12-03</item>
-	<item name='Телефон' type="string">нд-чт 12-24, пт-сб 12-03</item>
+		<!--
+		Also you can use second structure, when you have more than 1 address.
+
+		<item name="Адреса" type="address">
+			<item ia="49.857131626112476" ja="24.020319380737302">Кульпарківська 45</item>
+			<item ia="50.857131626112476" ja="24.020319380737302">Кульпарківська 47</item>
+		</item>
+		-->
+		<item name="Години роботи">11:00 - 02:00</item>
+		<item name="Телефон">2-100-500</item>
+		<item name="Вебсайт"><a href="http://google.com"> www.gasovaLaeeeempa.lviv.ua</a></item>
+		<item name="Середній чек">40-100 грн.</item>
+		<item name="Форми розрахунку">Бартер</item>
+	</group>
+	<group name="Додаткові послуги">
+		<item name="Доставка їжі">-</item>
+		<item name="Парковка">-</item>
+		<item name="Організація бенкетів">-</item>
+		<item name="Кількість посадочних мість">120-160</item>
+		<item name="Кількість залів">5</item>
+		<item name="особливості" type="tags">
+			<a href="#">замовлення столиків</a>,
+			<a href="#">зал для курців</a>,
+			<a href="#">літній майдан</a>
+		</item>
+	</group>
+	<group name="Кухня">
+		<item name="Тип кухні">Українська</item>
+		<item name="Фірмова страва/напій">Жорчіг</item>
+		<item name="Додатково">Сочні пяні воєнам!</item>
+	</group>
+	<group name="Медіа та розваги">
+		<item name="Медіа та розваги">Українська</item>
+		<item name="Тип музики та напрямок">мітооол \m/</item>
+		<item name="Додатково">вздрожні ефєкт!</item>
+	</group>
+	<group name="Інше">
+		<item name="Медіа та розваги">Українська</item>
+		<item name="Хвото" type="img">
+			<item src="content/img/lampa-1.png" alt="lampa-1"/>
+			<item src="content/img/lampa-2.png" alt="lampa-2"/>
+			<item src="content/img/lampa-3.png" alt="lampa-3"/>
+			<item src="content/img/lampa-4.png" alt="lampa-4"/>
+			<item src="content/img/lampa-5.png" alt="lampa-5"/>
+			<item src="content/img/lampa-6.png" alt="lampa-6"/>
+			<item src="content/img/lampa-7.png" alt="lampa-7"/>
+		</item>
+		<item name="Додатково">вздрожні ефєкт!</item>
+	</group>
 </knajpa>

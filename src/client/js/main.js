@@ -39,7 +39,8 @@ $(function(){
 				$('#textInfo').xslt(_this.contentXML,'xsl/content-template.xsl');
 				feelMap($('marker',_this.contentXML));
 			}
-			if (/admin|knajpa/gim.test(window.location)){ //TODO:Remove this temporary admin check
+			if (/blank/gim.test(window.location)){}
+			else if (/admin/gim.test(window.location)){ //TODO:Remove this temporary admin check
 				$.ajax({
 					type: "GET",
 					url: "js/admin.js",
@@ -49,7 +50,9 @@ $(function(){
 			//TODO: move to normal path
 //				content/content-article-template.xml
 //				content/content-list-template.xml
-
+			else if (/knajpa/gim.test(window.location)){
+				$.ajax({ dataType: "xml", url: 'content/knajpa.xml', success: feelData});
+			}
 			else if ($.address.path() && $.address.path() != '/'){
 				$.ajax({ dataType: "xml", url: 'article?cmd=get;id='+$.address.path().replace('/',''), success: feelData});}
 			else { $.ajax({ dataType: "xml", url: 'article?cmd=list', success: feelData}); }
@@ -75,7 +78,8 @@ $(function(){
 			// Init Map
 			// ll=49.835657,24.048901 ; spn=0.085475,0.222988 ; z=13; output=embed
 			var latlng = new google.maps.LatLng(49.835657,24.048901);
-			_this.map = new google.maps.Map(document.getElementById("map"), { zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
+			//TODO: Temporary comment this init map;
+//			_this.map = new google.maps.Map(document.getElementById("map"), { zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
 		};
 
 		this.init();

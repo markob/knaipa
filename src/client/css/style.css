@@ -213,15 +213,31 @@
 /* Knajpa Info
 ------------------------------ */
 	.knajpa-info	{margin:0 0 0 25px; width:525px; margin:20px 0 0 25px; overflow:hidden;}
-		.knajpa-info	h2	{ font: 18px Tahoma; text-decoration: none !important; float:left; border:none !important; background:#f7f7f7; margin:0px;padding:10px 10px 10px 18px;}
-			.knajpa-info	h2	span	{font: 12px Tahoma; color:#464646; background:#ffffff;}
+		.knajpa-info	h2	{ font: 18px Tahoma; text-decoration: none !important; float:left; border:none !important; background:#F1F1F1; margin:0px;padding:10px 10px 10px 18px;}
+			.knajpa-info	h2	span	{font: 12px Tahoma; color:#464646; background:#ffffff; margin:0 0 0 10px;}
 
-		.knajpa-info	h3	{font: bold 12px Tahoma; color:#4a4a4a; width: 100%; float:left; background:#efeeee; padding:5px 18px 3px; margin:0px;border-bottom:1px solid #DADADA;}
+		.knajpa-info	h3	{ width:489px; height:17px; font: bold 12px Tahoma; color:#291204; text-shadow:-2px 1px 1px #F1F1F1; float:left; position:relative;
+							 background:url("img/vertical-back_admin.png") repeat-x #d4d4d4; padding:5px 18px 3px; margin:0px; }
+			.knajpa-info	h3	.bottom	{ background:url("img/main-back-admin.png") #b6b6b6; position:absolute; height:1px; bottom:-1px; left:0; width:100%;}
+			.knajpa-info	h3	em.tl	{background:url("img/main-back-admin.png") repeat scroll 10px 9px transparent;}
+
 		.knajpa-info	p	{ float:left;}
 
-		.knajpa-info	ul	{ float:left; background:#f7f7f7; width:100%; font: 12px Tahoma; margin:0; padding:10px 0 20px;}
+		.knajpa-info	ul	{ float:left; background:#F1F1F1; width:100%; font: 12px Tahoma; margin:0; padding:10px 0 20px;}
 			.knajpa-info	ul	li	{ overflow: visible !important;list-style:none; background: url("img/points-on-list.png") repeat-x 0 bottom; float:left; font:12px Tahoma; margin:4px 100% 0 17px; position:relative; width:223px;}
-				.knajpa-info	ul	li	h4	{ padding-right:4px; background:none repeat scroll 0 0 #F7F7F7; color:#8E6744; display:inline; font:12px Tahoma;}
-				.knajpa-info	ul	li	.description	{border:1px solid; top:0; left:225px; background:none repeat scroll 0 0 #F7F7F7; color:#1E1E1E; font-size:14px; position:absolute; right:-285px; text-align:left;}
+				.knajpa-info	ul	li	h4	{ padding-right:4px; background:none repeat scroll 0 0 #F1F1F1; color:#5f3217; display:inline; font:12px Tahoma;}
+				.knajpa-info	ul	li	.description	{ top:0; left:225px; background:none repeat scroll 0 0 #F1F1F1; color:#1E1E1E; font-size:14px; position:absolute; right:-285px; text-align:left;}
 				.knajpa-info	ul	li	.img-description	{display:block;}
-			.knajpa-info	ul	li.long-description	{background: none;}
+				.knajpa-info	ul	li	.img-description	.img-wrapper	{background:url("img/main-back-admin.png") repeat scroll -10px -1px transparent; float:left !important; height:90px; margin:0 2px; overflow:hidden; padding:4px 0 0 5px; width:90px;}
+
+			.knajpa-info	ul	li.tags	{ background:none;}
+				.knajpa-info	ul	li.tags	h4	{color:#B7B6B6; float:left; font-size:11px; margin-right:100%; text-align:right; width:488px; margin-bottom:2px;}
+				.knajpa-info	ul	li.tags	.description	{ background-color:White; color:#1966B4; float:left; font:11px/17px Tahoma; left:0; padding:6px 2px 9px 11px; position:relative; width:480px;}
+
+				.knajpa-info	ul	li.tags	.description	em	{ background:url("img/main-back-admin.png")  -100px 0; position:absolute; height:20px; width:20px;}
+						.knajpa-info	ul	li.tags	.description	em.tl	{ top:-10px; left:-10px;}
+						.knajpa-info	ul	li.tags	.description	em.tr	{ top:-10px; right:-10px;}
+						.knajpa-info	ul	li.tags	.description	em.bl	{ bottom:-10px; left:-10px;}
+						.knajpa-info	ul	li.tags	.description	em.br	{ bottom:-10px; right:-10px;}
+
+			.knajpa-info	ul	li.long-description	{background: none; width:500px;}
