@@ -73,7 +73,7 @@ $.widget("ui.tabs", {
 
 		this.list = this.element.children('ul:first');
 		this.lis = $('li:has(a[href])', this.list);
-		this.anchors = this.lis.map(function() { return $('a', this)[0]; });
+		this.anchors = this.lis.gMap(function() { return $('a', this)[0]; });
 		this.panels = $([]);
 
 		var self = this, o = this.options;
@@ -166,7 +166,7 @@ $.widget("ui.tabs", {
 			// into account and update option properly.
 			// A selected tab cannot become disabled.
 			o.disabled = $.unique(o.disabled.concat(
-				$.map(this.lis.filter('.ui-state-disabled'),
+				$.gMap(this.lis.filter('.ui-state-disabled'),
 					function(n, i) { return self.lis.index(n); } )
 			)).sort();
 
@@ -463,7 +463,7 @@ $.widget("ui.tabs", {
 			$panel.insertBefore(this.panels[index]);
 		}
 
-		o.disabled = $.map(o.disabled,
+		o.disabled = $.gMap(o.disabled,
 			function(n, i) { return n >= index ? ++n : n; });
 
 		this._tabify();
@@ -492,7 +492,7 @@ $.widget("ui.tabs", {
 			this.select(index + (index + 1 < this.anchors.length ? 1 : -1));
 		}
 
-		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
+		o.disabled = $.gMap($.grep(o.disabled, function(n, i) { return n != index; }),
 			function(n, i) { return n >= index ? --n : n; });
 
 		this._tabify();

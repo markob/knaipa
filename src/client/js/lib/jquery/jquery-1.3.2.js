@@ -224,7 +224,7 @@ jQuery.fn = jQuery.prototype = {
 			if ( this[0].parentNode )
 				wrap.insertBefore( this[0] );
 
-			wrap.map(function(){
+			wrap.gMap(function(){
 				var elem = this;
 
 				while ( elem.firstChild )
@@ -292,7 +292,7 @@ jQuery.fn = jQuery.prototype = {
 			jQuery.find( selector, this[0], ret );
 			return ret;
 		} else {
-			return this.pushStack( jQuery.unique(jQuery.map(this, function(elem){
+			return this.pushStack( jQuery.unique(jQuery.gMap(this, function(elem){
 				return jQuery.find( selector, elem );
 			})), "find", selector );
 		}
@@ -300,7 +300,7 @@ jQuery.fn = jQuery.prototype = {
 
 	clone: function( events ) {
 		// Do the clone
-		var ret = this.map(function(){
+		var ret = this.gMap(function(){
 			if ( !jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this) ) {
 				// IE copies events bound via attachEvent when
 				// using cloneNode. Calling detachEvent on the
@@ -362,7 +362,7 @@ jQuery.fn = jQuery.prototype = {
 		var pos = jQuery.expr.match.POS.test( selector ) ? jQuery(selector) : null,
 			closer = 0;
 
-		return this.map(function(){
+		return this.gMap(function(){
 			var cur = this;
 			while ( cur && cur.ownerDocument ) {
 				if ( pos ? pos.index(cur) > -1 : jQuery(cur).is(selector) ) {
@@ -501,8 +501,8 @@ jQuery.fn = jQuery.prototype = {
 			"slice", Array.prototype.slice.call(arguments).join(",") );
 	},
 
-	map: function( callback ) {
-		return this.pushStack( jQuery.map(this, function(elem, i){
+	gMap: function( callback ) {
+		return this.pushStack( jQuery.gMap(this, function(elem, i){
 			return callback.call( elem, i, elem );
 		}));
 	},
@@ -1143,7 +1143,7 @@ jQuery.extend({
 		return ret;
 	},
 
-	map: function( elems, callback ) {
+	gMap: function( elems, callback ) {
 		var ret = [];
 
 		// Go through the array, translating each of the items to their
@@ -1186,7 +1186,7 @@ jQuery.each({
 	contents: function(elem){return jQuery.nodeName(elem,"iframe")?elem.contentDocument||elem.contentWindow.document:jQuery.makeArray(elem.childNodes);}
 }, function(name, fn){
 	jQuery.fn[ name ] = function( selector ) {
-		var ret = jQuery.map( this, fn );
+		var ret = jQuery.gMap( this, fn );
 
 		if ( selector && typeof selector == "string" )
 			ret = jQuery.multiFilter( selector, ret );
@@ -3288,7 +3288,7 @@ jQuery.fn.extend({
 		return jQuery.param(this.serializeArray());
 	},
 	serializeArray: function() {
-		return this.map(function(){
+		return this.gMap(function(){
 			return this.elements ? jQuery.makeArray(this.elements) : this;
 		})
 		.filter(function(){
@@ -3296,11 +3296,11 @@ jQuery.fn.extend({
 				(this.checked || /select|textarea/i.test(this.nodeName) ||
 					/text|hidden|password|search/i.test(this.type));
 		})
-		.map(function(i, elem){
+		.gMap(function(i, elem){
 			var val = jQuery(this).val();
 			return val == null ? null :
 				jQuery.isArray(val) ?
-					jQuery.map( val, function(val, i){
+					jQuery.gMap( val, function(val, i){
 						return {name: elem.name, value: val};
 					}) :
 					{name: elem.name, value: val};

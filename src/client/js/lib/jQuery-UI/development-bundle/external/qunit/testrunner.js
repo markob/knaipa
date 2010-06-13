@@ -197,7 +197,7 @@ var equiv = function () {
     return innerEquiv;
 }(); // equiv
 
-var GETParams = $.map( location.search.slice(1).split('&'), decodeURIComponent ),
+var GETParams = $.gMap( location.search.slice(1).split('&'), decodeURIComponent ),
 	ngindex = $.inArray("noglobals", GETParams),
 	noglobals = ngindex !== -1;
 

@@ -309,7 +309,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().removeClass('ui-state-disabled');
 		}
-		this._disabledInputs = $.map(this._disabledInputs,
+		this._disabledInputs = $.gMap(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
 	},
 
@@ -332,7 +332,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().addClass('ui-state-disabled');
 		}
-		this._disabledInputs = $.map(this._disabledInputs,
+		this._disabledInputs = $.gMap(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
 		this._disabledInputs[this._disabledInputs.length] = target;
 	},
