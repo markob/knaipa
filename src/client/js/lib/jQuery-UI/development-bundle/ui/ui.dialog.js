@@ -536,7 +536,7 @@ $.extend($.ui.dialog, {
 $.extend($.ui.dialog.overlay, {
 	instances: [],
 	maxZ: 0,
-	events: $.map('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
+	events: $.gMap('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
 		function(event) { return event + '.dialog-overlay'; }).join(' '),
 	create: function(dialog) {
 		if (this.instances.length === 0) {

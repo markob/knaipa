@@ -6,7 +6,11 @@
 		<modified>{{ article.modified }}</modified>
 		<description><p>{{ article.description }}</p></description>
 		<cut>читати далі</cut>
-		<marker ia="49.857131626112476" ja="24.020319380737302" />
+
+		<knajpa name="Гасафа Лямпо" id="000001" type="ресторан">
+			<item type="address" ia="49.857131626112476" ja="24.020319380737302">Володимира Великого 45</item>
+		</knajpa>
+
 	</item>
 {% endfor %}
 </content>

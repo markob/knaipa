@@ -397,7 +397,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 				var b = [prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth')],
 					p = [prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft')];
 
-				this.borderDif = $.map(b, function(v, i) {
+				this.borderDif = $.gMap(b, function(v, i) {
 					var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
 					return border + padding;
 				});
