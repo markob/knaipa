@@ -15,7 +15,93 @@
 		<link media="all" rel="stylesheet" href="css/style.css">
 
 		<title>Knajpa - for your convenience </title>
+		<script type="text/javascript">
+			$(function(){
+				function makeExtended (el){
+					el.data('position','extended');
+					// Animation test
+					$('.description:first').animate({ top: 20, left:0});
+				}
 
+				function makeCompact (el){
+					el.data('position','compact');
+					$('.description:first').animate({top: 0, left:225 });
+					$('.knajpa-info ul li:first').stop().animate({ height: 14});
+				}
+
+				$('.description:first')
+					.data('position','compact')
+					.bind('keydown',function(e){
+						var el= $(this);
+						window.setTimeout(function(){
+							if (el.data('position') == 'compact') {
+								if (el.find('div').height() > 20 || el.width()-20 < el.find('div').width()) makeExtended(el);
+							}
+							if (el.data('position') == 'extended'){
+								$('.knajpa-info ul li:first').stop().animate({height:el.height()+40})
+								if (el.find('div').width() < 230 && el.find('div').height() < 20) { makeCompact(el); }
+							}
+						},10)
+					})
+					.bind('click',function(){
+						$('.description:first div').trigger('focus');
+					})
+				$('.description:first div')
+					.bind('keydown',function(e){
+						if (e.keyCode == 13){ //Return
+							document.execCommand('inserthtml',false,'<br>&nbsp;');
+							var sel = window.getSelection();
+
+							if (!sel.isCollapsed)sel.collapseToEnd();
+							var r = sel.getRangeAt(0);
+							var offset = r.startOffset
+							var offsetElement = r.startContainer;
+
+							r.setStart(offsetElement,offset-1);
+							r.setEnd(offsetElement,offset);
+
+							document.execCommand('delete',false,false);
+							$('.description:first').trigger('keydown')
+							return false;
+						}
+					})
+					.bind('focus',function(){$(this).parent().css({'z-index':99});})
+					.bind('blur',function(){$(this).parent().css({'z-index':0});})
+
+				// Controls init part
+				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
+						.bind('click',function(){alert('save')})
+						.appendTo("#textInfo");
+
+				window.timeout=false;
+				$(document).bind("scroll",function (e){
+					if (window.timeout) clearTimeout(window.timeout);
+					var y = $(document).scrollTop() > 210 ? $(document).scrollTop() :210;
+					window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
+				})
+
+				// Stuff of map's markers 
+				var adminMarker = Knajpa.map.addMarker('49.83725896583545', '24.02403635406495', 'knajpa')
+				Knajpa.map.markers[adminMarker].draggable = true;
+
+				var geocoder = new google.maps.Geocoder();
+
+				function geocodePosition(pos) {
+					geocoder.geocode({latLng: pos,language:'ua'}, function (responses) {
+						if (responses && responses.length > 0) {
+							alert(responses[0].formatted_address);
+						}else {
+							alert ('Нема нічого')
+						}
+					});
+				}
+
+				google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
+					geocodePosition(this.getPosition());
+				});
+				
+			})
+		</script>
 	</head>
 	<body>
 		<div id="globalWrapper" class="w-90">
@@ -48,7 +134,7 @@
 
 			<div id="content" class="columns content">
 
-				<div id="textInfo">
+				<div id="textInfo" class="admin">
 					<div class="knajpa-info corners corners-10"><!-- For easy rendering -->
 						<em class="bl"></em><em class="br"></em>
 
@@ -64,7 +150,7 @@
 							<em class="tr"></em><em class="tl"></em>  <!--Corners-->
 						</h3>
 						<ul>
-							<li><h4>Адреса:</h4><div class="description"><div style="float:left;">вул.Вірменська 2</div></div> </li>
+							<li><h4>Адреса:</h4><div class="description"><div style="float:left;" contenteditable="true">вул.Вірменська 2</div></div> </li>
 							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span> </li>
 							<li><h4>Телефон:</h4><span class="description">2-100-500</span> </li>
 							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>

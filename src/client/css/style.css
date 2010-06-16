@@ -216,7 +216,7 @@
 		.knajpa-info	h2	{ font: 18px Tahoma; text-decoration: none !important; float:left; border:none !important; background:#F1F1F1; margin:0px;padding:10px 10px 10px 18px;}
 			.knajpa-info	h2	span	{font: 12px Tahoma; color:#464646; background:#ffffff; margin:0 0 0 10px;}
 
-		.knajpa-info	h3	{ width:489px; height:17px; font: bold 12px Tahoma; color:#291204; text-shadow:-2px 1px 1px #F1F1F1; float:left; position:relative;
+		.knajpa-info	h3	{ width:489px; height:17px; font: bold 12px Tahoma; color:#291204; text-shadow: 0 1px 0 #F1F1F1; float:left; position:relative;
 							 background:url("img/vertical-back_admin.png") repeat-x #d4d4d4; padding:5px 18px 3px; margin:0px; }
 			.knajpa-info	h3	.bottom	{ background:url("img/main-back-admin.png") #b6b6b6; position:absolute; height:1px; bottom:-1px; left:0; width:100%;}
 			.knajpa-info	h3	em.tl	{background:url("img/main-back-admin.png") repeat scroll 10px 9px transparent;}
@@ -224,7 +224,7 @@
 		.knajpa-info	p	{ float:left;}
 
 		.knajpa-info	ul	{ float:left; background:#F1F1F1; width:100%; font: 12px Tahoma; margin:0; padding:10px 0 20px;}
-			.knajpa-info	ul	li	{ overflow: visible !important;list-style:none; background: url("img/points-on-list.png") repeat-x 0 bottom; float:left; font:12px Tahoma; margin:4px 100% 0 17px; position:relative; width:223px;}
+			.knajpa-info	ul	li	{ overflow: visible !important; list-style:none; background: url("img/points-on-list.png") repeat-x 0 bottom; float:left; font:12px Tahoma; margin:8px 100% 0 17px; position:relative; width:223px;}
 				.knajpa-info	ul	li	h4	{ padding-right:4px; background:none repeat scroll 0 0 #F1F1F1; color:#5f3217; display:inline; font:12px Tahoma;}
 				.knajpa-info	ul	li	.description	{ top:0; left:225px; background:none repeat scroll 0 0 #F1F1F1; color:#1E1E1E; font-size:14px; position:absolute; right:-285px; text-align:left;}
 				.knajpa-info	ul	li	.img-description	{display:block;}
@@ -241,3 +241,39 @@
 						.knajpa-info	ul	li.tags	.description	em.br	{ bottom:-10px; right:-10px;}
 
 			.knajpa-info	ul	li.long-description	{background: none; width:500px;}
+
+	/* Knajpa admin*/
+		.admin	ul	li	.description { -moz-border-radius:7px 7px 7px 7px; background:none repeat scroll 0 0 white; border-top:1px solid #D9D9D9; color:#1E1E1E; font-size:12px; left:225px; padding:1px 8px 2px;
+			position:absolute; right:-270px; text-align:left; top:0; }
+
+		.admin	.controls {background:url("img/horizontal-back-admin.png") repeat-y scroll 6px 0 transparent;
+height:31px;
+margin-top:-26px;
+position:absolute;
+right:-6px;
+top:60px;
+width:65px;
+z-index:99;
+}
+.admin .controls em.t {
+background:url("img/main-back-admin.png") repeat scroll -168px 0 transparent;
+height:9px;
+position:absolute;
+top:-9px;
+width:100%;
+z-index:-1;
+}
+.admin .controls em.b {
+background:url("img/main-back-admin.png") repeat scroll -168px -5px transparent;
+bottom:-20px;
+height:23px;
+overflow:visible;
+position:absolute;
+width:100%;
+z-index:-1;
+}
+.admin	.controls	.button-save	{ background:url("img/main-back-admin.png") repeat scroll -120px 0 transparent; cursor:pointer; height:21px; margin-left:9px;margin-top:-5px; width:44px;}
+.admin	.controls	.button-save:hover	{background-position:-120px -40px}
+
+.admin	.controls	.button-cancel	{ background:url("img/main-back-admin.png") repeat scroll -120px -20px transparent; cursor:pointer; height:21px; margin-left:9px; width:44px;}
+.admin	.controls	.button-cancel:hover	{background-position:-120px -60px}

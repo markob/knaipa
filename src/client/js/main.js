@@ -50,11 +50,20 @@ $(function(){
 			9: new gMap.MarkerImage('css/img/map-i/9.png')
 		}
 
+		/**
+		 *
+		 * @param ia
+		 * @param ja
+		 * @param  {String} icon item from {@link Map.markerIcons} object
+		 * @return {String} marker id
+		 */
 		this.addMarker = function(ia,ja,icon){
 			var latlng = new google.maps.LatLng(ia,ja);
 			_this.markers[ia+'_'+ja] = new gMap.Marker({ map :_this.map, position: latlng});
 			if (icon){_this.markers[ia+'_'+ja].setIcon(_this.markerIcons[icon]);}
 			else {_this.markers[ia+'_'+ja].setIcon(_this.markerIcons['knajpa']);}
+
+			return ia+'_'+ja ;
 		}
 
 		/**
