@@ -46,7 +46,23 @@
 					.bind('click',function(){
 						$('.description:first div').trigger('focus');
 					})
+
+				// Address field  
 				$('.description:first div')
+					.bind("keypress",function(e){
+						if ( e.charCode == 59){
+							var sel = window.getSelection();
+							if (!sel.isCollapsed) sel.collapseToEnd();
+
+							if (sel.anchorNode.parentNode.tagName == "DIV"){ //New field
+								console.log("new field",sel.anchorNode)
+							}
+							else { //in old field
+								console.log("old field",sel.anchorNode)
+							}
+
+						}
+					})
 					.bind('keydown',function(e){
 						if (e.keyCode == 13){ //Return
 							document.execCommand('inserthtml',false,'<br>&nbsp;');
@@ -80,25 +96,32 @@
 					window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
 				})
 
-				// Stuff of map's markers 
-				var adminMarker = Knajpa.map.addMarker('49.83725896583545', '24.02403635406495', 'knajpa')
-				Knajpa.map.markers[adminMarker].draggable = true;
+				// Stuff of map's markers
+
+				$("*[type=address] span").each(function(i){
+					var position = this.getAttribute('id').split('_')
+					var adminMarker = Knajpa.map.addMarker(position[0], position[1], i+1)
+					Knajpa.map.markers[adminMarker].draggable = true;
+
+					google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
+						geocodePosition(this.getPosition(),function (responses) {
+							if (responses && responses.length > 0) {
+								console.log (responses[0].formatted_address, adminMarker,responses[0]);
+								document.getElementById(adminMarker).innerHTML = responses[0].address_components[1].long_name+' '+responses[0].address_components[0].long_name; // jQuery do not work, because in ID is symbol  "." (dot).
+							}else {
+								console.log ('Нeзнайдено нічого, або якійсь трабли із коннектом')
+							}
+						});
+					});
+				});
 
 				var geocoder = new google.maps.Geocoder();
 
-				function geocodePosition(pos) {
-					geocoder.geocode({latLng: pos,language:'ua'}, function (responses) {
-						if (responses && responses.length > 0) {
-							alert(responses[0].formatted_address);
-						}else {
-							alert ('Нема нічого')
-						}
-					});
+				function geocodePosition(pos,callback) {
+					geocoder.geocode({latLng: pos,language:'ua'}, callback);
 				}
 
-				google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
-					geocodePosition(this.getPosition());
-				});
+
 				
 			})
 		</script>
@@ -150,7 +173,14 @@
 							<em class="tr"></em><em class="tl"></em>  <!--Corners-->
 						</h3>
 						<ul>
-							<li><h4>Адреса:</h4><div class="description"><div style="float:left;" contenteditable="true">вул.Вірменська 2</div></div> </li>
+							<li><h4>Адреса:</h4>
+								<div class="description" type="address">
+									<div style="float:left;" contenteditable="true">
+										<span id="49.83725896583545_24.02403635406495" >вул.Вірменська 2;</span>
+										<span id="49.84262833886588_23.995669311523447" >Залізнична 64;</span>
+									</div>
+								</div>
+							</li>
 							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span> </li>
 							<li><h4>Телефон:</h4><span class="description">2-100-500</span> </li>
 							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>

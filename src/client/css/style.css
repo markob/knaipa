@@ -246,34 +246,12 @@
 		.admin	ul	li	.description { -moz-border-radius:7px 7px 7px 7px; background:none repeat scroll 0 0 white; border-top:1px solid #D9D9D9; color:#1E1E1E; font-size:12px; left:225px; padding:1px 8px 2px;
 			position:absolute; right:-270px; text-align:left; top:0; }
 
-		.admin	.controls {background:url("img/horizontal-back-admin.png") repeat-y scroll 6px 0 transparent;
-height:31px;
-margin-top:-26px;
-position:absolute;
-right:-6px;
-top:60px;
-width:65px;
-z-index:99;
-}
-.admin .controls em.t {
-background:url("img/main-back-admin.png") repeat scroll -168px 0 transparent;
-height:9px;
-position:absolute;
-top:-9px;
-width:100%;
-z-index:-1;
-}
-.admin .controls em.b {
-background:url("img/main-back-admin.png") repeat scroll -168px -5px transparent;
-bottom:-20px;
-height:23px;
-overflow:visible;
-position:absolute;
-width:100%;
-z-index:-1;
-}
-.admin	.controls	.button-save	{ background:url("img/main-back-admin.png") repeat scroll -120px 0 transparent; cursor:pointer; height:21px; margin-left:9px;margin-top:-5px; width:44px;}
-.admin	.controls	.button-save:hover	{background-position:-120px -40px}
+		.admin	.controls {background:url("img/horizontal-back-admin.png") repeat-y scroll 6px 0 transparent; height:31px; margin-top:-26px; position:absolute; right:-6px; top:60px; width:65px; z-index:99;}
+			.admin .controls em.t { background:url("img/main-back-admin.png") repeat scroll -168px 0 transparent; height:9px; position:absolute; top:-9px; width:100%; z-index:-1;}
+			.admin .controls em.b { background:url("img/main-back-admin.png") repeat scroll -168px -5px transparent; bottom:-20px; height:23px; overflow:visible; position:absolute; width:100%; z-index:-1;}
 
-.admin	.controls	.button-cancel	{ background:url("img/main-back-admin.png") repeat scroll -120px -20px transparent; cursor:pointer; height:21px; margin-left:9px; width:44px;}
-.admin	.controls	.button-cancel:hover	{background-position:-120px -60px}
+			.admin	.controls	.button-save	{ background:url("img/main-back-admin.png") repeat scroll -120px 0 transparent; cursor:pointer; height:21px; margin-left:9px;margin-top:-5px; width:44px;}
+			.admin	.controls	.button-save:hover	{background-position:-120px -40px}
+
+			.admin	.controls	.button-cancel	{ background:url("img/main-back-admin.png") repeat scroll -120px -20px transparent; cursor:pointer; height:21px; margin-left:9px; width:44px;}
+			.admin	.controls	.button-cancel:hover	{background-position:-120px -60px}
