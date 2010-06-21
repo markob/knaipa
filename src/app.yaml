@@ -1,5 +1,5 @@
 application: knaipa-ua
-version: 12-dev
+version: 12
 runtime: python
 api_version: 1
 
