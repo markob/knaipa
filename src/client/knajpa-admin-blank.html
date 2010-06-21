@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
 		<script type="text/javascript" src="js/lib/xsl/jQuery.xslt.js"></script>
 		<script type="text/javascript" src="js/lib/adressing/jquery.address-1.1.min.js"></script>
 
@@ -46,8 +46,96 @@
 					.bind('click',function(){
 						$('.description:first div').trigger('focus');
 					})
+
+				// Address field  
 				$('.description:first div')
+/*					.bind("keypress",function(e){
+						//Separate one Knajpa marker to two.
+						if ( e.charCode == 59){
+							var sel = window.getSelection();
+							if (!sel.isCollapsed) sel.collapseToEnd();
+
+							if (sel.anchorNode.parentNode.tagName == "DIV"){ //New field
+								console.log("new field",sel.anchorNode,sel.anchorOffset)
+							} else { //in old field
+								console.log("old field",sel.anchorNode,sel.anchorOffset);
+
+								var newPoint = $('<span id="49.83725896583545_24.02403635406495" >вул.Вірменська 2;</span>'
+										+'<span id="49.83963927694057_24.02553839111329" >test</span>');
+
+								$(sel.anchorNode.parentNode).replaceWith(newPoint);
+
+								var range = document.createRange();
+								range.selectNodeContents(document.getElementById('49.83963927694057_24.02553839111329'));
+								sel.addRange(range);
+								sel.collapseToEnd();
+								console.log(window.getSelection());
+
+								var adminMarker = Knajpa.map.addMarker({ ia:49.83963927694057, ja:24.02553839111329,draggable: true });
+								google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
+									geocodePosition(this.getPosition(),function (responses) {
+										if (responses && responses.length > 0) {
+											console.log (responses[0].formatted_address, adminMarker);
+											document.getElementById(adminMarker).innerHTML = responses[0].formatted_address+";"; // jQuery do not work, because in ID is symbol  "." (dot).
+										}else {
+											console.log ('Нeзнайдено нічого, або якійсь трабли із коннектом')
+										}
+									});
+								});
+
+								//$(sel.anchorNode.parentNode).replaceWith("");
+							}
+							return false;
+						}
+					})*/
 					.bind('keydown',function(e){
+
+						var el = $(this);
+						window.setTimeout(function(){
+								/*// Remove empty markers
+								var result = el.html().replace(/<span[^>]*><\/\s*span\s*>/gim,'');
+
+								if (result != el.html()) el.html(result);
+
+								var currentPoints = [];
+								el.find('span[id]').each(function(){currentPoints.push(this.getAttribute('id'))})
+								for (var marker in Knajpa.map.markers){
+									if ($.inArray( marker, currentPoints) >= 0) console.log('ok');
+									else { Knajpa.map.removeMarker(marker); console.log('remove');}
+								}*/
+
+								geocoder.geocode({address: el.text().replace (/^\s*(\S+(\s*\S+)*)\s*$/gim,'$1') ,language:'ua'}, function (responce,status){
+									if (status == "OK"){
+										if (responce[0] && responce[0].types[0] == "street_address" ){
+
+											var sel=window.getSelection();
+											var selNode = sel.anchorNode;
+											var selOffset = sel.anchorOffset;
+											
+											if (selNode.parentNode.tagName != "SPAN"){
+												Knajpa.map.addMarker({
+														ia : responce[0].geometry.location.lat(),
+														ja : responce[0].geometry.location.lng(),
+														draggable : true
+													});
+												$(selNode).wrap("<span id='"+ responce[0].geometry.location.lat() +'_'+ responce[0].geometry.location.lng() +"'></span>");
+												var range = document.createRange();
+
+												range.selectNodeContents(selNode);
+												range.setStart(selNode, selOffset);
+
+												sel.addRange(range);
+											} else {
+												Knajpa.map.markers[$(selNode).parent().attr('id')].setPosition(responce[0].geometry.location);
+											}
+										}
+										//console.log (responce[0]);
+										//responce[0].geometry.location.lat(),responce[0].geometry.location.lng(),
+									}
+								})
+
+							},10);
+
 						if (e.keyCode == 13){ //Return
 							document.execCommand('inserthtml',false,'<br>&nbsp;');
 							var sel = window.getSelection();
@@ -80,25 +168,32 @@
 					window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
 				})
 
-				// Stuff of map's markers 
-				var adminMarker = Knajpa.map.addMarker('49.83725896583545', '24.02403635406495', 'knajpa')
-				Knajpa.map.markers[adminMarker].draggable = true;
+				// Stuff of map's markers
 
-				var geocoder = new google.maps.Geocoder();
+				$("*[type=address] span").each(function(i){
+					var position = this.getAttribute('id').split('_')
+					var adminMarker = Knajpa.map.addMarker({ ia:position[0], ja:position[1], icon: i+1, draggable: true })
 
-				function geocodePosition(pos) {
-					geocoder.geocode({latLng: pos,language:'ua'}, function (responses) {
-						if (responses && responses.length > 0) {
-							alert(responses[0].formatted_address);
-						}else {
-							alert ('Нема нічого')
-						}
+					google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
+						geocodePosition(this.getPosition(),function (responses) {
+							if (responses && responses.length > 0) {
+								console.log (responses[0].formatted_address, adminMarker);
+								document.getElementById(adminMarker).innerHTML = responses[0].formatted_address+";"; // jQuery do not work, because in ID is symbol  "." (dot).
+							}else {
+								console.log ('Нeзнайдено нічого, або якійсь трабли із коннектом')
+							}
+						});
 					});
+				});
+
+				//TODO: Make as local function;
+				window.geocoder = new google.maps.Geocoder();
+
+				function geocodePosition(pos,callback) {
+					geocoder.geocode({latLng: pos,language:'ua'}, callback);
 				}
 
-				google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
-					geocodePosition(this.getPosition());
-				});
+
 				
 			})
 		</script>
@@ -150,7 +245,14 @@
 							<em class="tr"></em><em class="tl"></em>  <!--Corners-->
 						</h3>
 						<ul>
-							<li><h4>Адреса:</h4><div class="description"><div style="float:left;" contenteditable="true">вул.Вірменська 2</div></div> </li>
+							<li><h4>Адреса:</h4>
+								<div class="description" type="address">
+									<div style="float:left;" contenteditable="true">&nbsp;
+										<!--<span id="49.83725896583545_24.02403635406495" >вул.Вірменська 2;</span>-->
+										<!--<span id="49.84262833886588_23.995669311523447" >Залізнична 64;</span>-->
+									</div>
+								</div>
+							</li>
 							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span> </li>
 							<li><h4>Телефон:</h4><span class="description">2-100-500</span> </li>
 							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>

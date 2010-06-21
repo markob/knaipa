@@ -55,7 +55,7 @@
 				updateMarkerAddress('Dragging...');
 			});
 
-			google.maps.event.addListener(marker, 'drag', function() {
+			google.maps.event.addListener(marker, 'draggable', function() {
 				updateMarkerStatus('Dragging...');
 				updateMarkerPosition(marker.getPosition());
 			});
