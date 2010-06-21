@@ -16,14 +16,14 @@
 
 var setDataSwitch = {
 		dragStart: "start.draggable",
-		drag: "drag.draggable",
+		draggable: "draggable.draggable",
 		dragStop: "stop.draggable",
 		maxHeight: "maxHeight.resizable",
 		minHeight: "minHeight.resizable",
 		maxWidth: "maxWidth.resizable",
 		minWidth: "minWidth.resizable",
 		resizeStart: "start.resizable",
-		resize: "drag.resizable",
+		resize: "draggable.resizable",
 		resizeStop: "stop.resizable"
 	},
 	
@@ -316,8 +316,8 @@ $.widget("ui.dialog", {
 				$(this).height($(this).height()).addClass("ui-dialog-dragging");
 				(options.dragStart && options.dragStart.apply(self.element[0], arguments));
 			},
-			drag: function() {
-				(options.drag && options.drag.apply(self.element[0], arguments));
+			draggable: function() {
+				(options.draggable && options.draggable.apply(self.element[0], arguments));
 			},
 			stop: function() {
 				$(this).removeClass("ui-dialog-dragging").height(heightBeforeDrag);

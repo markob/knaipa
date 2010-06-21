@@ -275,7 +275,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		this._contactContainers(event);
 
 		//Interconnect with droppables
-		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
+		if($.ui.ddmanager) $.ui.ddmanager.draggable(this, event);
 
 		//Call callbacks
 		this._trigger('sort', event, this._uiHash());

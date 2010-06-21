@@ -110,7 +110,7 @@ $.extend($.simulate.prototype, {
 		return evt;
 	},
 
-	drag: function(el) {
+	draggable: function(el) {
 		var self = this, center = this.findCenter(this.target), 
 			options = this.options,	x = Math.floor(center.x), y = Math.floor(center.y), 
 			dx = options.dx || 0, dy = options.dy || 0, target = this.target;

@@ -651,13 +651,13 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		//Call plugins and callbacks and use the resulting position if something is returned
 		if (!noPropagation) {
 			var ui = this._uiHash();
-			this._trigger('drag', event, ui);
+			this._trigger('draggable', event, ui);
 			this.position = ui.position;
 		}
 
 		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
-		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
+		if($.ui.ddmanager) $.ui.ddmanager.draggable(this, event);
 
 		return false;
 	},
@@ -901,7 +901,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	_trigger: function(type, event, ui) {
 		ui = ui || this._uiHash();
 		$.ui.plugin.call(this, type, [event, ui]);
-		if(type == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
+		if(type == "draggable") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
 		return $.widget.prototype._trigger.call(this, type, event, ui);
 	},
 
@@ -920,7 +920,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 $.extend($.ui.draggable, {
 	version: "1.7.2",
-	eventPrefix: "drag",
+	eventPrefix: "draggable",
 	defaults: {
 		addClasses: true,
 		appendTo: "parent",
@@ -1005,7 +1005,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 		});
 
 	},
-	drag: function(event, ui) {
+	draggable: function(event, ui) {
 
 		var inst = $(this).data("draggable"), self = this;
 
@@ -1139,7 +1139,7 @@ $.ui.plugin.add("draggable", "scroll", {
 		var i = $(this).data("draggable");
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
 	},
-	drag: function(event, ui) {
+	draggable: function(event, ui) {
 
 		var i = $(this).data("draggable"), o = i.options, scrolled = false;
 
@@ -1199,7 +1199,7 @@ $.ui.plugin.add("draggable", "snap", {
 		});
 
 	},
-	drag: function(event, ui) {
+	draggable: function(event, ui) {
 
 		var inst = $(this).data("draggable"), o = inst.options;
 		var d = o.snapTolerance;
@@ -1519,7 +1519,7 @@ $.ui.ddmanager = {
 		return dropped;
 
 	},
-	drag: function(draggable, event) {
+	draggable: function(draggable, event) {
 
 		//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
 		if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets(draggable, event);
@@ -2899,7 +2899,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		this._contactContainers(event);
 
 		//Interconnect with droppables
-		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
+		if($.ui.ddmanager) $.ui.ddmanager.draggable(this, event);
 
 		//Call callbacks
 		this._trigger('sort', event, this._uiHash());
@@ -4136,14 +4136,14 @@ $.extend($.ui.accordion, {
 
 var setDataSwitch = {
 		dragStart: "start.draggable",
-		drag: "drag.draggable",
+		draggable: "draggable.draggable",
 		dragStop: "stop.draggable",
 		maxHeight: "maxHeight.resizable",
 		minHeight: "minHeight.resizable",
 		maxWidth: "maxWidth.resizable",
 		minWidth: "minWidth.resizable",
 		resizeStart: "start.resizable",
-		resize: "drag.resizable",
+		resize: "draggable.resizable",
 		resizeStop: "stop.resizable"
 	},
 	
@@ -4436,8 +4436,8 @@ $.widget("ui.dialog", {
 				$(this).height($(this).height()).addClass("ui-dialog-dragging");
 				(options.dragStart && options.dragStart.apply(self.element[0], arguments));
 			},
-			drag: function() {
-				(options.drag && options.drag.apply(self.element[0], arguments));
+			draggable: function() {
+				(options.draggable && options.draggable.apply(self.element[0], arguments));
 			},
 			stop: function() {
 				$(this).removeClass("ui-dialog-dragging").height(heightBeforeDrag);

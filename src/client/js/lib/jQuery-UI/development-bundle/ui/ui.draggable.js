@@ -132,13 +132,13 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		//Call plugins and callbacks and use the resulting position if something is returned
 		if (!noPropagation) {
 			var ui = this._uiHash();
-			this._trigger('drag', event, ui);
+			this._trigger('draggable', event, ui);
 			this.position = ui.position;
 		}
 
 		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
-		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
+		if($.ui.ddmanager) $.ui.ddmanager.draggable(this, event);
 
 		return false;
 	},
@@ -382,7 +382,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	_trigger: function(type, event, ui) {
 		ui = ui || this._uiHash();
 		$.ui.plugin.call(this, type, [event, ui]);
-		if(type == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
+		if(type == "draggable") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
 		return $.widget.prototype._trigger.call(this, type, event, ui);
 	},
 
@@ -401,7 +401,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 $.extend($.ui.draggable, {
 	version: "1.7.2",
-	eventPrefix: "drag",
+	eventPrefix: "draggable",
 	defaults: {
 		addClasses: true,
 		appendTo: "parent",
@@ -486,7 +486,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 		});
 
 	},
-	drag: function(event, ui) {
+	draggable: function(event, ui) {
 
 		var inst = $(this).data("draggable"), self = this;
 
@@ -620,7 +620,7 @@ $.ui.plugin.add("draggable", "scroll", {
 		var i = $(this).data("draggable");
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
 	},
-	drag: function(event, ui) {
+	draggable: function(event, ui) {
 
 		var i = $(this).data("draggable"), o = i.options, scrolled = false;
 
@@ -680,7 +680,7 @@ $.ui.plugin.add("draggable", "snap", {
 		});
 
 	},
-	drag: function(event, ui) {
+	draggable: function(event, ui) {
 
 		var inst = $(this).data("draggable"), o = inst.options;
 		var d = o.snapTolerance;
