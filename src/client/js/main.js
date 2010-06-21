@@ -51,19 +51,41 @@ $(function(){
 		}
 
 		/**
+		 * You can use both of two methods initializing markers
+		 *    1. parameter initializing
 		 *
-		 * @param ia
-		 * @param ja
-		 * @param  {String} icon item from {@link Map.markerIcons} object
+		 *       @param ia
+		 *       @param ja
+		 *       @param  {String} icon item from {@link Map.markerIcons} object
+		 *
+		 *    2. object initializing
+		 *       @param  {
+		 *         ia: {Integer},
+		 *         ja: {Integer},
+		 *         icon: {String},
+		 *         draggable: {Boolean}
+		 *       }
 		 * @return {String} marker id
 		 */
-		this.addMarker = function(ia,ja,icon){
-			var latlng = new google.maps.LatLng(ia,ja);
-			_this.markers[ia+'_'+ja] = new gMap.Marker({ map :_this.map, position: latlng});
-			if (icon){_this.markers[ia+'_'+ja].setIcon(_this.markerIcons[icon]);}
-			else {_this.markers[ia+'_'+ja].setIcon(_this.markerIcons['knajpa']);}
+		this.addMarker = function(){
+			var initObj = {
+				icon: 'knajpa',
+				draggable: false
+			};
 
-			return ia+'_'+ja ;
+			if (arguments[0] instanceof Object){
+				for (var par in arguments[0]){initObj[par] = arguments[0][par];}
+			}else{
+				initObj.ia = arguments[0];
+				initObj.ja = arguments[1]
+				if (arguments[2]) initObj.icon = arguments[2];
+			}
+
+			var latlng = new google.maps.LatLng(initObj.ia,initObj.ja);
+			_this.markers[initObj.ia+'_'+initObj.ja] = new gMap.Marker({ map :_this.map, position: latlng, draggable:initObj.draggable});
+			_this.markers[initObj.ia+'_'+initObj.ja].setIcon(_this.markerIcons[initObj.icon]);
+
+			return initObj.ia+'_'+initObj.ja ;
 		}
 
 		/**
@@ -82,6 +104,14 @@ $(function(){
 
 		this.hideAllMarkers = function(){
 			for (var marker in _this.markers){ _this.markers[marker].setVisible(false);}
+		}
+		this.hideMarker = function(marker){
+			_this.markers[marker].setVisible(false);
+		}
+		this.removeMarker = function(marker){
+			_this.hideMarker(marker);
+			delete (_this.markers[marker]);
+			console.log(_this.markers);
 		}
 
 		this.init = function(initObj){
