@@ -3,7 +3,7 @@
 from datetime import datetime
 from google.appengine.ext import db
 from google.appengine.tools.bulkloader import Loader, Exporter
-from libs.models.article import Article
+from libs.models.articles import Article
 
 class ArticleLoader(Loader):
     """ Article Model entities loader. """
@@ -13,8 +13,7 @@ class ArticleLoader(Loader):
         str_to_date = lambda x: datetime.strptime(x, '%m %d %Y %H:%M')
         
         Loader.__init__(self, 'Article',
-                        [('knaipa', str_to_text),
-                         ('title', str_to_text),
+                        [('title', str_to_text),
                          ('description', str_to_text),
                          ('cut', str_to_text),
                          ('text', str_to_text),
@@ -30,8 +29,7 @@ class ArticleExporter(Exporter):
         date_to_str = lambda x: x.strftime('%m %d %Y %H:%M')
 
         Exporter.__init__(self, 'Article',
-                          [('knaipa', text_to_str, None),
-                           ('title', text_to_str, None),
+                          [('title', text_to_str, None),
                            ('description', text_to_str, None),
                            ('cut', text_to_str, None),
                            ('text', text_to_str, None),

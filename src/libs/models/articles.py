@@ -3,9 +3,9 @@ import logging as log
 from google.appengine.ext import db
 
 #from libs.uzvers import Uzver #@UnresolvedImport
-from libs.models.imodel import BaseIndexableModel
+from libs.models.imodels import BaseDocument
 
-class Article(BaseIndexableModel):
+class Article(BaseDocument):
     """ Describes data model for storing articles """
     
     #services = db.ListProperty(db.Key, required=True)
