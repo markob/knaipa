@@ -19,7 +19,7 @@ def search_query(str):
     """"""
     log.debug("Search request is processing.")
     
-    index = getdatastoreindex("articles", schema=DOCUMENTS_SCHEMA)
+    index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
     parser = QueryParser("content", schema=index.schema)
     query = parser.parse(str)
     results = index.searcher().search(query)
@@ -28,7 +28,7 @@ def search_query(str):
     log.debug("search results are %s" % results)
     
     
-def exec_add_docs_to_index():
+def add_docs_to_index():
     """It's temporary decision and have to be moved to task scheduler"""
     # check unindexed documents queue
     query = DocumentsQueue.all()
@@ -38,7 +38,7 @@ def exec_add_docs_to_index():
         
     if None != docs_to_index:
         # get index writer and index required documents
-        index = getdatastoreindex("articles", schema=DOCUMENTS_SCHEMA)
+        index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
         writer = index.writer()
             
         for doc in docs_to_index:

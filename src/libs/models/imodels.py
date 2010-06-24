@@ -18,14 +18,17 @@ class BaseDocument(db.Model):
     
     def get_id(self):
         """Retrieves the document instance id if it exists"""
+        log.debug("document id has been requested")
         return self.key().id_or_name()
     
     def put(self):
         """Stores the document and adds it id to the index queue"""
         db.Model.put(self)
+        log.debug("document has been added to the storage with id %s" % self.get_id())
         
         doc_to_index = DocumentsQueue(document=self)
         doc_to_index.put()
+        log.debug("document has been added to the index queue")
 
 
 class DocumentsQueue(db.Model):

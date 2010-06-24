@@ -85,7 +85,12 @@ handlers:
 
 # work with services (store, get and edit)
 - url: /services.*
-  script: apps/services.py  
+  script: apps/services.py
+  
+# documents indexing
+- url: /tasks/index
+  script: apps/indexer.py
+  login: admin  
 
 # test app which adds required data to datastore
 - url: /test/.*

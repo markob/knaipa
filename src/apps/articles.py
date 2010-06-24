@@ -38,8 +38,7 @@ class ArticleHandler(ObjectHandler):
 
     
         
-application = webapp.WSGIApplication(
-    [('/articles', ArticleHandler)], debug = True)
+application = webapp.WSGIApplication([('/articles', ArticleHandler)], debug = True)
         
         
 def main():
