@@ -2,8 +2,7 @@
 
 import logging as log
 
-from libs.models.imodels import BaseDocument
-from google.appengine.ext import db
+from libs.models.imodels import DocumentsQueue
 
 # whoosh imports
 from whoosh.fields import Schema, TEXT, ID
@@ -14,13 +13,9 @@ from whoosh.qparser import QueryParser
 DOCUMENTS_SCHEMA = Schema(title=TEXT(stored=True),
                           id=ID(stored=True),
                           content=TEXT(stored=True))
-
-class DocumentsQueue(db.Model):
-    """Contains only links to documents which should be processed"""
-    document = db.ReferenceProperty(BaseDocument, required=True)
     
 
-def query_search(str):
+def search_query(str):
     """"""
     log.debug("Search request is processing.")
     
@@ -31,11 +26,6 @@ def query_search(str):
         
     # log results
     log.debug("search results are %s" % results)
-
-def add_doc_to_index(doc):
-    """Just stores document id to queue and it will be processed by scheduler"""
-    doc_to_index = DocumentsQueue(doc)
-    doc_to_index.put()
     
     
 def exec_add_docs_to_index():

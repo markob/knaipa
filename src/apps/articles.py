@@ -3,14 +3,9 @@ import logging as log
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-# add libs to system path
-import os, sys
-sys.path.append(os.path.abspath(os.curdir) + '/../libs')
-
-from libs.models.articles import Article #@UnresolvedImport
-from libs.objhandler import ObjectHandler #@UnresolvedImport
-from libs.utils import InvalidRequestError #@UnresolvedImport
-from libs.search import add_doc_to_index #@UnresolvedImport
+from models.articles import Article
+from objhandler import ObjectHandler
+from utils import InvalidRequestError
 
 
 # Articles service request handler
@@ -29,17 +24,6 @@ class ArticleHandler(ObjectHandler):
                                'error' : (lambda self: None, 'articles-error.xml') }
         
         log.debug("Article handler was initialized")
-        
-    
-    def add(self, request):
-        """Adds a new article to datastore"""
-        # put article to datastore
-        response = self._write(request)
-        
-        # add the article to index queue
-        add_doc_to_index()
-        
-        return response
     
     
     def _select_cmd_handler(self):

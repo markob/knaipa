@@ -2,7 +2,6 @@ import logging as log
 
 from google.appengine.ext import db
 
-#from libs.uzvers import Uzver #@UnresolvedImport
 from libs.models.imodels import BaseDocument
 
 class Article(BaseDocument):
@@ -13,7 +12,6 @@ class Article(BaseDocument):
     description = db.StringProperty(required=True)
     cut = db.StringProperty(required=True)
     text = db.TextProperty(required=True)
-    #author = db.ReferenceProperty(Uzver, required=True)
     modified = db.DateTimeProperty(auto_now=True)
     
     def get_title(self):
@@ -25,6 +23,3 @@ class Article(BaseDocument):
         """Retrieves only text content of an article"""
         log.debug("Article content is %d" % self.text)
         return self.text
-
-
-

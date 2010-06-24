@@ -1,5 +1,7 @@
 import logging as log
+
 from google.appengine.ext import db
+
 
 class BaseDocument(db.Model):
     """It's interface class for all indexable document models"""
@@ -16,7 +18,16 @@ class BaseDocument(db.Model):
     
     def get_id(self):
         """Retrieves the document instance id if it exists"""
-        if not self.is_saved():
-            return None
-        else:
-            return self.key().id_or_name()
+        return self.key().id_or_name()
+    
+    def put(self):
+        """Stores the document and adds it id to the index queue"""
+        db.Model.put(self)
+        
+        doc_to_index = DocumentsQueue(document=self)
+        doc_to_index.put()
+
+
+class DocumentsQueue(db.Model):
+    """Contains only links to documents which should be processed"""
+    document = db.ReferenceProperty(BaseDocument, required=True)
