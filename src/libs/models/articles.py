@@ -2,7 +2,7 @@ import logging as log
 
 from google.appengine.ext import db
 
-from libs.models.imodels import BaseDocument
+from models.imodels import BaseDocument
 
 class Article(BaseDocument):
     """ Describes data model for storing articles """

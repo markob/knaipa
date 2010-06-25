@@ -1,9 +1,10 @@
 import logging as log
 
 from google.appengine.ext import db
+from google.appengine.ext.db.polymodel import PolyModel
 
 
-class BaseDocument(db.Model):
+class BaseDocument(PolyModel):
     """It's interface class for all indexable document models"""
     
     def get_title(self):
@@ -23,7 +24,7 @@ class BaseDocument(db.Model):
     
     def put(self):
         """Stores the document and adds it id to the index queue"""
-        db.Model.put(self)
+        PolyModel.put(self)
         log.debug("document has been added to the storage with id %s" % self.get_id())
         
         doc_to_index = DocumentsQueue(document=self)

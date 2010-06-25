@@ -1,7 +1,9 @@
 import logging as log
 
 from google.appengine.ext import webapp
-from search import add_docs_to_index
+from indexing import add_docs_to_index #@UnresolvedImport
+
+from common import main
 
 
 class IndexRequestHandler(webapp.RequestHandler):
@@ -12,11 +14,11 @@ class IndexRequestHandler(webapp.RequestHandler):
         log.debug("document index request")
         
         add_docs_to_index()
+        
+        self.response.set_status(200)
 
-application = webapp.WSGIApplication([('/index', IndexRequestHandler)], debug = True)
+application = webapp.WSGIApplication([('/tasks/index', IndexRequestHandler)], debug = True)
 
-def main():
-    webapp.util.run_wsgi_app(application)
 
 if __name__ == '__main__':
-    main()
+    main(application)
