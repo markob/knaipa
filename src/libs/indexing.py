@@ -1,4 +1,4 @@
-""" The file contains functionality to setup and generate search engine indices. """
+"""The file contains functionality to setup and generate search engine indices."""
 
 import logging as log
 
@@ -16,7 +16,7 @@ DOCUMENTS_SCHEMA = Schema(title=TEXT(stored=True),
     
 
 def search_query(str):
-    """"""
+    """Launches search through indexes and returns result"""
     log.debug("Search request is processing.")
     
     index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)

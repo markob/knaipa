@@ -1,4 +1,4 @@
-""" Utilities are used in other modules and contain common solutions for them """
+"""Utilities are used in other modules and contain common solutions for them"""
 
 import logging as log
 
@@ -8,7 +8,7 @@ from libs import xml_tools as XMLTools #@UnresolvedImport
 
 
 def login_required():
-  """ Redirects user to login page if it's not logged in. """
+  """Redirects user to login page if it's not logged in. """
   pass
 
 
@@ -86,14 +86,19 @@ class ModelProcessor(object):
       value = request.get(prop_name)
       prop_type = properties[prop_name]
       
+      # skip properties is used for internal purposes
+      if prop_name[0] == '_':
+        continue
+      
       if not value and not prop_type.default_value():
         if allParamsRequired:
-          log.debug("Property type is %s and value is %s" % (prop_type, value))
+          log.debug("Mandatory property was not found in model instance")
+          log.debug("Property type is %s and name is %s" % (type(prop_type), prop_name))
           raise(InvalidRequestError, 'request data is not completed')
         else:
           continue
         
-        data[prop_name] = value
+      data[prop_name] = value
       
     # extract optional data if required
     if issubclass(self._cls_model, db.Expando):

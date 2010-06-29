@@ -27,11 +27,11 @@ class BaseDocument(PolyModel):
         PolyModel.put(self)
         log.debug("document has been added to the storage with id %s" % self.get_id())
         
-        doc_to_index = DocumentsQueue(document=self)
+        doc_to_index = DocumentsQueue(self.key())
         doc_to_index.put()
         log.debug("document has been added to the index queue")
 
 
 class DocumentsQueue(db.Model):
     """Contains only links to documents which should be processed"""
-    document = db.ReferenceProperty(BaseDocument, required=True)
+    document = db.ListProperty(db.Key, required=True)

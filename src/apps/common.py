@@ -3,9 +3,13 @@ import logging as log
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 def main(application):
-  """Just launch appropriate application"""
+  """Just prepares and launches appropriate application"""
+  # update system path here because __init__.py was cached
+  set_system_path()
+  
   # set logger level
   log.getLogger().setLevel(log.DEBUG)
+  
   # run application
   run_wsgi_app(application)
 

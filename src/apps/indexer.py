@@ -1,7 +1,7 @@
 import logging as log
 
 from google.appengine.ext import webapp
-from indexing import add_docs_to_index #@UnresolvedImport
+from indexing import add_docs_to_index
 
 from common import main
 
