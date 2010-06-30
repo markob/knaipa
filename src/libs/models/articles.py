@@ -16,10 +16,10 @@ class Article(BaseDocument):
     
     def get_title(self):
         """Retrieves only title of an article"""
-        log.debug("Article title is %d" % self.title)
+        log.debug("Article title is %s" % self.title)
         return self.title
     
     def get_content(self):
         """Retrieves only text content of an article"""
-        log.debug("Article content is %d" % self.text)
+        log.debug("Article content is %s" % self.text)
         return self.text

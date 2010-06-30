@@ -1,12 +1,13 @@
 import logging as log
 
+from common import main, set_system_path
+set_system_path()
+
 from google.appengine.ext import webapp
 
 from models.articles import Article
 from objhandler import ObjectHandler
 from utils import InvalidRequestError
-
-from common import main
 
 # Articles service request handler
 class ArticleHandler(ObjectHandler):

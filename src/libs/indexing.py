@@ -2,7 +2,7 @@
 
 import logging as log
 
-from models.imodels import DocumentsQueue
+from models.imodels import DocumentsQueue, BaseDocument
 
 # whoosh imports
 from whoosh.fields import Schema, TEXT, ID
@@ -29,20 +29,25 @@ def search_query(str):
     
     
 def add_docs_to_index():
-    """It's temporary decision and have to be moved to task scheduler"""
-    # check unindexed documents queue
-    query = DocumentsQueue.all()
- 
-    if query.count(1):
-        # get index writer and index required documents
-        index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
-        writer = index.writer()
-        
-        for doc in query:
-            # retrieve content of appropriate documents and write index it
-            writer.add_document(title=doc.document.get_title(),
-                                id=doc.document.get_id(),
-                                content=doc.document.get_content())
-            del doc
-        writer.commit()
-
+  """It's temporary decision and have to be moved to task scheduler"""
+  # check unindexed documents queue
+  queue = DocumentsQueue.get_instance()
+  
+  if queue.documents:
+    # get index writer and index required documents
+    index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
+    writer = index.writer()
+    
+    for key in queue.documents:
+      log.debug("document with key %s is going to index" % key)
+      
+      # retrieve content of appropriate documents and write index it
+      document = BaseDocument.get(key)
+      
+      writer.add_document(title=document.get_title(),
+                          id=document.get_id(),
+                          content=document.get_content())
+      queue.documents.remove(key)
+      
+    writer.commit()
+    queue.put()

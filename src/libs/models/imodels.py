@@ -24,14 +24,29 @@ class BaseDocument(PolyModel):
     
     def put(self):
         """Stores the document and adds it id to the index queue"""
-        PolyModel.put(self)
+        super(BaseDocument, self).put()
         log.debug("document has been added to the storage with id %s" % self.get_id())
         
-        doc_to_index = DocumentsQueue(self.key())
-        doc_to_index.put()
+        docs_queue = DocumentsQueue.get_instance()
+        docs_queue.documents.append(self.key())
+        docs_queue.put()
+        
         log.debug("document has been added to the index queue")
+        log.debug(self.class_key())
 
 
 class DocumentsQueue(db.Model):
     """Contains only links to documents which should be processed"""
-    document = db.ListProperty(db.Key, required=True)
+    documents = db.ListProperty(db.Key, default=None)
+    
+    @staticmethod
+    def get_instance():
+      """Retrieves the documents queue instance"""
+      instance = DocumentsQueue.all().get()
+      
+      if not instance:
+        # create documents queue instance if it does not exist
+        instance = DocumentsQueue()
+        instance.put()
+      
+      return instance

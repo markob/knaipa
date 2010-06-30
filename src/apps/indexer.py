@@ -1,7 +1,10 @@
 import logging as log
 
+import common
+common.set_system_path()
+
 from google.appengine.ext import webapp
-from indexing import add_docs_to_index
+from indexing import add_docs_to_index #@UnresolvedImport
 
 from common import main
 
