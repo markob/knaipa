@@ -4,8 +4,85 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /static
-  static_dir: static
+# entry point to the main service page
+- url: /
+  static_files: webapp/index.html
+  upload: webapp/index\.html
 
-- url: /.*
+# entry points to the administration services - admin-*.html
+- url: /(admin-.*\.html)
+  static_files: webapp/\1
+  upload: webapp/admin-.*\.html
+  login: admin
+
+# entry points to the services - *.html
+- url: /(.*\.html)
+  static_files: webapp/\1
+  upload: webapp/.*\.html
+
+# css files handler
+- url: /css/(.*\.css)
+  static_files: webapp/css/\1
+  upload: webapp/css/.*\.css
+
+# css framework images files handler
+- url: /css/(.*\.(png|gif))
+  static_files: webapp/css/\1
+  upload: webapp/css/.*\.(png|gif)
+
+# javascript files handler
+- url: /js/(.*\.js)
+  static_files: webapp/js/\1
+  upload: webapp/js/.*\.js
+
+# content files handler
+- url: /content/(.*\.(png|gif|xml))
+  static_files: webapp/content/\1
+  upload: webapp/content/.*\.(png|gif|xml)
+
+# favicon handler
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+# xsl files handler
+- url: /xsl/(.*\.xsl)
+  static_files: webapp/xsl/\1
+  upload: webapp/xsl/.*\.xsl
+
+- url: /static
   script: main.py
+
+
+####################################################################
+# Script Handlers Section
+####################################################################
+
+# work with articles (store, get and edit)
+- url: /articles.*
+  script: src/knajpa/handlers/articles.py
+
+# handles search engine requests (to index and search)
+- url: /search.*
+  script: src/knajpa/handlers/search.py
+
+# work with comments (store, get and edit)
+- url: /comments.*
+  script: src/knajpa/handlers/comments.py
+
+# work with uploaded images (just upload)
+- url: /images.*
+  script: src/knajpa/handlers/images.py
+
+# work with services (store, get and edit)
+- url: /services.*
+  script: src/knajpa/handlers/services.py
+
+# test app which adds required data to datastore
+- url: /test/.*
+  script: src/knajpa/handlers/tests.py
+
+# backup/restore data handler
+- url: /remote-admin
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
