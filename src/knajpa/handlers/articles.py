@@ -2,9 +2,13 @@ import logging as log
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
+import os,sys
+
+sys.path.append('/data/programming/projects/startup/knajpa/src')
+log.info(os.path)
 
 from knajpa.models.articles import Article
-from objhandler import ObjectHandler
+from knajpa.handlers.objhandler import ObjectHandler
 from knajpa.utils import InvalidRequestError
 
 

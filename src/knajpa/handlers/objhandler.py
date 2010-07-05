@@ -10,7 +10,8 @@ from knajpa.utils import InvalidRequestError, ModelProcessor #@UnresolvedImport
 import os
 import logging
 
-templates_path = os.path.join(os.path.dirname(__file__), 'webapp/templates')
+
+templates_path = os.path.join(os.path.dirname(__file__),'../../../', 'webapp/templates')
 logging.info("Templates path: "+templates_path)
 
 
