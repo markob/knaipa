@@ -62,6 +62,9 @@ handlers:
 - url: /articles.*
   script: src/knajpa/handlers/articles.py
 
+- url: /knajpa.*
+  script:  src/knajpa/handlers/knajpahandler.py
+
 # handles search engine requests (to index and search)
 - url: /search.*
   script: src/knajpa/handlers/search.py
