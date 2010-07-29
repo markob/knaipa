@@ -2,7 +2,8 @@
 
 import logging as log
 
-from models.imodels import DocumentsQueue, BaseDocument
+from models.imodels import DocumentsQueue
+from models.documents import IndexableDocument
 
 # whoosh imports
 from whoosh.fields import Schema, TEXT, ID
@@ -10,8 +11,8 @@ from whoosh.index import getdatastoreindex
 from whoosh.qparser import QueryParser
 
 
-DOCUMENTS_SCHEMA = Schema(title=TEXT(stored=True),
-                          id=ID(stored=True),
+DOCUMENTS_SCHEMA = Schema(id=ID(stored=True),
+                          title=TEXT(stored=True),
                           content=TEXT(stored=True))
     
 
@@ -38,16 +39,16 @@ def add_docs_to_index():
     index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
     writer = index.writer()
     
-    for key in queue.documents:
-      log.debug("document with key %s is going to index" % key)
+    for doc_id in queue.documents:
+      log.debug("document with id %d is going to index" % doc_id)
       
       # retrieve content of appropriate documents and write index it
-      document = BaseDocument.get(key)
+      document = IndexableDocument.get_by_id(doc_id)
       
-      writer.add_document(title=document.get_title(),
-                          id=document.get_id(),
+      writer.add_document(id=document.get_id(),
+                          title=document.get_title(),
                           content=document.get_content())
-      queue.documents.remove(key)
+      queue.documents.remove(doc_id)
       
     writer.commit()
     queue.put()
