@@ -27,6 +27,7 @@ def search_query(str):
         
     # log results
     log.debug("search results are %s" % results)
+    return results
     
     
 def add_docs_to_index():
