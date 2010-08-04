@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+	<image>
+		<album id="{{ album_id }}" />
+		<photo id="{{ photo_id }}" url="{{ photo_url }}" />
+		{% for thumb in thumbs_list %}
+		<thumb id="{{ thumb.name }}" url="{{ thumb.url }}" />
+		{% endfor %}
+	</image>
+</content>
+
