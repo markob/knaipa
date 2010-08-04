@@ -1,6 +1,6 @@
 """This file contains configs are common for all applications"""
 
-import common
+# add common utils path to system path
+import sys, os
 
-# Update System Path
-common.set_system_path()
+sys.path.append(os.path.dirname(os.path.curdir + "/.."))
