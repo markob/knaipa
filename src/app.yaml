@@ -89,7 +89,7 @@ handlers:
   
 # documents indexing
 - url: /tasks/index
-  script: apps/indexer.py
+  script: apps/index.py
   login: admin  
 
 # test app which adds required data to datastore

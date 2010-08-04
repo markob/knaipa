@@ -3,16 +3,19 @@
 # app engine imports
 from google.appengine.ext import webapp
 
+import logging as log
+
 from common import main, set_system_path
 set_system_path()
 
-from libs.indexing import search_query
+from libs.indexer import search_query
 
 class SearchHandler(webapp.RequestHandler):
     """Handles search request by using full text search functionality"""
     
     def get(self):
         """Processes search request and retrieves results"""
+        log.debug("Search request: %s" % self.request.get("query"))
         
         result = search_query(self.request.get("query"))
         
