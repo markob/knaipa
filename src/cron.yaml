@@ -1,4 +1,0 @@
-cron:
-- description: hourly indexing job 
-  url: /tasks/index
-  schedule: every 1 hour synchronized
