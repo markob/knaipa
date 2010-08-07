@@ -1,171 +1,93 @@
-<!DOCTYPE html PUBLIC  "-//W3C//DTD XHTML 1.0 Strict//EN" "www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC  "-//W3C//DTD XHTML 1.0 Strict//EN"
+		"www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+
+
 		<script type="text/javascript" src="js/lib/xsl/jQuery.xslt.js"></script>
 		<script type="text/javascript" src="js/lib/adressing/jquery.address-1.1.min.js"></script>
 
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
 		<script src="js/main.js"></script>
-		<script src="saparate-input.js"></script>
+		<script src="js/admin-knajpa.js"></script>
+		<script src="js/suggestions.js"></script>
 
 		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-base.css">
 		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-fsi-icons.css">
 		<link media="all" rel="stylesheet" href="css/style.css">
 
-		<title>Knajpa - for your convenience </title>
 		<script type="text/javascript">
-			window.getPosition = function (node){
 
-				Knajpa.map.identifyMarker({
-					address:$(node).text().trim(),
-					success: function (responce,status){
-							$(node).css ('border-bottom','none');
+			$(function (){
 
-							var result = ''
-							for (var i=0; i<responce.length; i++){
-								for (var j=0; j < responce[i].address_components.length ;j++)
-									result += (responce[i].address_components[j].long_name) +', '
-								 result +="<br/>";
-							}
-							suggestedPopup.setData(result);
+				//TODO: refactor temporary code;
+				var adminObj = new adminKnajpa({
+					activeDescription: $(".admin-items li:first"),
+					container : $('.admin-items:first')
+				});
 
-							if (responce[0] && responce[0].types[0] == "street_address" ){
 
-								if (!node.getAttribute('id')){
-									Knajpa.map.addMarker({ia : responce[0].geometry.location.lat(), ja : responce[0].geometry.location.lng(), draggable : true});
-									$(node).attr('id',responce[0].geometry.location.lat() +'_'+ responce[0].geometry.location.lng());
-								} else if ($(node).attr('id') != responce[0].geometry.location.lat()+'_'+responce[0].geometry.location.lng()){
-									$(node).attr('id', Knajpa.map.updateMarker ($(node).attr('id'),responce[0].geometry.location));
+				// Decoration thing
+				//TODO: remove temporary code;
+				$('#textInfo input:text').each(function(){
+					$(this) //TODO: make it better;
+						.bind('focus',function(){$(this.parentNode).addClass('focus')})
+						.bind('blur',function(){$(this.parentNode).removeClass('focus')})
+						.wrap('<div class="input '+this.className+'"></div>');
+				});
+
+				$('#textInfo textarea').each(function(){
+					$(this) //TODO: make it better;
+						.bind('focus',function(){$(this.parentNode).addClass('focus')})
+						.bind('blur',function(){$(this.parentNode).removeClass('focus')})
+						.wrap('<div class="textarea '+this.className+'"></div>');
+				});
+
+				$('#textInfo div.input').append('<em class="l"></em><em class="r"></em><em class="t"></em><em class="b"></em>');
+
+				// Create suggestion elements
+				var a = new suggestions({container : $('#admin-main input:first')})
+						.bind('select',function (_this){
+							$.ajax({
+								type: "GET",
+								url: "content/knajpa.xml",
+								dataType: "XML",
+								success : function (data){
+									$('#knajpa-template-test').xslt(data,'xsl/admin.xsl')
 								}
-							} else {
-								/*$(node.parentNode).removeAttr("id");*/
-							}
-
-					},
-					decline :function(){
-						 $(node).css ('border-bottom','2px dotted red');
-					}
-				})
-			}
-
-			// http://maps-api-ssl.google.com/maps/suggest?
-			//		q=%D0%9B%D0%B8%D1%87&
-			// 		cp=3&
-			// 		ll=37.0625,-95.677068&
-			// 		spn=34.122306,114.169922&
-			// 		hl=en&gl=&v=2&json=a&auth=4c3a4cf1QzGfLMD5aUDw7ou3Sm-XFWaO4uw&src=1,2&num=10&numps=5&callback=_xdc_._5gbihlrj7
-
-			//https://maps-api-ssl.google.com/maps/suggest?
-			// 		q=New&cp=3&
-			// 		ll=37.0625,-95.677068&
-			// 		spn=34.122306,114.169922&
-			// 		hl=en&
-			// 		gl=&
-			// 		v=2&
-			// 		json=a&
-			// 		auth=4c3a5419UKXiKdsdX290LpVHb72YACjESlw&
-			// 		src=1,2&
-			// 		num=10&
-			// 		numps=5&
-			// 		callback=_xdc_._6gbiipngp
-
-
-			var suggestedPopup = {
-				show:function (initObj){
-					if (!this.container){
-						this.container = $('<div class="suggestion"></div>').appendTo(document.body);
-						this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')
-					}
-					this.container.css({top: initObj.top, left: initObj.left, display: 'block'});
-				},
-				hide: function(){
-					this.container.css({display: 'none'});
-				},
-				setData: function(content){
-					if (!this.container){this.container = $('<div class="suggestion">test</div>').appendTo(document.body);}
-
-					this.container.html(content);
-					this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')
-				}
-			}
-
-			$(function(){
-				var address = new separateInput({container: $('.description:first')})
-
-				address
-					.bind('separate', function(_this,arg){
-							for (var i=0; i<arg.length; i++){ getPosition (arg[i][0]);}
+							});
 						})
-					.bind('change', function(_this, arg){
-							//Remove garbage markers
-							var currentPoints = [];
-							_this.editabelEl.find('span[id]').each(function(){currentPoints.push(this.getAttribute('id'))})
-							for (var marker in Knajpa.map.markers){
-								if ($.inArray( marker, currentPoints) < 0) { Knajpa.map.removeMarker(marker); /*console.log('remove');*/}
-							}
-
-							var sel = window.getSelection();
-							var selNode = _this.sel.anchorNode.parentNode;
-							var selOffset = _this.sel.anchorOffset;
-
-							$(selNode).html($(selNode).text().slice(0, selOffset)+'<em class="coordinates"></em>'+$(selNode).text().slice(selOffset));
-
-							var pos = $('.coordinates');
-							suggestedPopup.show({top:pos.offset().top, left:pos.offset().left});
-							pos.remove()
-
-							$(selNode).html($(selNode).text());
-							var range = document.createRange();
-							range.setStart(selNode.firstChild, selOffset);
-							range.setEnd(selNode.firstChild, selOffset);
-							sel.removeAllRanges();
-							sel.addRange(range);
-
-							getPosition(arg);
+						.bind('show',function(_this){
+							_this.container.parent().addClass('i-suggestion-grey');
+						})
+						.bind('hide',function(_this){
+							_this.container.parent().removeClass('i-suggestion-grey');
 						})
 
-				var time = new separateInput({container: $('.description:eq(1)')})
+				var b = new suggestions({container : $('#search-item'),dataURL: 'content/knajpa-items-suggestion.xml'})
+						.bind('select',function (_this){alert(_this.container.attr('value'))})
+						.bind('show',function(_this){
+							_this.container.parent().addClass('i-suggestion-white');
+							_this.suggestElement.addClass('white');
+						})
+						.bind('hide',function(_this){
+							_this.container.parent().removeClass('i-suggestion-white');
+							_this.suggestElement.removeClass('white');
+						})
 
-				// Controls init part
-				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
-						.bind('click',function(){alert('save')})
-						.appendTo("#textInfo");
-
-				window.timeout=false;
-				$(document).bind("scroll",function (e){
-					if (window.timeout) clearTimeout(window.timeout);
-					var y = $(document).scrollTop() > 210 ? $(document).scrollTop() :210;
-					window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
-				})
-
-				// Stuff of map's markers
-
-//				$("*[type=address] span").each(function(i){
-//					var position = this.getAttribute('id').split('_')
-//					var adminMarker = Knajpa.map.addMarker({ ia:position[0], ja:position[1], icon: i+1, draggable: true })
-//
-//					google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
-//						geocodePosition(this.getPosition(),function (responses) {
-//							if (responses && responses.length > 0) {
-//								console.log (responses[0].formatted_address, adminMarker);
-//								document.getElementById(adminMarker).innerHTML = responses[0].formatted_address+";"; // jQuery do not work, because in ID is symbol  "." (dot).
-//							}else {
-//								console.log ('Нeзнайдено нічого, або якійсь трабли із коннектом')
-//							}
-//						});
-//					});
-//				});
-			})
+			});
 		</script>
+
+		<title>Knajpa - admin </title>
 	</head>
 	<body>
 		<div id="globalWrapper" class="w-90">
-			<div id="header" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+			<div id="header" class="corners">
 				<h1 id="logo">
-					<a href="/">Кнайпа</a>
+					<a href="#">Кнайпа</a>
 				</h1>
 				<p id='Zamanilovo'>
 					Цей мего сервіс створений для вас
@@ -174,16 +96,14 @@
 					для тусіння і знищеня піга.
 				</p>
 
-				<div id="search" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
-					<form>
+				<div id="search" class="corners">
+					<!--<form>-->
 						<span id='searchLegend'>пошук</span>
-						<div class="input corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
-							<input class="icon i-search" type="text" name="search" value="Приклад: пиво 'Микулин'"/>
+						<div class="input corners">
+							<input id="search-input" name="search-input" class="icon i-search" type="text"/>
 						</div>
-						<a class="button corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
-							Знайти
-						</a>
-					</form>
+						<a class="button corners">Знайти</a>
+					<!--</form>-->
 				</div>
 				<span id="searchTips" class="w-40">
 					Тут мона навалити текст з підказкою, навіть і не одною, або просто додаткову інформацію.
@@ -191,98 +111,95 @@
 			</div>
 
 			<div id="content" class="columns content">
+				<div id="textInfo">
 
-				<div id="textInfo" class="admin">
-					<div class="knajpa-info corners corners-10"><!-- For easy rendering -->
-						<em class="bl"></em><em class="br"></em>
-
-						<h2 class="corners corners-10">
-							Гасафа Лямпо
-							<span>ресторан</span>
-							<em class="tr"></em><em class="tl"></em>
-						</h2>
-
-						<h3 class="corners corners-10">
-							Загальні дані
-							<span class="bottom"></span> <!--Gradient bottom line-->
-							<em class="tr"></em><em class="tl"></em>  <!--Corners-->
-						</h3>
-						<ul>
-							<li>
-								<h4>Адреса:</h4>
-								<span class="description" type="address"></span><!--Important! Do not put any space characters in editable element-->
-							</li>
-							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span> </li>
-							<li><h4>Телефон:</h4><span class="description">2-100-500</span> </li>
-							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>
-							<li><h4>Середній чек:</h4><span class="description">40-100 грн.</span> </li>
-							<li><h4>Форми розрахунку:</h4><span class="description">Бартер</span> </li>
-						</ul>
-
-						<h3>Додаткові послуги<span class="bottom"></span></h3>
-						<ul>
-							<li><h4>Доставка їжі:</h4><span class="description">-</span> </li>
-							<li><h4>Парковка:</h4><span class="description">-</span> </li>
-							<li><h4>Організація бенкетів:</h4><span class="description">-</span> </li>
-							<li><h4>Кількість посадочних мість:</h4><span class="description">120-160</span> </li>
-							<li><h4>Кількість залів:</h4><span class="description">5</span> </li>
-							<li class="tags">
-								<h4>особливості</h4>
-								<span class="description corners">
-									<em class="tl"></em><em class="tr"></em><em class="br"></em><em class="bl"></em>
-									<a href="#">замовлення столиків</a>,
-									<a href="#">зал для курців</a>,
-									<a href="#">літній майдан</a>
-								</span>
-							</li>
-						</ul>
-
-						<h3>Кухня<span class="bottom"></span></h3>
-						<ul>
-							<li><h4>Тип кухні:</h4><span class="description">Українська</span> </li>
-							<li><h4>Фірмова страва/напій:</h4><span class="description">Жорчіг</span> </li>
-							<li><h4>Додатково:</h4><span class="description">Сочні пяні воєнам!</span> </li>
-						</ul>
-
-						<h3>Медіа та розваги<span class="bottom"></span></h3>
-
-						<ul>
-							<li><h4>Медіа та розваги:</h4><span class="description">Українська</span> </li>
-							<li><h4>Тип музики та напрямок:</h4><span class="description">мітооол \m/</span> </li>
-							<li><h4>Додатково:</h4><span class="description">вздрожні ефєкт!</span> </li>
-						</ul>
-
-						<h3>Інше<span class="bottom"></span></h3>
-						<ul>
-							<li><h4>Медіа та розваги:</h4><span class="description">Українська</span> </li>
-							<li class="long-description">
-								<h4>Хвото:</h4>
-								<span class="img-description">
-									<img src="content/img/lampa-1.png" alt="lampa-1"/>
-									<img src="content/img/lampa-2.png" alt="lampa-2"/>
-									<img src="content/img/lampa-3.png" alt="lampa-3"/>
-									<img src="content/img/lampa-4.png" alt="lampa-4"/>
-									<img src="content/img/lampa-5.png" alt="lampa-5"/>
-									<img src="content/img/lampa-6.png" alt="lampa-6"/>
-									<img src="content/img/lampa-7.png" alt="lampa-7"/>
-								</span>
-								</li>
-								<li><h4>Додатково:</h4><span class="description">вздрожні ефєкт!</span> </li>
-						</ul>
+					<div id="admin-main" class="w-100 admin-main">
+						<label>Назва кнайпи</label> <input type="text" />
+						<label>Адреса</label> <input id="address" type="text" />
 					</div>
+
+					<ul class="admin-items">
+
+						<li class="active" >
+							<em class="l"></em><em class="r"></em><em class="b"></em><em class="t"></em>
+							<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+
+							<input type="text" value="" id="search-item"/>
+							<textarea rows="" cols="">
+								Hong Kong Phooey, number one super guy. Hong Kong Phooey, quicker than the human eye.
+								He's got style, a groovy style, and a car that just won't stop. When the going gets
+								tough, he's really rough, with a Hong Kong Phooey chop (Hi-Ya!). Hong Kong Phooey,
+								number one super guy. Hong Kong Phooey, quicker than the human eye. Hong Kong Phooey,
+								he's fan-riffic!
+							</textarea>
+						</li>
+
+<!--
+												<li>
+													<em class="l"></em><em class="r"></em><em class="b"></em><em class="t"></em>
+													<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+													<h3>Children of the sun</h3>
+													<p>
+														Hong Kong Phooey, number one super guy. Hong Kong Phooey, quicker than the human eye.
+														He's got style, a groovy style, and a car that just won't stop. When the going gets
+														tough, he's really rough, with a Hong Kong Phooey chop (Hi-Ya!). Hong Kong Phooey,
+														number one super guy. Hong Kong Phooey, quicker than the human eye. Hong Kong Phooey,
+														he's fan-riffic!
+													</p>
+												</li>
+
+												<li>
+													<em class="l"></em><em class="r"></em><em class="b"></em><em class="t"></em>
+													<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+
+													<h3>Thunder, thunder, thundercats</h3>
+													<p>
+														Thunder, thunder, thundercats, Ho! Thundercats are on the move, Thundercats are loose.
+														Feel the magic, hear the roar, Thundercats are loose. Thunder, thunder, thunder,
+														Thundercats! Thunder, thunder, thunder, Thundercats! Thunder, thunder, thunder,
+														Thundercats! Thunder, thunder, thunder, Thundercats! Thundercats!
+													</p>
+													<p>
+														Ulysses, Ulysses - Soaring through all the galaxies. In search of Earth, flying in to
+														the night. Ulysses, Ulysses - Fighting evil and tyranny, with all his power, and with
+														all of his might. Ulysses - no-one else can do the things you do. Ulysses - like a bolt
+														of thunder from the blue. Ulysses - always fighting all the evil forces bringing peace
+														and justice to all.
+													</p>
+													<p>
+														Mutley, you snickering, floppy eared hound. When courage is needed, you're never around.
+														Those medals you wear on your moth-eaten chest should be there for bungling at which you
+														are best. So, stop that pigeon, stop that pigeon, stop that pigeon, stop that pigeon,
+														stop that pigeon, stop that pigeon, stop that pigeon. Howwww! Nab him, jab him, tab him,
+														grab him, stop that pigeon now.
+													</p>
+												</li>
+
+												<li>
+													<em class="l"></em><em class="r"></em><em class="b"></em><em class="t"></em>
+													<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+													<h3>Muskehounds</h3>
+													<p>
+														New item descriptions. New item descriptions. New item descriptions. New item descriptions.
+														New item descriptions. New item descriptions. New item descriptions. New item descriptions.
+													</p>
+												</li>
+-->
+
+					</ul>
+
+					<div id="knajpa-template-test"></div>
 				</div>
 
 				<div id="mediaInfo">
 					<h2 id='mediaTitle'>Кнайпа на мапі</h2>
 					<div id="map"></div>
 					<span id='mapTips'>Ще туту можна щось мінімальне написати</span>
-					<div class= "mediaContent corners corners-10"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
-						Ще якась інфа
-					</div>
+					<div class= "mediaContent corners corners-10"> Ще якась інфа </div>
 				</div>
 			</div>
 
-			<div id="footer" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+			<div id="footer" class="corners">
 				<p>Бла-бла-бла  бла-бла  бла-бла-бла-бла..</p>
 				<p>Хто шо зробив, хто як допоміг, а хто зайопував. Респекти у всі сторони</p>
 				<p>Копірайтед бай “Туса муділ” :D </p>
