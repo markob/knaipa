@@ -2,8 +2,8 @@
 
 import logging as log
 
-from models.imodels import DocumentsQueue
-from models.documents import IndexableDocument
+from knajpa.models.imodels import DocumentsQueue
+from knajpa.models.documents import IndexableDocument
 
 # whoosh imports
 from whoosh.fields import Schema, TEXT, ID
