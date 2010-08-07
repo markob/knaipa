@@ -14,12 +14,12 @@ class ArticleHandler(ObjectHandler):
         ObjectHandler.__init__(self, Article)
 
         # add cmd handlers
-        self._cmd_handlers = { 'list'  : (self._get_list, 'articles-list.xml'),
-                               'add'   : (self._write, 'articles-add.xml'),
-                               'get'   : (self._read, 'articles-get.xml'),
-                               'del'   : (self._delete, 'articles-del.xml'),
-                               'info'  : (lambda self: None, 'articles-info.xml'),
-                               'error' : (lambda self: None, 'articles-error.xml') }
+        self._cmd_handlers = { 'list'  : (self._get_list, 'article/articles-list.xml'),
+                               'add'   : (self._write, 'article/articles-add.xml'),
+                               'get'   : (self._read, 'article/articles-get.xml'),
+                               'del'   : (self._delete, 'article/articles-del.xml'),
+                               'info'  : (lambda self: None, 'article/articles-info.xml'),
+                               'error' : (lambda self: None, 'article/articles-error.xml') }
         
         log.debug("Article handler was initialized")
     
@@ -36,7 +36,7 @@ class ArticleHandler(ObjectHandler):
 
     
         
-application = webapp.WSGIApplication([('/articles', ArticleHandler)], debug = True)
+application = webapp.WSGIApplication([('/article', ArticleHandler)], debug = True)
 
         
 if __name__ == '__main__':
