@@ -1,0 +1,69 @@
+application: knaipa-ua
+version: 7
+runtime: python
+api_version: 1
+
+default_expiration: "999d"
+
+handlers:
+
+####################################################################
+# Static File Handlers Section
+####################################################################
+
+# favicon handler
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+# entry point to the main service page
+- url: /
+  static_files: client/index.html
+  upload: client/index\.html
+
+# entry points to the service - *.html
+- url: /(.*\.html)
+  static_files: client/\1
+  upload: client/.*\.html  
+
+# css files handler
+- url: /css/(.*\.css)
+  static_files: client/css/\1
+  upload: client/css/.*\.css
+
+# css framework images files handler
+- url: /css/(.*\.(png|gif))
+  static_files: client/css/\1
+  upload: client/css/.*\.(png|gif)
+
+# javascript files handler
+- url: /js/(.*\.js)
+  static_files: client/js/\1
+  upload: client/js/.*\.js
+
+# content files handler
+- url: /content/(.*\.(png|gif|xml))
+  static_files: client/content/\1
+  upload: client/content/.*\.(png|gif|xml)
+
+# xsl files handler
+- url: /xsl/(.*\.xsl)
+  static_files: client/xsl/\1
+  upload: client/xsl/.*\.xsl
+
+####################################################################
+# Script Handlers Section
+####################################################################
+
+# work with articles (store, get and edit)
+- url: /article.*
+  script: apps/article.py
+
+# test app which adds required data to datastore
+- url: /test/.*
+  script: apps/tests.py
+
+# backup/restore data handler
+- url: /remote-admin
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin

@@ -163,51 +163,67 @@
 		ul.admin-items	.textarea	{ position:relative;}
 
 
-/* Suggestions (default : gery)
------------------------------- */
-	.suggestion	{ position:absolute; font: 11px Tahoma; z-index:999; display: none; margin:22px 0 0;padding-bottom:6px; background: #f3f3f3; border-top:none;}
+/* Suggestions (default : gery)*/
+/*------------------------------ */
+	/*.suggestion	{ position:absolute; font: 11px Tahoma; z-index:999; display: none; margin:22px 0 0;padding-bottom:6px; background: #f3f3f3; border-top:none;}*/
 
-		.suggestion	em	{position:absolute; height:14px; width:10px; background: url(img/controls-main-back.png); z-index:-1}
-			.suggestion	em.bl	{background-position:0 -207px; bottom:-14px; left:-10px;}
-			.suggestion	em.br	{background-position:-11px -207px; bottom:-14px; right:-12px; width:12px;}
+		/*.suggestion	em	{position:absolute; height:14px; width:10px; background: url(img/controls-main-back.png); z-index:-1}*/
+			/*.suggestion	em.bl	{background-position:0 -207px; bottom:-14px; left:-10px;}*/
+			/*.suggestion	em.br	{background-position:-11px -207px; bottom:-14px; right:-12px; width:12px;}*/
 
-			.suggestion	em.r	{background:url("img/controls-horizontal-back.png") repeat scroll -13px 0 transparent; height:100%;position:absolute; right:-12px; top:0; width:12px;}
-			.suggestion	em.b	{background:url("img/controls-vertical-back.png") repeat scroll 0 -14px transparent; bottom:-16px; height:18px; position:absolute; right:0; width:100%;}
-			.suggestion	em.t	{background: #9E9E9E; display:block !important; height:1px; left:-7px; padding:0 5px; right:2px; top:-1px; width:100%;}
+			/*.suggestion	em.r	{background:url("img/controls-horizontal-back.png") repeat scroll -13px 0 transparent; height:100%;position:absolute; right:-12px; top:0; width:12px;}*/
+			/*.suggestion	em.b	{background:url("img/controls-vertical-back.png") repeat scroll 0 -14px transparent; bottom:-16px; height:18px; position:absolute; right:0; width:100%;}*/
+			/*.suggestion	em.t	{background: #9E9E9E; display:block !important; height:1px; left:-7px; padding:0 5px; right:2px; top:-1px; width:100%;}*/
 
-		.suggestion	ul	{border-left:1px solid #CFCFCF; background-color:#F3F3F3; margin-bottom:-6px; margin-left:-10px; padding-top:5px;}
-			.suggestion	li	{list-style:none outside none; margin:auto -3px auto 2px; padding:3px 7px;}
-			.suggestion	li.active	{background:#fedb74;}
-			.suggestion	li:hover	{background:#c9e8f4;}
+		/*.suggestion	ul	{border-left:1px solid #CFCFCF; background-color:#F3F3F3; margin-bottom:-6px; margin-left:-10px; padding-top:5px;}*/
+			/*.suggestion	li	{list-style:none outside none; margin:auto -3px auto 2px; padding:3px 7px;}*/
+			/*.suggestion	li.active	{background:#fedb74;}*/
+			/*.suggestion	li:hover	{background:#c9e8f4;}*/
 
 	/* White suggestion */
-		.white	{ background: #ffffff !important;}
-			.white	ul	{ background: #ffffff !important; border-left:1px solid #61cef9;}
+		/*.white	{ background: #ffffff !important;}*/
+			/*.white	ul	{ background: #ffffff !important; border-left:1px solid #61cef9;}*/
 
-			.white	em.bl	{background-position:0 -246px;}
-			.white	em.br	{background-position:-11px -246px;}
+			/*.white	em.bl	{background-position:0 -246px;}*/
+			/*.white	em.br	{background-position:-11px -246px;}*/
 
-			.white	em.r	{background-position:-26px 0 !important;}
-			.white	em.b	{background-position:0 -39px !important;}
-			.white	em.t	{background: #cdcdcd !important;}
+			/*.white	em.r	{background-position:-26px 0 !important;}*/
+			/*.white	em.b	{background-position:0 -39px !important;}*/
+			/*.white	em.t	{background: #cdcdcd !important;}*/
 
 	/* Grey suggested input */
-		.i-suggestion-grey {}
-		.i-suggestion-grey	input	{border-top:none !important; height: 20px !important;}
+		/*.i-suggestion-grey {}*/
+		/*.i-suggestion-grey	input	{border-top:none !important; height: 20px !important;}*/
 
-		.i-suggestion-grey	em.l	{background-position:0 -183px !important; top:-2px !important;}
-		.i-suggestion-grey	em.r	{background-position:-12px -183px !important; right:-30px !important; top:-2px !important;width:18px !important;}
+		/*.i-suggestion-grey	em.l	{background-position:0 -183px !important; top:-2px !important;}*/
+		/*.i-suggestion-grey	em.r	{background-position:-12px -183px !important; right:-30px !important; top:-2px !important;width:18px !important;}*/
 
-		.i-suggestion-grey	em.t	{background:url("img/controls-vertical-back.png") repeat scroll 0 -31px transparent; display:block !important; height:4px; left:20px; position:absolute; right:-12px; top:-4px;}
+		/*.i-suggestion-grey	em.t	{background:url("img/controls-vertical-back.png") repeat scroll 0 -31px transparent; display:block !important; height:4px; left:20px; position:absolute; right:-12px; top:-4px;}*/
 
 	/* White suggested input */
-		.i-suggestion-white {}
-		.i-suggestion-white	input	{border-top:none !important; height: 20px !important;}
+		/*.i-suggestion-white {}*/
+		/*.i-suggestion-white	input	{border-top:none !important; height: 20px !important;}*/
 
-		.i-suggestion-white	em.l	{background-position:0 -222px !important; top:-2px !important;}
-		.i-suggestion-white	em.r	{background-position:-12px -222px !important; right:-30px !important; top:-2px !important;width:19px !important;}
+		/*.i-suggestion-white	em.l	{background-position:0 -222px !important; top:-2px !important;}*/
+		/*.i-suggestion-white	em.r	{background-position:-12px -222px !important; right:-30px !important; top:-2px !important;width:19px !important;}*/
 
-.i-suggestion-white	em.t	{background-position: 0 -57px !important; ; display:block !important; left:20px;  right:-12px !important; top:-4px; width:auto !important;}
+/*.i-suggestion-white	em.t	{background-position: 0 -57px !important; ; display:block !important; left:20px;  right:-12px !important; top:-4px; width:auto !important;}*/
+
+
+/* New suggestions
+------------------------------ */
+	.suggestion	{ background:white; border-top:medium none; font:11px Tahoma; margin:22px 0 0; padding-bottom:6px; position:absolute; top:1px; z-index:999;}
+
+		.suggestion	em	{position:absolute; height:13px; width:14px; background: url(img/suggestion-main-back.png); z-index:-1}
+			.suggestion	em.tl	{background-position: 0 0; top:-13px; left:-14px;}
+			.suggestion	em.tr	{background-position:-14px 0; top:-13px; right:-14px;}
+			.suggestion	em.bl	{background-position: 0 -13px; bottom:-13px; left:-14px;}
+			.suggestion	em.br	{background-position:-14px -13px; bottom:-13px; right:-14px;}
+
+			.suggestion	em.r	{background: url("img/suggestion-horizontal-back.png") -14px 0; height:100%; position:absolute; right:-14px; top:0; width:14px;}
+			.suggestion	em.l	{background: url("img/suggestion-horizontal-back.png") 0 0; height:100%; position:absolute; left:-14px; top:0; width:14px;}
+			.suggestion	em.t	{background: url("img/suggestion-vertical-back.png") 0 0; width:100%; position:absolute; right:0; top:-13px; height:13px;}
+			.suggestion	em.b	{background: url("img/suggestion-vertical-back.png") 0 -13px; width:100%; position:absolute; left:0; bottom:-13px; height:13px;}
 
 
 /* Knajpa Info
@@ -243,8 +259,10 @@
 			.knajpa-info	ul	li.long-description	{background: none; width:500px;}
 
 	/* Knajpa admin*/
-		.admin	ul	li	.description { -moz-border-radius:7px 7px 7px 7px; background:none repeat scroll 0 0 white; border-top:1px solid #D9D9D9; color:#1E1E1E; font-size:12px; left:225px; padding:1px 8px 2px;
+		.admin	ul	li	.description	{ -moz-border-radius:7px 7px 7px 7px; background:none repeat scroll 0 0 white; border-top:1px solid #D9D9D9; color:#1E1E1E; font-size:12px; left:225px; padding:1px 8px 2px;
 			position:absolute; right:-270px; text-align:left; top:0; }
+				.admin	ul	li	.description	div	{min-height:13px;}
+				.admin	ul	li	.description	div	span	{-moz-border-radius:3px 3px 3px 3px; background:none repeat scroll 0 0 transparent; border:1px solid Silver; margin:2px; padding:0 5px;}
 
 		.admin	.controls {background:url("img/horizontal-back-admin.png") repeat-y scroll 6px 0 transparent; height:31px; margin-top:-26px; position:absolute; right:-6px; top:60px; width:65px; z-index:99;}
 			.admin .controls em.t { background:url("img/main-back-admin.png") repeat scroll -168px 0 transparent; height:9px; position:absolute; top:-9px; width:100%; z-index:-1;}
