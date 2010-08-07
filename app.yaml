@@ -78,7 +78,7 @@ handlers:
 - url: /services.*
   script: src/knajpa/handlers/services.py
 
-# task which updates documents indices
+# documents indexing service url
 - url: /tasks/index
   script: src/knajpa/search/search.py
   login: admin
