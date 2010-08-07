@@ -24,7 +24,6 @@
 					success: function (responce,status){
 							$(node).css ('border-bottom','none');
 
-							console.log(responce)
 							var result = ''
 							for (var i=0; i<responce.length; i++){
 								for (var j=0; j < responce[i].address_components.length ;j++)
@@ -52,10 +51,32 @@
 				})
 			}
 
+			// http://maps-api-ssl.google.com/maps/suggest?
+			//		q=%D0%9B%D0%B8%D1%87&
+			// 		cp=3&
+			// 		ll=37.0625,-95.677068&
+			// 		spn=34.122306,114.169922&
+			// 		hl=en&gl=&v=2&json=a&auth=4c3a4cf1QzGfLMD5aUDw7ou3Sm-XFWaO4uw&src=1,2&num=10&numps=5&callback=_xdc_._5gbihlrj7
+
+			//https://maps-api-ssl.google.com/maps/suggest?
+			// 		q=New&cp=3&
+			// 		ll=37.0625,-95.677068&
+			// 		spn=34.122306,114.169922&
+			// 		hl=en&
+			// 		gl=&
+			// 		v=2&
+			// 		json=a&
+			// 		auth=4c3a5419UKXiKdsdX290LpVHb72YACjESlw&
+			// 		src=1,2&
+			// 		num=10&
+			// 		numps=5&
+			// 		callback=_xdc_._6gbiipngp
+
+
 			var suggestedPopup = {
 				show:function (initObj){
 					if (!this.container){
-						this.container = $('<div class="suggestion">test</div>').appendTo(document.body);
+						this.container = $('<div class="suggestion"></div>').appendTo(document.body);
 						this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')
 					}
 					this.container.css({top: initObj.top, left: initObj.left, display: 'block'});
@@ -64,6 +85,8 @@
 					this.container.css({display: 'none'});
 				},
 				setData: function(content){
+					if (!this.container){this.container = $('<div class="suggestion">test</div>').appendTo(document.body);}
+
 					this.container.html(content);
 					this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')
 				}
