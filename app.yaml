@@ -80,7 +80,7 @@ handlers:
 
 # documents indexing service url
 - url: /tasks/index
-  script: src/knajpa/search/search.py
+  script: src/knajpa/handlers/search.py
   login: admin
 
 # test app which adds required data to datastore

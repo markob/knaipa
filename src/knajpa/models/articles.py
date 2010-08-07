@@ -1,7 +1,7 @@
 import logging as log
 
 from google.appengine.ext import db
-from imodels import  BaseDocument
+from knajpa.models.imodels import  BaseDocument
 
 
 class Article(BaseDocument):

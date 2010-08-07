@@ -1,16 +1,21 @@
 """Utilities are used in other modules and contain common solutions for them"""
 import logging as log
+import sys, os
 
 from google.appengine.ext import db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-import xml_tools as XMLTools #@UnresolvedImport
+import xml_tools as XMLTools
 
 
 def main(application, log_level=log.DEBUG):
     """Sets appropriate log level and launches request handler. """
     log.getLogger().setLevel(log_level)
     run_wsgi_app(application)
+    
+
+def update_lib_path():
+  sys.path.append(os.path.curdir + '/../../libs')
     
 
 def login_required():
