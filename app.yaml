@@ -81,6 +81,11 @@ handlers:
 - url: /services.*
   script: src/knajpa/handlers/services.py
 
+# documents indexing service url
+- url: /tasks/index
+  script: src/knajpa/search/search.py
+  login: admin
+
 # test app which adds required data to datastore
 - url: /test/.*
   script: src/knajpa/handlers/tests.py

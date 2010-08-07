@@ -1,16 +1,10 @@
 import logging as log
 
 from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
-import os,sys
-
-#sys.path.append('/data/programming/projects/startup/knajpa/src')
-log.info(os.path)
 
 from knajpa.models.articles import Article
 from knajpa.handlers.objhandler import ObjectHandler
-from knajpa.utils import InvalidRequestError
-
+from knajpa.utils import main, InvalidRequestError
 
 # Articles service request handler
 class ArticleHandler(ObjectHandler):
@@ -42,13 +36,8 @@ class ArticleHandler(ObjectHandler):
 
     
         
-application = webapp.WSGIApplication(
-    [('/articles', ArticleHandler)], debug = True)
-        
-        
-def main():
-    run_wsgi_app(application)
+application = webapp.WSGIApplication([('/articles', ArticleHandler)], debug = True)
 
         
 if __name__ == '__main__':
-    main()
+    main(application)

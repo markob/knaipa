@@ -3,25 +3,34 @@
  *
  */
 
+String.prototype.trim = function (){ return this.replace(/^\s*(\S+(\s+\S+)*)\s*$/gim,"$1");}
+
 /**
  * Global object for Knajpa.
  */
 $(function(){
 	var Map = function (initObj){
 		var _this = this;
+		var geocoder = new google.maps.Geocoder();
 
 		this.events = {};
+		this.eventsOne = {};
+
 		this.bind = function (ev,fn){
 				var ev = ev.toLocaleLowerCase();
 				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
 				this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
 				return this;
 			}
-		this.trigger = function (ev){
+		this.trigger = function (ev,arg){
 				var ev = ev.toLocaleLowerCase();
 				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
-						{this.events[ev][i](this)}
+				for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
+					{this.events[ev][i](this,arg)}
+				for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++)
+					{this.eventsOne[ev][i](this,arg);}
+				delete this.eventsOne[ev];
+
 				return this;
 			}
 		this.unbind = function (ev,fn){
@@ -30,8 +39,18 @@ $(function(){
 				if (this.events[ev])
 					for (var i=0; i < this.events[ev].length ;i++)
 					if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
+
+				if (this.eventsOne[ev])
+					for (var i=0; i < this.eventsOne[ev].length ;i++)
+					if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
 				return this;
 			}
+		this.one = function (ev,fn){
+			var ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
+			return this;
+		}
 
 		var gMap = google.maps;
 		this.map = {}
@@ -77,15 +96,44 @@ $(function(){
 				for (var par in arguments[0]){initObj[par] = arguments[0][par];}
 			}else{
 				initObj.ia = arguments[0];
-				initObj.ja = arguments[1]
+				initObj.ja = arguments[1];
 				if (arguments[2]) initObj.icon = arguments[2];
 			}
 
-			var latlng = new google.maps.LatLng(initObj.ia,initObj.ja);
-			_this.markers[initObj.ia+'_'+initObj.ja] = new gMap.Marker({ map :_this.map, position: latlng, draggable:initObj.draggable});
-			_this.markers[initObj.ia+'_'+initObj.ja].setIcon(_this.markerIcons[initObj.icon]);
+			console.log(_this.markers);
 
+			var latlng = new google.maps.LatLng(initObj.ia,initObj.ja);
+
+			if (!_this.markers[initObj.ia+'_'+initObj.ja]){
+				_this.markers[initObj.ia+'_'+initObj.ja] = new gMap.Marker({ map :_this.map, position: latlng, draggable:initObj.draggable});
+				_this.markers[initObj.ia+'_'+initObj.ja].setIcon(_this.markerIcons[initObj.icon]);
+			} else {
+				_this.updateMarker(initObj.ia+'_'+initObj.ja,latlng)
+			}
 			return initObj.ia+'_'+initObj.ja ;
+		}
+
+		this.updateMarker = function (id, newLatLng){
+			var newId = newLatLng.lat()+'_'+newLatLng.lng()
+			if (!_this.markers[newId]){
+				_this.markers[id].setPosition(newLatLng);
+				_this.markers[newId] = _this.markers[id];
+				delete _this.markers[id];
+//				console.log(_this.markers);
+			}
+			return newId;
+		}
+
+		this.identifyMarker = function(initObj){
+			geocoder.geocode({address: initObj.address, language:'ua'},
+				function (responce,status){
+					if (status == 'OK'){
+						initObj.success(responce,status);
+					}else {
+						initObj.decline(responce,status);
+					}
+				})
+			return _this;
 		}
 
 		/**
@@ -111,7 +159,7 @@ $(function(){
 		this.removeMarker = function(marker){
 			_this.hideMarker(marker);
 			delete (_this.markers[marker]);
-			console.log(_this.markers);
+//			console.log(_this.markers);
 		}
 
 		this.init = function(initObj){
@@ -170,8 +218,8 @@ $(function(){
 				$.ajax({ dataType: "xml", url: 'content/knajpa.xml', success: feelData});
 			}
 			else if ($.address.path() && $.address.path() != '/'){
-				$.ajax({ dataType: "xml", url: 'articles?cmd=get;id='+$.address.path().replace('/',''), success: feelData});}
-			else { $.ajax({ dataType: "xml", url: 'articles?cmd=list', success: feelData}); }
+				$.ajax({ dataType: "xml", url: 'article?cmd=get;id='+$.address.path().replace('/',''), success: feelData});}
+			else { $.ajax({ dataType: "xml", url: 'article?cmd=list', success: feelData}); }
 		}
 
 		this.init = function(){

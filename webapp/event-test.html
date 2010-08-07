@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript">
+		var eventCommander = function(){
+			this.events = {};
+			this.eventsOne = {};
+
+			this.bind = function (ev,fn){
+					var ev = ev.toLocaleLowerCase();
+					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+					this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
+					return this;
+				}
+			this.trigger = function (ev){
+					var ev = ev.toLocaleLowerCase();
+					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+					for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
+						{this.events[ev][i](this)}
+					for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++)
+						{this.eventsOne[ev][i](this);}
+					delete this.eventsOne[ev];
+
+					return this;
+				}
+			this.unbind = function (ev,fn){
+					var ev = ev.toLocaleLowerCase();
+					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+					if (this.events[ev])
+						for (var i=0; i < this.events[ev].length ;i++)
+						if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
+
+					if (this.eventsOne[ev])
+						for (var i=0; i < this.eventsOne[ev].length ;i++)
+						if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
+
+					return this;
+				}
+			this.one = function (ev,fn){
+				var ev = ev.toLocaleLowerCase();
+				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+				this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
+				return this;
+			}
+		}
+
+		a = new eventCommander();
+		a.bind ('t1',function(){console.log('bind')});
+		a.one ('t1',function(){console.log('one')});
+
+		a.trigger('t1');
+		a.trigger('t1');
+		a.one ('t1',function(){console.log('one')});
+
+		a.unbind('t1',function(){console.log('bind')})
+		a.unbind('t1',function(){console.log('one')})
+
+		a.trigger('t1');
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>
