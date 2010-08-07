@@ -6,10 +6,9 @@ import logging as log
 from google.appengine.ext import webapp
 
 
-from common import main, set_system_path
-set_system_path()
+from knajpa.utils import main
 
-from libs.indexer import search_query
+from knajpa.search.indexer import search_query
 
 class SearchHandler(webapp.RequestHandler):
     """Handles search request by using full text search functionality"""
