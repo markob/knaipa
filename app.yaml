@@ -59,7 +59,7 @@ handlers:
 ####################################################################
 
 # work with articles (store, get and edit)
-- url: /articles.*
+- url: /article.*
   script: src/knajpa/handlers/articles.py
 
 - url: /knajpa.*

@@ -36,7 +36,7 @@ class ArticleHandler(ObjectHandler):
 
     
         
-application = webapp.WSGIApplication([('/articles', ArticleHandler)], debug = True)
+application = webapp.WSGIApplication([('/article', ArticleHandler)], debug = True)
 
         
 if __name__ == '__main__':

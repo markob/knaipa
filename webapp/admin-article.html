@@ -27,7 +27,7 @@
 				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
 						.bind('click',function(){
 								var data = {}
-								data.cmd = 'post' ;
+								data.cmd = 'add' ;
 								data.knaipa = articleKnajpa.container.text();
 								data.title = articleTitle.container.text();
 								data.description = articleDescription.container.text();
@@ -35,7 +35,7 @@
 								data.cut = articleCut.container.text();
 
 								$.ajax({
-									type: "POST",
+									type: "GET",
 									data: data,
 									url: 'article',
 									success: function(msg){alert(msg);}
