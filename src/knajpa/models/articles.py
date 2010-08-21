@@ -6,13 +6,13 @@ from imodels import  BaseDocument
 
 class Article(BaseDocument):
     """ Describes data model for storing articles """
-    
     #services = db.ListProperty(db.Key, required=True)
     title = db.StringProperty(required=True)
     description = db.StringProperty(required=True)
     cut = db.StringProperty(required=True)
     text = db.TextProperty(required=True)
     modified = db.DateTimeProperty(auto_now=True)
+    
     
     def get_title(self):
         """Retrieves only title of an article"""
@@ -23,3 +23,5 @@ class Article(BaseDocument):
         """Retrieves only text content of an article"""
         log.debug("Article content is %s" % self.text)
         return self.text
+
+    
