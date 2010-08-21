@@ -262,7 +262,7 @@
 		.admin	ul	li	.description	{ -moz-border-radius:7px 7px 7px 7px; background:none repeat scroll 0 0 white; border-top:1px solid #D9D9D9; color:#1E1E1E; font-size:12px; left:225px; padding:1px 8px 2px;
 			position:absolute; right:-270px; text-align:left; top:0; }
 				.admin	ul	li	.description	div	{min-height:13px;}
-				.admin	ul	li	.description	div	span	{-moz-border-radius:3px 3px 3px 3px; background:none repeat scroll 0 0 transparent; border:1px solid Silver; margin:2px; padding:0 5px;}
+				.admin	ul	li	.separator	div	span	{-moz-border-radius:3px 3px 3px 3px; background:none repeat scroll 0 0 transparent; border:1px solid Silver; margin:2px; padding:0 5px;}
 
 		.admin	.controls {background:url("img/horizontal-back-admin.png") repeat-y scroll 6px 0 transparent; height:31px; margin-top:-26px; position:absolute; right:-6px; top:60px; width:65px; z-index:99;}
 			.admin .controls em.t { background:url("img/main-back-admin.png") repeat scroll -168px 0 transparent; height:9px; position:absolute; top:-9px; width:100%; z-index:-1;}
