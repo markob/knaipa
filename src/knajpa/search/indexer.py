@@ -4,6 +4,7 @@ import logging as log
 
 from knajpa.models.imodels import DocumentsQueue
 from knajpa.models.documents import IndexableDocument
+from knajpa.utils import update_lib_path
 
 # whoosh imports
 from whoosh.fields import Schema, TEXT, ID
@@ -14,7 +15,8 @@ from whoosh.qparser import QueryParser
 DOCUMENTS_SCHEMA = Schema(id=ID(stored=True),
                           title=TEXT(stored=True),
                           content=TEXT(stored=True))
-    
+
+update_lib_path()
 
 def search_query(str):
     """Launches search through indexes and returns result"""

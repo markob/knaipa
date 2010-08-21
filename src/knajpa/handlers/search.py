@@ -5,9 +5,7 @@ import logging as log
 # app engine imports
 from google.appengine.ext import webapp
 
-
 from knajpa.utils import main
-
 from knajpa.search.indexer import search_query
 
 class SearchHandler(webapp.RequestHandler):
