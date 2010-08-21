@@ -1064,7 +1064,7 @@ jQuery.extend({
 	},
 
 	trim: function( text ) {
-		return (text || "").replace( /^\s+|\s+$/g, "" );
+		return (text || "").replace( /^\s+|\s+$/gim, "" );
 	},
 
 	makeArray: function( array ) {

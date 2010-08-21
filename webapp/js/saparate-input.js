@@ -70,19 +70,21 @@
 		}
 
 		this.separate = function (){
-			var newElements = [];
-			$(_this.selNode).text().replace (/[^;]+;?/gim,function(){
-				var newSpan = $("<span>"+arguments[0]+"</span>").insertBefore(_this.selNode.parentNode);
-				if (arguments[1] <= _this.selOffset && arguments[1]+arguments[0].length >= _this.selOffset){ _this.setPointer(newSpan[0].firstChild, _this.selOffset-arguments[1])}
-				newElements.push(newSpan);
-			})
-			_this.trigger('separate',newElements);
+			if (_this.separator){
+				var newElements = [];
+				$(_this.selNode).text().replace (/[^;]+;?/gim,function(){
+					var newSpan = $("<span>"+arguments[0]+"</span>").insertBefore(_this.selNode.parentNode);
+					if (arguments[1] <= _this.selOffset && arguments[1]+arguments[0].length >= _this.selOffset){ _this.setPointer(newSpan[0].firstChild, _this.selOffset-arguments[1])}
+					newElements.push(newSpan);
+				})
+				_this.trigger('separate',newElements);
 
-			$(_this.selNode.parentNode).remove();
+				$(_this.selNode.parentNode).remove();
 
-			_this.sel = window.getSelection();
-			_this.selNode = _this.sel.anchorNode;
-			_this.selOffset = _this.sel.anchorOffset;
+				_this.sel = window.getSelection();
+				_this.selNode = _this.sel.anchorNode;
+				_this.selOffset = _this.sel.anchorOffset;
+			}
 		}
 
 		this.merge = function (){
@@ -108,6 +110,10 @@
 
 			_this.container.wrapInner('<div style="float:left;" contenteditable="true"></div>');
 			_this.editabelEl = _this.container.find('div:first'); 
+
+			if (_this.separator){
+				_this.container.addClass('separator');
+			}
 
 			_this.container
 				.data('position','compact')

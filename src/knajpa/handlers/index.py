@@ -1,12 +1,9 @@
 import logging as log
 
-import common
-common.set_system_path()
-
 from google.appengine.ext import webapp
-from indexing import add_docs_to_index #@UnresolvedImport
+from knajpa.search.indexer import add_docs_to_index
 
-from common import main
+from knajpa.utils import main
 
 
 class IndexRequestHandler(webapp.RequestHandler):

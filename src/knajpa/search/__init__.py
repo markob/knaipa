@@ -1,6 +1,3 @@
-"""This file contains configs are common for all applications"""
+from knajpa.utils import update_lib_path
 
-import common
-
-# Update System Path
-common.set_system_path()
+update_lib_path()

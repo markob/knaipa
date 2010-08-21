@@ -94,7 +94,7 @@
 			}
 
 			$(function(){
-				var address = new separateInput({container: $('.description:first')})
+				var address = new separateInput({container: $('.description:first'),separator:';'})
 
 				address
 					.bind('separate', function(_this,arg){
@@ -127,12 +127,38 @@
 
 							getPosition(arg);
 						})
-
 				var time = new separateInput({container: $('.description:eq(1)')})
 
 				// Controls init part
 				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
-						.bind('click',function(){alert('save')})
+						.bind('click',function(){
+							window.data = {};
+							data.knajpaName = $('#textInfo h2:first div:first').text()
+							data.knajpaType = $('#textInfo h2:first div:eq(1)').text()
+//							data.address=[{name:'Личаківська 1, Львів', ia:'49.840088', ja:'24.044469'},{name:'Смольського 3,Львів', ia:'49.840372', ja:'24.040047'}, ]
+							$('#textInfo li').each(function(){
+								var item = $(this)
+								if (item.find('span.description').attr('type') == 'address'){
+									data[item.find('h4').text()] = []
+									item.find('span[id]').each(function(){
+										var location = {}
+										location.name = $(this).text()
+										location.ia = $(this).attr('id').match(/[^_]+/gim)[0]
+										location.ja = $(this).attr('id').match(/[^_]+/gim)[1]
+										data[item.find('h4').text()].push(location);
+									})
+								}else { data[item.find('h4').text()] = item.find('span.description').text();}
+							})
+
+							data.cmd = 'save';
+							$.ajax({
+									type: "POST",
+									data: data,
+									url: 'knajpa',
+									success: function(msg){alert(msg);}
+								});
+
+						})
 						.appendTo("#textInfo");
 
 				window.timeout=false;
@@ -198,8 +224,8 @@
 						<em class="bl"></em><em class="br"></em>
 
 						<h2 class="corners corners-10">
-							Гасафа Лямпо
-							<span>ресторан</span>
+							<div contenteditable="true" class="f-left">Гасафа Лямпо</div>
+							<div contenteditable="true" class="f-left"><span>ресторан</span></div>
 							<em class="tr"></em><em class="tl"></em>
 						</h2>
 
