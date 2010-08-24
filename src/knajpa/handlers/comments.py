@@ -4,8 +4,8 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from knajpa.models.comments import Comment
-from knajpa.objhandler import ObjectHandler
 from knajpa.utils import InvalidRequestError
+from knajpa.handlers.objhandler import ObjectHandler
 
 
 class CommentHandler(ObjectHandler):

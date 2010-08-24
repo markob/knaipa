@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+<count>{{count}}</count>
+{% for knajpa in list %}
+	<item id="{{knajpa.id }}" name="{{knajpa.name}}" >
+		{% for address in knajpa.get_address_list %}
+			<item  latitude="{{address.ia}}" longitude="{{address.ja}}">
+				<street>{{address.completeAddress}}</street>
+			</item>
+		{% endfor %}
+	</item>
+{% endfor %}
+</content>

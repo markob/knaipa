@@ -3,6 +3,9 @@ from knajpa.models.articles import Article
 
 class Knajpa(db.Model):
     name = db.StringProperty(required=True)
+    dateOfCreate = db.DateTimeProperty(required=True)
+    dateOfUpdate = db.DateTimeProperty(required=True)
+    
 
 class Address(db.Model):
     knajpa = db.ReferenceProperty(Knajpa, collection_name='addresses')
@@ -17,6 +20,7 @@ class ArticleForKnajpa(db.Model):
 #Content
 class Group(db.Model):
     name = db.StringProperty(required=True)
+    knajpa = db.ReferenceProperty(Knajpa, collection_name='contentGroups')
     
 class Item(db.Model):
     name = db.StringProperty(required=True)

@@ -53,7 +53,6 @@ handlers:
 - url: /static
   script: main.py
 
-
 ####################################################################
 # Script Handlers Section
 ####################################################################
@@ -61,6 +60,9 @@ handlers:
 # work with articles (store, get and edit)
 - url: /article.*
   script: src/knajpa/handlers/articles.py
+  
+- url: /knajpa.*
+  script: src/knajpa/handlers/restaurant.py
 
 # handles search engine requests (to index and search)
 - url: /search.*
