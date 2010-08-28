@@ -6,5 +6,12 @@
 				<street>{{address.completeAddress}}</street>
 			</item>
 		{% endfor %}
+		{%for gcontent in get_groups_list %}
+			<cgroup name="{{gcontent.name}}">
+				{%for item in gcontent.get_content_item_list %}
+				<citem name="{{item.name}}" value="{{item.value}}"/>	
+				{% endfor %}		
+			</cgroup>
+		{% endfor %}
 	</knajpa>
 </content>

@@ -4,9 +4,16 @@
 {% for knajpa in list %}
 	<item id="{{knajpa.id }}" name="{{knajpa.name}}" >
 		{% for address in knajpa.get_address_list %}
-			<item  latitude="{{address.ia}}" longitude="{{address.ja}}">
+			<item  ia="{{address.ia}}" ja="{{address.ja}}">
 				<street>{{address.completeAddress}}</street>
 			</item>
+		{% endfor %}
+		{%for gcontent in knajpa.get_groups_list %}
+			<cgroup name="{{gcontent.name}}">
+				{%for item in gcontent.get_content_item_list %}
+				<citem name="{{item.name}}" value="{{item.value}}"/>	
+				{% endfor %}		
+			</cgroup>
 		{% endfor %}
 	</item>
 {% endfor %}

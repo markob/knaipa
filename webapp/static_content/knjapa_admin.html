@@ -12,16 +12,30 @@
 	<li>address : <input type="text" name="address" /></li>
 	<li>ia:<input type="text" name="ia" /></li>
 	<li>ja:<input type="text" name="ja" /></li>
+	<li>PhoneNumber: <input type="text" name="phoneNumber" /> type: <input type="text" name="phone_type" /></li>
+	<li>group1: <input type="text" name="g1" />
+			 <ul>
+				<li>item1: <input type="text" name="g1_item1_name" />=<input type="text" name="g1_item1_value" /></li> 
+			 	<li>item2: <input type="text" name="g1_item2_name" />= <input type="text" name="g1_item2_value" /></li>
+			 </ul>	
+	</li>
+	<li>group2: <input type="text" name="g2" />
+			<ul>
+				<li>item1:<input type="text" name="g2_item1_name" />=<input type="text" name="g2_item1_value" /></li>
+				<li>item2:<input type="text" name="g2_item2_name" />=<input type="text" name="g2_item2_value" /></li>
+				<li>item3:<input type="text" name="g2_item3_name" />=<input type="text" name="g2_item3_value" /></li>
+			</ul>
+	</li>
 </ul>
 
-<input type="submit" />
+<input type="submit" value="add" />
 </form>
 
 </hr>
 
 <form action="/knajpa" method="post">
 <input type="hidden" name="cmd" value="list" />
-<input type="submit" />
+<input type="submit" value="get list" />
 </form>
 
 

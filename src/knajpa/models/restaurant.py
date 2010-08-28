@@ -6,12 +6,16 @@ class Knajpa(db.Model):
     dateOfCreate = db.DateTimeProperty(required=True)
     dateOfUpdate = db.DateTimeProperty(required=True)
     
-
 class Address(db.Model):
     knajpa = db.ReferenceProperty(Knajpa, collection_name='addresses')
     ia = db.FloatProperty(required=True)
     ja = db.FloatProperty(required=True)
     address = db.PostalAddressProperty(required=True)
+
+class PhoneNumber(db.Model):
+    knajpa = db.ReferenceProperty(Knajpa, collection_name='phonenumbers')
+    phone_type = db.StringProperty()
+    number = db.PhoneNumberProperty() 
 
 class ArticleForKnajpa(db.Model):
     article = db.ReferenceProperty(Article, required=True, collection_name='articles')

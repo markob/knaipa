@@ -3,14 +3,18 @@ Created on Aug 7, 2010
 
 @author: apetrenko
 '''
-from knajpa.models.restaurant import Knajpa, Address
+from knajpa.models.restaurant import Knajpa, Address, Group, Item
 import datetime
 import logging
+#from io import Uns#upportedOperation
 
 class KnajpaService():
 
     @staticmethod
     def create_new_knajpa(knajpaitem):
+        if not isinstance(knajpaitem , KnajpaItem):
+            raise TypeError('incorrect type of parameter knajpaitem')
+        
         m_knajpa = Knajpa(name=knajpaitem.name, dateOfCreate=knajpaitem.dateOfCreate, dateOfUpdate=knajpaitem.dateOfUpdate)
         m_knajpa.put()
         logging.info("Add knajpa to datastore %s" , str(m_knajpa.key().id()));
@@ -20,6 +24,16 @@ class KnajpaService():
             m_address.put()
             logging.info("Add m_address %s for knajpa %s to datastore" , str(m_address.key().id()), str(m_knajpa.key().id()));
         
+        for group in knajpaitem.get_groups_list():
+            m_group = Group(name=group.name)
+            m_group.put()
+            logging.info("Add m_group %s for knajpa %s to datastore", str(m_group.key().id()), str(m_knajpa.key().id()))
+            
+            for item in group.get_content_item_list():
+                m_item = Item(name=item.name, value=item.value, group=m_group.key())
+                m_item.put()
+                logging.info("Add m_item %s to group %s for knajpa %s to datastore", str(m_item.key().id()), m_group.key().name(), str(m_knajpa.key().id()))
+
         return m_knajpa.key().id()
 
     @staticmethod
@@ -40,7 +54,7 @@ class KnajpaService():
         return Knajpa.all().count()
 
 
-class KnajpaItem():
+class KnajpaItem(object):
     
     id = 0L
     
@@ -51,6 +65,11 @@ class KnajpaItem():
     dateOfUpdate = datetime.datetime.today() ;
     
     _addresses = [];
+    
+    _phonenumbers = [];
+    
+    _groups = []
+    
     
     def __init__(self, title):
         self.name = title
@@ -66,6 +85,28 @@ class KnajpaItem():
     def clear_address_list(self):
         self._addresses = []
 
+    def add_phonenumber(self, type, number):
+#        self._phonenumbers.append(PhoneNumberItem())
+#        raise UnsupportedOperation("it's not implemented yet")
+        pass
+
+    def add_group(self, group):
+        if not isinstance(group, GroupContent):
+            raise TypeError('incorrect group type')
+        self._groups.append(group)
+
+    def get_group(self, name):
+        for group in self._groups : 
+            if group.name == name:
+                return group
+        return None
+    
+    def get_groups_list(self):
+        return self._groups
+    
+    def clear_group_list(self):
+        self._groups = []
+    
     @staticmethod
     def create_knajpa_item_based_on_model(model):
         item = KnajpaItem(model.name)
@@ -77,8 +118,18 @@ class KnajpaItem():
         for address in model.addresses:
             item.add_address(address.address, ia=address.ia, ja=address.ja)
 
+#        for phoneNumber in model.phonenumbers:
+#            pass
+        item.clear_group_list()
+        for group in model.contentGroups :
+            group_content = GroupContent(name=group.name)
+            
+            for group_item in group.items:
+                group_content.add_content_item(group_item.name, group_item.value)
+            
+            item.add_group(group_content)
+
         return item
-        
         
 
 class AddressItem():
@@ -90,4 +141,44 @@ class AddressItem():
         self.completeAddress = address
         self.ia = ia
         self.ja = ja
+
+class GroupContent():
+    name = ''
+    _items = []
+    
+    def __init__(self, name):
+        self._validateParameters(name)
+        self.name = name
+    
+    def add_content_item(self, name, value):
+        self._validateParameters(name)
+        self._items.append(ContentItem(name, value))
+    
+    def remove_content_item(self, name):
+        self._validateParameters(name)
+        self._items.remove(name)
+
+    def get_content_item_list(self):
+        return self._items
+    
+    def update_content_item(self, name, value):
+        for item in self._items:
+            if item.name == name:
+                item.value = value
+    
+    def _validateParameters(self, name):
+        if (name == None):
+            raise ValueError('parameter name could not be empty')
+
+class ContentItem():
+    name = ''
+    value = ''
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+           
+    
+    
         
+class PhoneNumberItem():
+    pass
