@@ -60,8 +60,6 @@ class KnajpaHandler(webapp.RequestHandler):
             return self.response.out.write(err)
      
      
-     
-     
     def _add(self, request):
         knajpaitem = self._create_knajpaItem_from_request(request)
         return {'id': KnajpaService.create_new_knajpa(knajpaitem)} 
@@ -74,7 +72,8 @@ class KnajpaHandler(webapp.RequestHandler):
         
     def _read(self, request):
         logging.info('I am reading')
-        pass   
+        id = request.get('id')
+        return {'knajpa': KnajpaService.get_knajpa(long(id))} 
 
 
 
@@ -121,7 +120,7 @@ class KnajpaHandler(webapp.RequestHandler):
                     item_names = group_item_names[g_name]
                     item_names.append(i_name)
                 else:
-                    group_item_names[g_name] = [i_name,]
+                    group_item_names[g_name] = [i_name, ]
                     
         logging.info("group_itme:" + str(group_item_names))           
         return group_item_names

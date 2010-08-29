@@ -38,7 +38,7 @@ class KnajpaService():
 
     @staticmethod
     def get_knajpa(id):
-        return KnajpaItem.create_knajpa_item_based_on_model(Knajpa.get(id)) 
+        return KnajpaItem.create_knajpa_item_based_on_model(Knajpa.get_by_id(id)) 
 
     @staticmethod
     def get_knajpa_list(limit, offset):

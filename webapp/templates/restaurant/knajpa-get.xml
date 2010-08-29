@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
-	<knajpa id="{{id }}" name="{{name}}" ">
-		{% for article in get_address_list %}
-			<item  latitude="{{address.ia}}" longitude="{{address.ja}}">
-				<street>{{address.completeAddress}}</street>
-			</item>
+	<knajpa id="{{knajpa.id }}" name="{{knajpa.name}}" >
+		{% for address in knajpa.get_address_list %}
+		<item ia="{{address.ia}}" ja="{{address.ja}}">
+			<street>{{address.completeAddress}}</street>
+		</item>
 		{% endfor %}
-		{%for gcontent in get_groups_list %}
-			<cgroup name="{{gcontent.name}}">
-				{%for item in gcontent.get_content_item_list %}
-				<citem name="{{item.name}}" value="{{item.value}}"/>	
-				{% endfor %}		
-			</cgroup>
+		{%for gcontent in knajpa.get_groups_list %}
+		<cgroup name="{{gcontent.name}}">
+			{%for item in gcontent.get_content_item_list %}
+			<citem name="{{item.name}}" value="{{item.value}}" />
+			{% endfor %}
+		</cgroup>
 		{% endfor %}
 	</knajpa>
 </content>
