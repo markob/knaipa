@@ -110,6 +110,7 @@ class KnajpaHandler(webapp.RequestHandler):
         
     def _get_map_group_item_names(self, request):
         list_attr = request.arguments()
+        logging.info("list_attr:" + str(list_attr))        
         group_item_names = {}
         for attr_name in list_attr:
             m = re.match("((g[0-9]{1,})_item[0-9]{1,})_name", attr_name)
@@ -117,12 +118,12 @@ class KnajpaHandler(webapp.RequestHandler):
                 i_name = m.group(1)
                 g_name = m.group(2)
                 if g_name in group_item_names:
-                    
                     item_names = group_item_names[g_name]
                     item_names.append(i_name)
                 else:
-                    group_item_names[g_name] = []
+                    group_item_names[g_name] = [i_name,]
                     
+        logging.info("group_itme:" + str(group_item_names))           
         return group_item_names
 
 

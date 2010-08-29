@@ -25,7 +25,7 @@ class KnajpaService():
             logging.info("Add m_address %s for knajpa %s to datastore" , str(m_address.key().id()), str(m_knajpa.key().id()));
         
         for group in knajpaitem.get_groups_list():
-            m_group = Group(name=group.name)
+            m_group = Group(knajpa=m_knajpa.key(), name=group.name)
             m_group.put()
             logging.info("Add m_group %s for knajpa %s to datastore", str(m_group.key().id()), str(m_knajpa.key().id()))
             
@@ -73,6 +73,9 @@ class KnajpaItem(object):
     
     def __init__(self, title):
         self.name = title
+        self._addresses = []
+        self._phonenumbers = []
+        self._groups = []
     
     def add_address(self, address, ia, ja):
         self._addresses.append(AddressItem(address=address, ia=ia, ja=ja))
@@ -149,6 +152,8 @@ class GroupContent():
     def __init__(self, name):
         self._validateParameters(name)
         self.name = name
+        self._items = []
+        
     
     def add_content_item(self, name, value):
         self._validateParameters(name)
