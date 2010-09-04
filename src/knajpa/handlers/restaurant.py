@@ -24,7 +24,7 @@ class KnajpaHandler(webapp.RequestHandler):
     
     def __init__(self):
         self._cmd_handlers = { 'list'  : (self._get_list, 'restaurant/knajpa-list.xml'),
-                               'add'   : (self._add, 'restaurant/knajpa-add.xml'),
+                               'add'   : (self._write, 'restaurant/knajpa-add.xml'),
                                'get'   : (self._read, 'restaurant/knajpa-get.xml'),
                                'error' : (lambda self: None, 'restaurant/knajpa-error.xml') }
         
@@ -60,24 +60,28 @@ class KnajpaHandler(webapp.RequestHandler):
             return self.response.out.write(err)
      
      
-    def _add(self, request):
+    def _write(self, request):
         knajpaitem = self._create_knajpaItem_from_request(request)
-        return {'id': KnajpaService.create_new_knajpa(knajpaitem)} 
+        return {'id': KnajpaService.update_knajpa(knajpaitem)} 
         
     def _get_list(self, request):
         logging.info('I am getting list')
         list_of_knajp = KnajpaService.get_knajpa_list(100, 0)
-        return {'list': list_of_knajp, 'count':KnajpaService.count_knajpa()} 
+        return {'list': list_of_knajp, 'count': KnajpaService.count_knajpa()} 
                   
         
     def _read(self, request):
         logging.info('I am reading')
         id = request.get('id')
+        if not id:
+            raise(ResourceNotExist('Invalid instance id requested'))
+        
         return {'knajpa': KnajpaService.get_knajpa(long(id))} 
 
 
 
     def _create_knajpaItem_from_request(self, request):
+        id = request.get('id')
         title = request.get('title')
         address = request.get('address')
         ia = request.get('ia')
@@ -88,6 +92,9 @@ class KnajpaHandler(webapp.RequestHandler):
         
         logging.info('I am adding new knajpa with name %s', title)
         knajpaitem = KnajpaItem(title)
+        if(re.match ("^[0-9]+$", id) != None and long(id) > 0):
+                knajpaitem.id = long(id)
+                
         knajpaitem.add_address(address, float(ia), float(ja))
 
         for key in  group_item_names:

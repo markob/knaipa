@@ -3,13 +3,29 @@ Created on Aug 7, 2010
 
 @author: apetrenko
 '''
+from google.appengine.api.datastore_errors import EntityNotFoundError
 from knajpa.models.restaurant import Knajpa, Address, Group, Item
 import datetime
 import logging
-#from io import Uns#upportedOperation
 
 class KnajpaService():
 
+    @staticmethod
+    def _updateAddresses(knajpaitem, m_knajpa, is_create):
+        for address in knajpaitem.get_address_list():
+            
+            if is_create :
+                m_address = Address(knajpa=m_knajpa.key(), address=address.completeAddress, ia=address.ia, ja=address.ja)
+            else:
+                if address.id == -1L:
+                    #todo update address
+                    m_address = Address(knajpa=m_knajpa.key(), address=address.completeAddress, ia=address.ia, ja=address.ja)
+                else:
+                    m_address = Address.get_by_id(address.id)
+            m_address.put()
+            logging.info("Add m_address %s for knajpa %s to datastore", str(m_address.key().id()), str(m_knajpa.key().id()))
+        pass
+    
     @staticmethod
     def create_new_knajpa(knajpaitem):
         if not isinstance(knajpaitem , KnajpaItem):
@@ -17,12 +33,10 @@ class KnajpaService():
         
         m_knajpa = Knajpa(name=knajpaitem.name, dateOfCreate=knajpaitem.dateOfCreate, dateOfUpdate=knajpaitem.dateOfUpdate)
         m_knajpa.put()
+        
         logging.info("Add knajpa to datastore %s" , str(m_knajpa.key().id()));
         
-        for address in knajpaitem.get_address_list():
-            m_address = Address(knajpa=m_knajpa.key(), address=address.completeAddress , ia=address.ia, ja=address.ja)
-            m_address.put()
-            logging.info("Add m_address %s for knajpa %s to datastore" , str(m_address.key().id()), str(m_knajpa.key().id()));
+        KnajpaService._updateAddresses(knajpaitem, m_knajpa, True)
         
         for group in knajpaitem.get_groups_list():
             m_group = Group(knajpa=m_knajpa.key(), name=group.name)
@@ -35,7 +49,32 @@ class KnajpaService():
                 logging.info("Add m_item %s to group %s for knajpa %s to datastore", str(m_item.key().id()), m_group.key().name(), str(m_knajpa.key().id()))
 
         return m_knajpa.key().id()
-
+    
+    @staticmethod
+    def update_knajpa(knajpaitem):
+        if not isinstance(knajpaitem , KnajpaItem):
+            raise TypeError('incorrect type of parameter knajpaitem')
+        
+        if knajpaitem.id == -1L :
+            return KnajpaService.create_new_knajpa(knajpaitem)
+         
+        m_knajpa = Knajpa.get_by_id(knajpaitem.id)
+        if(m_knajpa == None):
+            raise EntityNotFoundError('knajpa entity with id {0} was not found'.format(knajpaitem.id))
+        
+        if(knajpaitem.name != None and knajpaitem.name != ''):
+            m_knajpa.name = knajpaitem.name
+        m_knajpa.dateOfUpdate = knajpaitem.dateOfUpdate
+        m_knajpa.put()
+        logging.info("Update knajpa to datastore %s" , str(m_knajpa.key().id()));
+        
+        KnajpaService._updateAddresses(knajpaitem, m_knajpa, False)
+        
+        return m_knajpa.key().id() 
+        pass
+    
+    
+    
     @staticmethod
     def get_knajpa(id):
         return KnajpaItem.create_knajpa_item_based_on_model(Knajpa.get_by_id(id)) 
@@ -56,7 +95,7 @@ class KnajpaService():
 
 class KnajpaItem(object):
     
-    id = 0L
+    id = -1L
     
     name = '';
     
@@ -72,14 +111,21 @@ class KnajpaItem(object):
     
     
     def __init__(self, title):
+        self.id = -1L
         self.name = title
         self._addresses = []
         self._phonenumbers = []
         self._groups = []
+        
     
     def add_address(self, address, ia, ja):
         self._addresses.append(AddressItem(address=address, ia=ia, ja=ja))
         return self._addresses
+        pass
+    
+    def add_address_item(self, address_item):
+        if(isinstance(address_item, AddressItem)):
+            self._addresses.append(address_item)
         pass
 
     def get_address_list(self):
@@ -113,19 +159,22 @@ class KnajpaItem(object):
     @staticmethod
     def create_knajpa_item_based_on_model(model):
         item = KnajpaItem(model.name)
+        item.id = model.key().id()
         item.dateOfCreate = model.dateOfCreate
         item.dateOfUpdate = model.dateOfUpdate
-        item.id = model.key().id()
         
         item.clear_address_list()
         for address in model.addresses:
-            item.add_address(address.address, ia=address.ia, ja=address.ja)
+            address_item = AddressItem(address.address, ia=address.ia, ja=address.ja)
+            address_item.id = address.key().id()
+            item.add_address_item(address_item)
 
 #        for phoneNumber in model.phonenumbers:
 #            pass
         item.clear_group_list()
         for group in model.contentGroups :
             group_content = GroupContent(name=group.name)
+            group_content.id = group.key().id()
             
             for group_item in group.items:
                 group_content.add_content_item(group_item.name, group_item.value)
@@ -136,6 +185,7 @@ class KnajpaItem(object):
         
 
 class AddressItem():
+    id = -1L
     completeAddress = ''
     ia = 0.0
     ja = 0.0
@@ -144,8 +194,10 @@ class AddressItem():
         self.completeAddress = address
         self.ia = ia
         self.ja = ja
+        self.id = -1L
 
 class GroupContent():
+    id = -1L
     name = ''
     _items = []
     
@@ -153,6 +205,7 @@ class GroupContent():
         self._validateParameters(name)
         self.name = name
         self._items = []
+        self.id = -1L
         
     
     def add_content_item(self, name, value):
@@ -176,14 +229,15 @@ class GroupContent():
             raise ValueError('parameter name could not be empty')
 
 class ContentItem():
+    id = -1L
     name = ''
     value = ''
+    
     def __init__(self, name, value):
         self.name = name
         self.value = value
+        self.id = -1L
            
-    
-    
         
 class PhoneNumberItem():
     pass
