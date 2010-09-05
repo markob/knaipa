@@ -20,16 +20,23 @@ update_lib_path()
 
 def search_query(str):
     """Launches search through indexes and returns result"""
-    log.debug("Search request is processing.")
+    log.debug("""Search request is processing. Search engine is looking for '%s'.""" % str)
     
     index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
     parser = QueryParser("content", schema=index.schema)
     query = parser.parse(str)
     results = index.searcher().search(query)
-        
-    # log results
-    log.debug("search results are %s" % results)
-    return results
+    
+    found_count = results.scored_length()
+    log.debug("Search results: was found %d documents:" % found_count)
+    
+    for document in results:
+      log.debug(" * %s" % document['id'])
+    
+    # get found documents ids and return as the result 
+    docs_found = [document['id'] for document in results]
+    
+    return docs_found
     
     
 def add_docs_to_index():

@@ -1,9 +1,9 @@
 import logging as log
 
 from google.appengine.ext import webapp
-from knajpa.search.indexer import add_docs_to_index
-
 from knajpa.utils import main
+
+from knajpa.search.indexer import add_docs_to_index
 
 
 class IndexRequestHandler(webapp.RequestHandler):
@@ -17,8 +17,8 @@ class IndexRequestHandler(webapp.RequestHandler):
         
         self.response.set_status(200)
 
-application = webapp.WSGIApplication([('/tasks/index', IndexRequestHandler)], debug = True)
 
+application = webapp.WSGIApplication([('/tasks/index', IndexRequestHandler)], debug = True)
 
 if __name__ == '__main__':
     main(application)

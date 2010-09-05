@@ -15,7 +15,9 @@ def main(application, log_level=log.DEBUG):
     
 
 def update_lib_path():
-  sys.path.append(os.path.curdir + '/../../libs')
+  log.debug("import library path")
+ # sys.path.append(os.path.abspath(APP_ROOT_PATH + "/libs"))
+  log.info(sys.path)
     
 
 def login_required():
