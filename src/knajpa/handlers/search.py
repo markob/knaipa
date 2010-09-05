@@ -19,10 +19,9 @@ class SearchHandler(webapp.RequestHandler):
         """Processes search request and retrieves results"""
         log.debug("Search request: %s" % self.request.url)
         
-        result = search_query(self.request.get("query"))
-        result = {'documents': [{'id': id} for id in result]}
+        results = search_query(self.request.get("query"))
         
-        return self.response.out.write(template.render(TEMPLATE_PATH, result))
+        return self.response.out.write(template.render(TEMPLATE_PATH, {'documents': results}))
 
 
 application = webapp.WSGIApplication([('/search', SearchHandler)], debug=True)

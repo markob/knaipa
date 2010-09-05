@@ -4,7 +4,7 @@ from google.appengine.ext import webapp
 
 from knajpa.models.articles import Article
 from knajpa.handlers.objhandler import ObjectHandler
-from knajpa.utils import main, InvalidRequestError
+from knajpa.utils import main, update_lib_path, InvalidRequestError
 
 # Articles service request handler
 class ArticleHandler(ObjectHandler):
@@ -35,7 +35,7 @@ class ArticleHandler(ObjectHandler):
             raise(InvalidRequestError('invalid command requested'))
 
     
-        
+
 application = webapp.WSGIApplication([('/article', ArticleHandler)], debug = True)
 
         

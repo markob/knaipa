@@ -18,7 +18,7 @@ class IndexRequestHandler(webapp.RequestHandler):
         self.response.set_status(200)
 
 
-application = webapp.WSGIApplication([('/tasks/index', IndexRequestHandler)], debug = True)
+application = webapp.WSGIApplication([('/index', IndexRequestHandler)], debug = True)
 
 if __name__ == '__main__':
     main(application)

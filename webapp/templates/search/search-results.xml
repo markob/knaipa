@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
 {% for document in documents %}
-  <item id="{{ document.id }}" />
+  <item id="{{ document.id }}" type="{{ document.type }}"/>
 {% endfor %}
 </content>

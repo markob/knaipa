@@ -5,6 +5,7 @@ import logging as log
 from knajpa.models.imodels import DocumentsQueue
 from knajpa.models.documents import IndexableDocument
 from knajpa.utils import update_lib_path
+update_lib_path()
 
 # whoosh imports
 from whoosh.fields import Schema, TEXT, ID
@@ -14,9 +15,9 @@ from whoosh.qparser import QueryParser
 
 DOCUMENTS_SCHEMA = Schema(id=ID(stored=True),
                           title=TEXT(stored=True),
-                          content=TEXT(stored=True))
+                          content=TEXT(stored=True),
+                          type=TEXT(stored=True))
 
-update_lib_path()
 
 def search_query(str):
     """Launches search through indexes and returns result"""
@@ -34,7 +35,7 @@ def search_query(str):
       log.debug(" * %s" % document['id'])
     
     # get found documents ids and return as the result 
-    docs_found = [document['id'] for document in results]
+    docs_found = [{'id': document['id'], 'type': document['type']} for document in results]
     
     return docs_found
     
@@ -57,8 +58,11 @@ def add_docs_to_index():
       
       writer.add_document(id=document.get_id(),
                           title=document.get_title(),
-                          content=document.get_content())
+                          content=document.get_content(),
+                          type=unicode(document.class_name()))
       queue.documents.remove(doc_id)
+      
+      log.debug("remaining documents: %s" % queue.documents)
       
     writer.commit()
     queue.put()
