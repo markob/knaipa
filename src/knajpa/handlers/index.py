@@ -16,6 +16,7 @@ class IndexRequestHandler(webapp.RequestHandler):
         add_docs_to_index()
         
         self.response.set_status(200)
+        self.response.out.write("")
 
 
 application = webapp.WSGIApplication([('/index', IndexRequestHandler)], debug = True)

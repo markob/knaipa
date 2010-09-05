@@ -50,19 +50,21 @@ def add_docs_to_index():
     index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
     writer = index.writer()
     
-    for doc_id in queue.documents:
-      log.debug("document with id %d is going to index" % doc_id)
-      
-      # retrieve content of appropriate documents and write index it
-      document = IndexableDocument.get_by_id(doc_id)
-      
-      writer.add_document(id=document.get_id(),
-                          title=document.get_title(),
-                          content=document.get_content(),
-                          type=unicode(document.class_name()))
-      queue.documents.remove(doc_id)
-      
-      log.debug("remaining documents: %s" % queue.documents)
+    while True:
+      try:
+        doc_id = queue.documents.pop()
+        log.debug("document with id %d is going to index" % doc_id)
+        
+        # retrieve content of appropriate documents and write index it
+        document = IndexableDocument.get_by_id(doc_id)
+        writer.add_document(id=document.get_id(),
+                            title=document.get_title(),
+                            content=document.get_content(),
+                            type=unicode(document.class_name()))
+        
+        log.debug("remaining documents: %s" % queue.documents)
+      except IndexError:
+        break
       
     writer.commit()
     queue.put()
