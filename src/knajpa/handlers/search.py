@@ -21,6 +21,7 @@ class SearchHandler(webapp.RequestHandler):
         
         results = search_query(self.request.get("query"))
         
+        self.response.headers['Content-Type'] = 'text/xml'
         return self.response.out.write(template.render(TEMPLATE_PATH, {'documents': results}))
 
 

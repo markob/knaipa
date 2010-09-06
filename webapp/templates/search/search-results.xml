@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
 {% for document in documents %}
-  <item id="{{ document.id }}" type="{{ document.type }}"/>
+  <item id="{{ document.id }}" type="{{ document.type }}">
+    <title>aefew</title>
+    <modified>awef</modified>
+    <description><p>awefawef</p></description>
+    <cut>читати далі</cut>
+
+    <knajpa name="Гасафа Лямпо" id="000001" type="ресторан">
+      <item type="address" ia="49.857131626112476" ja="24.020319380737302">Володимира Великого 45</item>
+    </knajpa>
+  </item>
 {% endfor %}
 </content>
