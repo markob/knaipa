@@ -7,8 +7,8 @@ from google.appengine.api import urlfetch
 
 # todo: this params have to be configurable through settings
 DOCS_QUEUE_THRESHOLD = 1
-INDEXER_URL = 'http://www.knajpa.com.ua/index'
-#INDEXER_URL = 'http://127.0.0.1:8080/index'
+#INDEXER_URL = 'http://www.knajpa.com.ua/index'
+INDEXER_URL = 'http://127.0.0.1:8080/index'
 
 class BaseDocument(PolyModel):
   """It's interface class for all indexable document models"""
@@ -46,12 +46,12 @@ class BaseDocument(PolyModel):
       urlfetch.make_fetch_call(rpc, INDEXER_URL)
       
       # uncomment following piece of code for local development
-#      try:
-#        result = rpc.get_result()
-#        if result.status_code == 200:
-#          log.info("Indices were updated")
-#      except urlfetch.DownloadError:
-#        log.error("Indices were not updated")
+      try:
+        result = rpc.get_result()
+        if result.status_code == 200:
+          log.info("Indices were updated")
+      except urlfetch.DownloadError:
+        log.error("Indices were not updated")
     
     log.debug("document has been added to the index queue")
     log.debug(self.class_key())

@@ -8,15 +8,15 @@ from knajpa.utils import update_lib_path
 update_lib_path()
 
 # whoosh imports
-from whoosh.fields import Schema, TEXT, ID
+from whoosh.fields import Schema, TEXT, STORED
 from whoosh.index import getdatastoreindex
 from whoosh.qparser import QueryParser
 
 
-DOCUMENTS_SCHEMA = Schema(id=ID(stored=True),
-                          title=TEXT(stored=True),
-                          content=TEXT(stored=True),
-                          type=TEXT(stored=True))
+DOCUMENTS_SCHEMA = Schema(id=STORED,
+                          type=STORED,
+                          title=TEXT(field_boost=2.0),
+                          content=TEXT)
 
 
 def search_query(str):
@@ -59,8 +59,8 @@ def add_docs_to_index():
         document = IndexableDocument.get_by_id(doc_id)
         writer.add_document(id=document.get_id(),
                             title=document.get_title(),
-                            content=document.get_content(),
-                            type=unicode(document.class_name()))
+                            type=unicode(document.class_name()),
+                            content=document.get_content())
         
         log.debug("remaining documents: %s" % queue.documents)
       except IndexError:

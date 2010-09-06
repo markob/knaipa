@@ -4,7 +4,7 @@ from google.appengine.ext import webapp
 
 from knajpa.models.articles import Article
 from knajpa.handlers.objhandler import ObjectHandler
-from knajpa.utils import main, update_lib_path, InvalidRequestError
+from knajpa.utils import main, InvalidRequestError
 
 # Articles service request handler
 class ArticleHandler(ObjectHandler):
