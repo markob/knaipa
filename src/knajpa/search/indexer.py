@@ -2,7 +2,7 @@
 
 import logging as log
 
-from knajpa.models.imodels import DocumentsQueue
+from knajpa.models.docsqueue import DocumentsQueue
 from knajpa.models.documents import IndexableDocument
 from knajpa.utils import update_lib_path
 update_lib_path()

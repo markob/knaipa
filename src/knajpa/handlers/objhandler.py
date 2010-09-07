@@ -3,14 +3,15 @@ from google.appengine.ext.webapp import template
 
 from google.appengine.ext import db
 
-from knajpa.utils import InvalidRequestError, ModelProcessor #@UnresolvedImport
+from knajpa.utils import InvalidRequestError, ModelProcessor
+from knajpa.configs import SettingsManager
 
 import os
-import logging
+import logging as log
 
 
 templates_path = os.path.join(os.path.dirname(__file__),'../../../', 'webapp/templates')
-logging.info("Templates path: "+templates_path)
+log.info("Templates path: " + templates_path)
 
 
 # Object Handler Exception that means that the resource does not exist
@@ -22,17 +23,29 @@ class ObjectHandler(webapp.RequestHandler):
     
     def __init__(self, data_model):
         self._data_model = data_model
+        
+    
+    def _update_info(self):
+        """ Updates request related information in Settings Manager. """
+        host_url_end_index = self.request.url.rfind(self.request.path)
+        
+        # host_url_end_index 
+        if 0 == host_url_end_index:
+          raise(InvalidRequestError)
+        
+        SettingsManager['host_name'] = self.request.url[0:host_url_end_index]
+        log.debug("Host URL is '%s'" % SettingsManager['host_name'])
 
 
     def get(self):
         """ Just hooks all GET requests and passes it to processor. """
-        
+        self._update_info()
         return self._handle_request()
 
 
     def post(self):
         """ Just hooks all POST requests and passes it to processor. """
-
+        self._update_info()
         return self._handle_request()
 
 
@@ -105,7 +118,7 @@ class ObjectHandler(webapp.RequestHandler):
 
 
     def _get_list(self, request):
-        """ Retieves a list of all instances. """
+        """ Retrieves a list of all instances. """
 
         instances = self._data_model.all()
         out_list = []
