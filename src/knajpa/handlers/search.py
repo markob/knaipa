@@ -7,7 +7,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
 from knajpa.utils import main
-from knajpa.search.indexer import search_query
+from knajpa.search.indexer import SearchEngine
 
 import os
 TEMPLATE_PATH = os.path.dirname(__file__) + "/../../../webapp/templates/search/search-results.xml"
@@ -19,7 +19,7 @@ class SearchHandler(webapp.RequestHandler):
         """Processes search request and retrieves results"""
         log.debug("Search request: %s" % self.request.url)
         
-        results = search_query(self.request.get("query"))
+        results = SearchEngine.search_query(self.request.get("query"))
         
         self.response.headers['Content-Type'] = 'text/xml'
         return self.response.out.write(template.render(TEMPLATE_PATH, {'documents': results}))

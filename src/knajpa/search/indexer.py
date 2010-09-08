@@ -10,7 +10,7 @@ update_lib_path()
 # whoosh imports
 from whoosh.fields import Schema, TEXT, STORED
 from whoosh.index import getdatastoreindex
-from whoosh.qparser import QueryParser
+from whoosh.qparser import MultifieldParser
 
 
 DOCUMENTS_SCHEMA = Schema(id=STORED,
@@ -19,13 +19,33 @@ DOCUMENTS_SCHEMA = Schema(id=STORED,
                           content=TEXT)
 
 
-def search_query(str):
+class SearchEngine(object):
+  
+  @staticmethod
+  def _compile_query(str, index):
+    parser = MultifieldParser(["title", "content"], schema=index.schema)
+
+    query_str = ""
+    query_terms = str.split()
+    try:
+      query_str += query_terms.pop(0)
+      while True:
+        term = query_terms.pop(0)
+        query_str += " OR "
+        query_str += term
+    except IndexError:
+      log.debug("Query String: %s" % query_str)
+      
+    return parser.parse(query_str)
+
+  
+  @staticmethod
+  def search_query(str):
     """Launches search through indexes and returns result"""
     log.debug("""Search request is processing. Search engine is looking for '%s'.""" % str)
     
     index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
-    parser = QueryParser("content", schema=index.schema)
-    query = parser.parse(str)
+    query = SearchEngine._compile_query(str, index)
     results = index.searcher().search(query)
     
     found_count = results.scored_length()
@@ -39,16 +59,17 @@ def search_query(str):
     
     return docs_found
     
-    
-def add_docs_to_index():
-  """It's temporary decision and have to be moved to task scheduler"""
-  # check unindexed documents queue
-  queue = DocumentsQueue.get_instance()
   
-  if queue.documents:
-    # get index writer and index required documents
-    index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
-    writer = index.writer()
+  @staticmethod  
+  def add_docs_to_index():
+    """It's temporary decision and have to be moved to task scheduler"""
+    # check unindexed documents queue
+    queue = DocumentsQueue.get_instance()
+    
+    if queue.documents:
+      # get index writer and index required documents
+      index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
+      writer = index.writer()
     
     while True:
       try:
@@ -68,3 +89,4 @@ def add_docs_to_index():
       
     writer.commit()
     queue.put()
+
