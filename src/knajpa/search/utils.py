@@ -3,8 +3,8 @@ import logging as log
 from google.appengine.api import urlfetch
 from knajpa.models.docsqueue import DocumentsQueue
 
-from knajpa.configs import SettingsManager
-DOCS_QUEUE_MAX_SIZE = SettingsManager['docs_to_index_queue_max_size']
+from knajpa.registry import Registry
+DOCS_QUEUE_MAX_SIZE = Registry['docs_to_index_queue_max_size']
 
 
 def AddDocumentToIndexQueue(document):
@@ -23,7 +23,7 @@ def AddDocumentToIndexQueue(document):
 def ActivateDocumentIndexer():
   log.debug("Activate indexing service.")
   
-  indexer_activation_url = SettingsManager['host_name'] + '/index'
+  indexer_activation_url = Registry['host_name'] + '/index'
   log.debug("Indexer Activation URL is '%s'" % indexer_activation_url)
   
   rpc = urlfetch.create_rpc(deadline=1)

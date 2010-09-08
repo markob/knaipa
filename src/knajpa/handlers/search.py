@@ -7,7 +7,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
 from knajpa.utils import main
-from knajpa.search.indexer import SearchEngine
+from knajpa.search.api import SearchEngine
 
 import os
 TEMPLATE_PATH = os.path.dirname(__file__) + "/../../../webapp/templates/search/search-results.xml"

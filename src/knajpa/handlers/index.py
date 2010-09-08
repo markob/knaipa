@@ -3,7 +3,7 @@ import logging as log
 from google.appengine.ext import webapp
 from knajpa.utils import main
 
-from knajpa.search.indexer import SearchEngine
+from knajpa.search.api import SearchEngine
 
 
 class IndexRequestHandler(webapp.RequestHandler):

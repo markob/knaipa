@@ -1,13 +1,14 @@
+import logging as log
+
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
 from google.appengine.ext import db
 
 from knajpa.utils import InvalidRequestError, ModelProcessor
-from knajpa.configs import SettingsManager
+from knajpa.registry import Registry
 
 import os
-import logging as log
 
 
 templates_path = os.path.join(os.path.dirname(__file__),'../../../', 'webapp/templates')
@@ -33,8 +34,8 @@ class ObjectHandler(webapp.RequestHandler):
         if 0 == host_url_end_index:
           raise(InvalidRequestError)
         
-        SettingsManager['host_name'] = self.request.url[0:host_url_end_index]
-        log.debug("Host URL is '%s'" % SettingsManager['host_name'])
+        Registry['host_name'] = self.request.url[0:host_url_end_index]
+        log.debug("Host URL is '%s'" % Registry['host_name'])
 
 
     def get(self):
