@@ -1,3 +1,3 @@
-from knajpa.configs import SettingsManager
+from knajpa.registry import Registry
 
-SettingsManager['docs_to_index_queue_max_size'] = 1
+Registry['docs_to_index_queue_max_size'] = 1

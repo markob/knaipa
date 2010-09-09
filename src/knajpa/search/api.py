@@ -18,6 +18,8 @@ DOCUMENTS_SCHEMA = Schema(id=STORED,
                           title=TEXT(field_boost=2.0),
                           content=TEXT)
 
+from knajpa.registry import Registry
+
 
 class SearchEngine(object):
   
@@ -40,11 +42,17 @@ class SearchEngine(object):
 
   
   @staticmethod
+  def _get_config(config_name):
+    """Reads appropriate configuration value from the Registry"""
+    return Registry[config_name]
+  
+  
+  @staticmethod
   def search_query(str):
     """Launches search through indexes and returns result"""
     log.debug("""Search request is processing. Search engine is looking for '%s'.""" % str)
     
-    index = getdatastoreindex("knajpa", schema=DOCUMENTS_SCHEMA)
+    index = getdatastoreindex(SearchEngine._get_config('datastore'), schema=DOCUMENTS_SCHEMA)
     query = SearchEngine._compile_query(str, index)
     results = index.searcher().search(query)
     
