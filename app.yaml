@@ -1,5 +1,5 @@
-application: knajpa
-version: 1
+application: knaipa-ua
+version: 13-search-dev
 runtime: python
 api_version: 1
 
@@ -81,9 +81,9 @@ handlers:
   script: src/knajpa/handlers/services.py
 
 # documents indexing service url
-- url: /tasks/index
-  script: src/knajpa/handlers/search.py
-  login: admin
+- url: /index
+  script: src/knajpa/handlers/index.py
+#  login: admin # temporary commented
 
 # test app which adds required data to datastore
 - url: /test/.*

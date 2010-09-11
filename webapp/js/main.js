@@ -146,8 +146,6 @@ $(function(){
 				if (arguments[2]) initObj.icon = arguments[2];
 			}
 
-			console.log(_this.markers);
-
 			var latlng = new google.maps.LatLng(initObj.ia,initObj.ja);
 
 			if (!_this.markers[initObj.ia+'_'+initObj.ja]){
@@ -243,6 +241,7 @@ $(function(){
 			 * @param {Document} xml Document who contained some data, for example "Knajpa" articles.
 			 */
 			function feelData (xml){ //TODO test this in IE;
+				alert(1);
 				_this.contentXML = xml;
 				$('#textInfo').xslt(_this.contentXML,'xsl/content-template.xsl');
 				feelMap($('item[type=address]',_this.contentXML));
@@ -251,7 +250,6 @@ $(function(){
 			//TODO: move to normal path
 				//content/content-article-template.xml
 				//content/content-list-template.xml
-
 			if (/blank/gim.test(window.location)){}
 			else if (/admin/gim.test(window.location)){ //TODO:Remove this temporary admin check
 				$.ajax({
@@ -262,6 +260,14 @@ $(function(){
 			}
 			else if (/knajpa/gim.test(window.location)){
 				$.ajax({ dataType: "xml", url: 'content/knajpa.xml', success: feelData});
+			}
+			else if ($.address.path() && $.address.path().indexOf('query')+1){
+				$.ajax({
+					dataType: "xml",
+					url: 'search?'+$.address.path().replace('/',''),
+					success:function(xml){alert(1);feelData(xml)},
+					error: function(xml){alert(1);feelData(xml)}
+				});
 			}
 			else if ($.address.path() && $.address.path() != '/'){
 				$.ajax({ dataType: "xml", url: 'article?cmd=get;id='+$.address.path().replace('/',''), success: feelData});}
@@ -296,5 +302,16 @@ $(function(){
 		this.init();
 		return this;
 	})();
-
+	
+	var Search = (function (){
+		_this = this;
+		this.init = function(){
+			$("#search a").bind('click',function(e){
+				$(this).attr('href','#query='+$("#search input").attr('value'));
+				e.stopPropagation();
+			})
+		}
+		this.init();
+		return this
+	})();
 });
