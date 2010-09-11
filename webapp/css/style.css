@@ -213,6 +213,9 @@
 /* New suggestions
 ------------------------------ */
 	.suggestion	{ background:white; border-top:medium none; font:11px Tahoma; margin:22px 0 0; padding-bottom:6px; position:absolute; top:1px; z-index:999;}
+	.suggestion	li	{ width: 100%; list-style-type:none;}
+	.suggestion	li:hover	{background-color: #fcfae5;}
+	.suggestion	li:active	{background-color: #dff3fb;}
 
 		.suggestion	em	{position:absolute; height:13px; width:14px; background: url(img/suggestion-main-back.png); z-index:-1}
 			.suggestion	em.tl	{background-position: 0 0; top:-13px; left:-14px;}

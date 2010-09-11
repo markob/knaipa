@@ -8,185 +8,187 @@
 
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
-		<script src="js/main.js"></script>
-		<script src="js/saparate-input.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<!--<script type="text/javascript" src="js/saparate-input.js"></script>-->
 
 		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-base.css">
 		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-fsi-icons.css">
 		<link media="all" rel="stylesheet" href="css/style.css">
 
 		<title>Knajpa - for your convenience </title>
-		<script type="text/javascript">
-			//test
-			window.getPosition = function (node){
+		<!--<script type="text/javascript">-->
+			<!--//test-->
+			<!--window.getPosition = function (node){-->
 
-				Knajpa.map.identifyMarker({
-					address:$(node).text().trim(),
-					success: function (responce,status){
-							$(node).css ('border-bottom','none');
+				<!--Knajpa.map.identifyMarker({-->
+					<!--address:$(node).text().trim(),-->
+					<!--success: function (responce,status){-->
+							<!--$(node).css ('border-bottom','none');-->
 
-							var result = ''
-							for (var i=0; i<responce.length; i++){
-								for (var j=0; j < responce[i].address_components.length ;j++)
-									result += (responce[i].address_components[j].long_name) +', '
-								 result +="<br/>";
-							}
-							suggestedPopup.setData(result);
+							<!--var result = ''-->
+							<!--for (var i=0; i<responce.length; i++){-->
+								<!--result += '<li>'-->
+								<!--for (var j=0; j < responce[i].address_components.length ;j++)-->
+									<!--result += (responce[i].address_components[j].long_name)-->
+								<!--result += '</li>'-->
+								 <!--result +="<br/>";-->
+							<!--}-->
+							<!--suggestedPopup.setData(result);-->
 
-							if (responce[0] && responce[0].types[0] == "street_address" ){
+							<!--if (responce[0] && responce[0].types[0] == "street_address" ){-->
 
-								if (!node.getAttribute('id')){
-									Knajpa.map.addMarker({ia : responce[0].geometry.location.lat(), ja : responce[0].geometry.location.lng(), draggable : true});
-									$(node).attr('id',responce[0].geometry.location.lat() +'_'+ responce[0].geometry.location.lng());
-								} else if ($(node).attr('id') != responce[0].geometry.location.lat()+'_'+responce[0].geometry.location.lng()){
-									$(node).attr('id', Knajpa.map.updateMarker ($(node).attr('id'),responce[0].geometry.location));
-								}
-							} else {
-								/*$(node.parentNode).removeAttr("id");*/
-							}
+								<!--if (!node.getAttribute('id')){-->
+									<!--Knajpa.map.addMarker({ia : responce[0].geometry.location.lat(), ja : responce[0].geometry.location.lng(), draggable : true});-->
+									<!--$(node).attr('id',responce[0].geometry.location.lat() +'_'+ responce[0].geometry.location.lng());-->
+								<!--} else if ($(node).attr('id') != responce[0].geometry.location.lat()+'_'+responce[0].geometry.location.lng()){-->
+									<!--$(node).attr('id', Knajpa.map.updateMarker ($(node).attr('id'),responce[0].geometry.location));-->
+								<!--}-->
+							<!--} else {-->
+								<!--/*$(node.parentNode).removeAttr("id");*/-->
+							<!--}-->
 
-					},
-					decline :function(){
-						 $(node).css ('border-bottom','2px dotted red');
-					}
-				})
-			}
+					<!--},-->
+					<!--decline :function(){-->
+						 <!--$(node).css ('border-bottom','2px dotted red');-->
+					<!--}-->
+				<!--})-->
+			<!--}-->
 
-			// http://maps-api-ssl.google.com/maps/suggest?
-			//		q=%D0%9B%D0%B8%D1%87&
-			// 		cp=3&
-			// 		ll=37.0625,-95.677068&
-			// 		spn=34.122306,114.169922&
-			// 		hl=en&gl=&v=2&json=a&auth=4c3a4cf1QzGfLMD5aUDw7ou3Sm-XFWaO4uw&src=1,2&num=10&numps=5&callback=_xdc_._5gbihlrj7
+			<!--// http://maps-api-ssl.google.com/maps/suggest?-->
+			<!--//		q=%D0%9B%D0%B8%D1%87&-->
+			<!--// 		cp=3&-->
+			<!--// 		ll=37.0625,-95.677068&-->
+			<!--// 		spn=34.122306,114.169922&-->
+			<!--// 		hl=en&gl=&v=2&json=a&auth=4c3a4cf1QzGfLMD5aUDw7ou3Sm-XFWaO4uw&src=1,2&num=10&numps=5&callback=_xdc_._5gbihlrj7-->
 
-			//https://maps-api-ssl.google.com/maps/suggest?
-			// 		q=New&cp=3&
-			// 		ll=37.0625,-95.677068&
-			// 		spn=34.122306,114.169922&
-			// 		hl=en&
-			// 		gl=&
-			// 		v=2&
-			// 		json=a&
-			// 		auth=4c3a5419UKXiKdsdX290LpVHb72YACjESlw&
-			// 		src=1,2&
-			// 		num=10&
-			// 		numps=5&
-			// 		callback=_xdc_._6gbiipngp
+			<!--//https://maps-api-ssl.google.com/maps/suggest?-->
+			<!--// 		q=New&cp=3&-->
+			<!--// 		ll=37.0625,-95.677068&-->
+			<!--// 		spn=34.122306,114.169922&-->
+			<!--// 		hl=en&-->
+			<!--// 		gl=&-->
+			<!--// 		v=2&-->
+			<!--// 		json=a&-->
+			<!--// 		auth=4c3a5419UKXiKdsdX290LpVHb72YACjESlw&-->
+			<!--// 		src=1,2&-->
+			<!--// 		num=10&-->
+			<!--// 		numps=5&-->
+			<!--// 		callback=_xdc_._6gbiipngp-->
 
 
-			var suggestedPopup = {
-				show:function (initObj){
-					if (!this.container){
-						this.container = $('<div class="suggestion"></div>').appendTo(document.body);
-						this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')
-					}
-					this.container.css({top: initObj.top, left: initObj.left, display: 'block'});
-				},
-				hide: function(){
-					this.container.css({display: 'none'});
-				},
-				setData: function(content){
-					if (!this.container){this.container = $('<div class="suggestion">test</div>').appendTo(document.body);}
+			<!--var suggestedPopup = {-->
+				<!--show:function (initObj){-->
+					<!--if (!this.container){-->
+						<!--this.container = $('<div class="suggestion"></div>').appendTo(document.body);-->
+						<!--this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')-->
+					<!--}-->
+					<!--this.container.css({top: initObj.top, left: initObj.left, display: 'block'});-->
+				<!--},-->
+				<!--hide: function(){-->
+					<!--this.container.css({display: 'none'});-->
+				<!--},-->
+				<!--setData: function(content){-->
+					<!--if (!this.container){this.container = $('<div class="suggestion">test</div>').appendTo(document.body);}-->
 
-					this.container.html(content);
-					this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')
-				}
-			}
+					<!--this.container.html(content);-->
+					<!--this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')-->
+				<!--}-->
+			<!--}-->
 
-			$(function(){
-				var address = new separateInput({container: $('.description:first'),separator:';'})
+			<!--$(function(){-->
+				<!--var address = new separateInput({container: $('.description:first'),separator:';'})-->
 
-				address
-					.bind('separate', function(_this,arg){
-							for (var i=0; i<arg.length; i++){ getPosition (arg[i][0]);}
-						})
-					.bind('change', function(_this, arg){
-							//Remove garbage markers
-							var currentPoints = [];
-							_this.editabelEl.find('span[id]').each(function(){currentPoints.push(this.getAttribute('id'))})
-							for (var marker in Knajpa.map.markers){
-								if ($.inArray( marker, currentPoints) < 0) { Knajpa.map.removeMarker(marker); /*console.log('remove');*/}
-							}
+				<!--address-->
+					<!--.bind('separate', function(_this,arg){-->
+							<!--for (var i=0; i<arg.length; i++){ getPosition (arg[i][0]);}-->
+						<!--})-->
+					<!--.bind('change', function(_this, arg){-->
+							<!--//Remove garbage markers-->
+							<!--var currentPoints = [];-->
+							<!--_this.editabelEl.find('span[id]').each(function(){currentPoints.push(this.getAttribute('id'))})-->
+							<!--for (var marker in Knajpa.map.markers){-->
+								<!--if ($.inArray( marker, currentPoints) < 0) { Knajpa.map.removeMarker(marker); /*console.log('remove');*/}-->
+							<!--}-->
 
-							var sel = window.getSelection();
-							var selNode = _this.sel.anchorNode.parentNode;
-							var selOffset = _this.sel.anchorOffset;
+							<!--var sel = window.getSelection();-->
+							<!--var selNode = _this.sel.anchorNode.parentNode;-->
+							<!--var selOffset = _this.sel.anchorOffset;-->
 
-							$(selNode).html($(selNode).text().slice(0, selOffset)+'<em class="coordinates"></em>'+$(selNode).text().slice(selOffset));
+							<!--$(selNode).html($(selNode).text().slice(0, selOffset)+'<em class="coordinates"></em>'+$(selNode).text().slice(selOffset));-->
 
-							var pos = $('.coordinates');
-							suggestedPopup.show({top:pos.offset().top, left:pos.offset().left});
-							pos.remove()
+							<!--var pos = $('.coordinates');-->
+							<!--suggestedPopup.show({top:pos.offset().top, left:pos.offset().left});-->
+							<!--pos.remove()-->
 
-							$(selNode).html($(selNode).text());
-							var range = document.createRange();
-							range.setStart(selNode.firstChild, selOffset);
-							range.setEnd(selNode.firstChild, selOffset);
-							sel.removeAllRanges();
-							sel.addRange(range);
+							<!--$(selNode).html($(selNode).text());-->
+							<!--var range = document.createRange();-->
+							<!--range.setStart(selNode.firstChild, selOffset);-->
+							<!--range.setEnd(selNode.firstChild, selOffset);-->
+							<!--sel.removeAllRanges();-->
+							<!--sel.addRange(range);-->
 
-							getPosition(arg);
-						})
-				var time = new separateInput({container: $('.description:eq(1)')})
+							<!--getPosition(arg);-->
+						<!--})-->
+				<!--var time = new separateInput({container: $('.description:eq(1)')})-->
 
-				// Controls init part
-				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
-						.bind('click',function(){
-							window.data = {};
-							data.knajpaName = $('#textInfo h2:first div:first').text()
-							data.knajpaType = $('#textInfo h2:first div:eq(1)').text()
-//							data.address=[{name:'Личаківська 1, Львів', ia:'49.840088', ja:'24.044469'},{name:'Смольського 3,Львів', ia:'49.840372', ja:'24.040047'}, ]
-							$('#textInfo li').each(function(){
-								var item = $(this)
-								if (item.find('span.description').attr('type') == 'address'){
-									data[item.find('h4').text()] = []
-									item.find('span[id]').each(function(){
-										var location = {}
-										location.name = $(this).text()
-										location.ia = $(this).attr('id').match(/[^_]+/gim)[0]
-										location.ja = $(this).attr('id').match(/[^_]+/gim)[1]
-										data[item.find('h4').text()].push(location);
-									})
-								}else { data[item.find('h4').text()] = item.find('span.description').text();}
-							})
+				<!--// Controls init part-->
+				<!--var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")-->
+						<!--.bind('click',function(){-->
+							<!--window.data = {};-->
+							<!--data.knajpaName = $('#textInfo h2:first div:first').text()-->
+							<!--data.knajpaType = $('#textInfo h2:first div:eq(1)').text()-->
+<!--//							data.address=[{name:'Личаківська 1, Львів', ia:'49.840088', ja:'24.044469'},{name:'Смольського 3,Львів', ia:'49.840372', ja:'24.040047'}, ]-->
+							<!--$('#textInfo li').each(function(){-->
+								<!--var item = $(this)-->
+								<!--if (item.find('span.description').attr('type') == 'address'){-->
+									<!--data[item.find('h4').text()] = []-->
+									<!--item.find('span[id]').each(function(){-->
+										<!--var location = {}-->
+										<!--location.name = $(this).text()-->
+										<!--location.ia = $(this).attr('id').match(/[^_]+/gim)[0]-->
+										<!--location.ja = $(this).attr('id').match(/[^_]+/gim)[1]-->
+										<!--data[item.find('h4').text()].push(location);-->
+									<!--})-->
+								<!--}else { data[item.find('h4').text()] = item.find('span.description').text();}-->
+							<!--})-->
 
-							data.cmd = 'save';
-							$.ajax({
-									type: "POST",
-									data: data,
-									url: 'knajpa',
-									success: function(msg){alert(msg);}
-								});
+							<!--data.cmd = 'save';-->
+							<!--$.ajax({-->
+									<!--type: "POST",-->
+									<!--data: data,-->
+									<!--url: 'knajpa',-->
+									<!--success: function(msg){alert(msg);}-->
+								<!--});-->
 
-						})
-						.appendTo("#textInfo");
+						<!--})-->
+						<!--.appendTo("#textInfo");-->
 
-				window.timeout=false;
-				$(document).bind("scroll",function (e){
-					if (window.timeout) clearTimeout(window.timeout);
-					var y = $(document).scrollTop() > 210 ? $(document).scrollTop() :210;
-					window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
-				})
+				<!--window.timeout=false;-->
+				<!--$(document).bind("scroll",function (e){-->
+					<!--if (window.timeout) clearTimeout(window.timeout);-->
+					<!--var y = $(document).scrollTop() > 210 ? $(document).scrollTop() :210;-->
+					<!--window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)-->
+				<!--})-->
 
-				// Stuff of map's markers
+				<!--// Stuff of map's markers-->
 
-//				$("*[type=address] span").each(function(i){
-//					var position = this.getAttribute('id').split('_')
-//					var adminMarker = Knajpa.map.addMarker({ ia:position[0], ja:position[1], icon: i+1, draggable: true })
-//
-//					google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {
-//						geocodePosition(this.getPosition(),function (responses) {
-//							if (responses && responses.length > 0) {
-//								console.log (responses[0].formatted_address, adminMarker);
-//								document.getElementById(adminMarker).innerHTML = responses[0].formatted_address+";"; // jQuery do not work, because in ID is symbol  "." (dot).
-//							}else {
-//								console.log ('Нeзнайдено нічого, або якійсь трабли із коннектом')
-//							}
-//						});
-//					});
-//				});
-			})
-		</script>
+<!--//				$("*[type=address] span").each(function(i){-->
+<!--//					var position = this.getAttribute('id').split('_')-->
+<!--//					var adminMarker = Knajpa.map.addMarker({ ia:position[0], ja:position[1], icon: i+1, draggable: true })-->
+<!--//-->
+<!--//					google.maps.event.addListener(Knajpa.map.markers[adminMarker], 'dragend', function() {-->
+<!--//						geocodePosition(this.getPosition(),function (responses) {-->
+<!--//							if (responses && responses.length > 0) {-->
+<!--//								console.log (responses[0].formatted_address, adminMarker);-->
+<!--//								document.getElementById(adminMarker).innerHTML = responses[0].formatted_address+";"; // jQuery do not work, because in ID is symbol  "." (dot).-->
+<!--//							}else {-->
+<!--//								console.log ('Нeзнайдено нічого, або якійсь трабли із коннектом')-->
+<!--//							}-->
+<!--//						});-->
+<!--//					});-->
+<!--//				});-->
+			<!--})-->
+		<!--</script>-->
 	</head>
 	<body>
 		<div id="globalWrapper" class="w-90">
