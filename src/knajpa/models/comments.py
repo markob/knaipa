@@ -1,11 +1,10 @@
-import logging
-
 from google.appengine.ext import db
 
 from articles import Article
 from uzvers import Uzver
+from knajpa.models.imodels import BaseDocument
 
-class Comment(db.Model):
+class Comment(BaseDocument):
     """ Describes data model for storing articles """
     
     article = db.ReferenceProperty(Article, required=True)

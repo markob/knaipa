@@ -3,7 +3,6 @@ import logging as log
 from google.appengine.ext import db
 from google.appengine.ext.db.polymodel import PolyModel
 
-
 class BaseDocument(PolyModel):
   """It's interface class for all indexable document models"""
   
