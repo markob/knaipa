@@ -7,6 +7,7 @@ from knajpa.utils import main, InvalidRequestError
 import logging
 import os
 import re
+from knajpa.registry import Registry
 
 
 
@@ -18,9 +19,11 @@ class KnajpaHandler(webapp.RequestHandler):
     _cmd_handlers = { }
     
     def get(self):
+        self._update_info()
         return self._handle_request()
     
     def post(self):
+        self._update_info()
         return self._handle_request()
     
     def __init__(self):
@@ -138,6 +141,19 @@ class KnajpaHandler(webapp.RequestHandler):
                     
         logging.debug("group_itme:" + str(group_item_names))           
         return group_item_names
+
+
+    def _update_info(self):
+        """ Updates request related information in Settings Manager. """
+        host_url_end_index = self.request.url.rfind(self.request.path)
+        
+        # host_url_end_index 
+        if 0 == host_url_end_index:
+          raise(InvalidRequestError)
+        
+        Registry['host_name'] = self.request.url[0:host_url_end_index]
+        logging.debug("Host URL is '%s'" % Registry['host_name'])
+
 
 
 application = webapp.WSGIApplication(

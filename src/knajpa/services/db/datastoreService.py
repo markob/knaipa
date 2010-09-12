@@ -4,7 +4,7 @@ Created on Sep 11, 2010
 @author: apetrenko
 '''
 from google.appengine.ext import db
-from knajpa.models.imodels import DocumentsQueue
+from knajpa.search.utils import AddDocumentToIndexQueue
 import logging
 
 class DatastoreService():
@@ -15,11 +15,6 @@ class DatastoreService():
             raise TypeError('Incorrect type. The model must be db.Model but it was ' + str(model))
         
         model.put()
-        
-        docs_queue = DocumentsQueue.get_instance()
-        docs_queue.documents.append(model.key().id())
-        docs_queue.put()
-        
+        AddDocumentToIndexQueue (model)
         logging.debug("document has been added to the index queue")
-        logging.debug(model)
                                         
