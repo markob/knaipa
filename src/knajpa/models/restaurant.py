@@ -24,9 +24,11 @@ class ArticleForKnajpa(db.Model):
 #Content
 class Group(db.Model):
     name = db.StringProperty(required=True)
+    priority = db.IntegerProperty(default= -1L);
     knajpa = db.ReferenceProperty(Knajpa, collection_name='contentGroups')
     
 class Item(db.Model):
     name = db.StringProperty(required=True)
     value = db.StringProperty(required=True)
+    priority = db.IntegerProperty(default= -1L);
     group = db.ReferenceProperty(Group, collection_name='items')
