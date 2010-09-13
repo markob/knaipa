@@ -105,6 +105,37 @@
 			}
 		}
 
+		/**
+		 *
+		 * @param el {String} HTML code of element
+		 * @return inserted node
+		 */
+		this.insertElement = function(el){
+			var sel = window.getSelection();
+			var selNode = _this.sel.anchorNode;
+			var selOffset = _this.sel.anchorOffset;
+
+			var newContent = ($(selNode).text().slice(0, selOffset)||'&nbsp;')+el+'<em id="insertedTemporaryElement"></em>'+($(selNode).text().slice(selOffset)||'&nbsp;');
+
+			$(selNode).replaceWith(newContent);
+			selNode = $('#insertedTemporaryElement')[0].previousSibling;
+			$('#insertedTemporaryElement').remove();
+
+			var range = document.createRange();
+			range.setStart(selNode.nextSibling, 0);
+			range.setEnd(selNode.nextSibling, 0);
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange(range);
+
+			return selNode;
+		}
+		this.getCursorPosition = function(){
+			var pos = $(_this.insertElement('<em/>'))
+			var result = {top:pos.offset().top, left:pos.offset().left}
+			pos.remove();
+			return result;
+		}
+
 		this.init = function (initObj){
 			if (initObj) for (parametr in initObj) _this[parametr] = initObj[parametr]
 
@@ -180,18 +211,7 @@
 						},10);
 
 						if (e.keyCode == 13){ //Return
-							document.execCommand('inserthtml',false,'<br>&nbsp;');
-							_this.sel = window.getSelection();
-
-							if (!_this.sel.isCollapsed) _this.sel.collapseToEnd();
-							var r = _this.sel.getRangeAt(0);
-							var offset = r.startOffset
-							var offsetElement = r.startContainer;
-
-							r.setStart(offsetElement,offset-1);
-							r.setEnd(offsetElement,offset);
-
-							document.execCommand('delete',false,false);
+							_this.insertElement('<br/>');
 							_this.container.trigger('keydown');
 							return false;
 						}

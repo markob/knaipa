@@ -5,52 +5,6 @@
 
 String.prototype.trim = function (){ return this.replace(/^\s*(\S+(\s+\S+)*)\s*$/gim,"$1");}
 
-		Object.prototype.bind = function (ev,fn){
-			if (!this.events)this.events={};
-			var ev = ev.toLocaleLowerCase();
-			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-
-			this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
-			return this;
-		}
-
-		Object.prototype.one = function (ev,fn){
-			if (!this.eventsOne)this.eventsOne={};
-			var ev = ev.toLocaleLowerCase();
-			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-			this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
-			return this;
-		}
-
-		Object.prototype.trigger = function (ev){
-					var ev = ev.toLocaleLowerCase();
-					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					if (this.events)
-						for (var i=0; this.events[ev] && i<this.events[ev].length;i++) this.events[ev][i](this)
-
-					if (this.eventsOne)
-						for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++){
-							this.eventsOne[ev][i](this);
-							delete this.eventsOne[ev];
-						}
-
-					return this;
-				}
-
-		Object.prototype.unbind = function (ev,fn){
-					var ev = ev.toLocaleLowerCase();
-					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					if (this.events[ev])
-						for (var i=0; i < this.events[ev].length ;i++)
-						if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
-
-					if (this.eventsOne[ev])
-						for (var i=0; i < this.eventsOne[ev].length ;i++)
-						if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
-
-					return this;
-				}
-
 /**
  * Global object for Knajpa.
  */

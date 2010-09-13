@@ -209,10 +209,11 @@
 
 /*.i-suggestion-white	em.t	{background-position: 0 -57px !important; ; display:block !important; left:20px;  right:-12px !important; top:-4px; width:auto !important;}*/
 
+br[_moz_dirty] {display:none;}
 
 /* New suggestions
 ------------------------------ */
-	.suggestion	{ background:white; border-top:medium none; font:11px Tahoma; margin:22px 0 0; padding-bottom:6px; position:absolute; top:1px; z-index:999;}
+	.suggestion	{ background:white; border-top:medium none; font:11px Tahoma; margin:22px 0 0; padding-bottom:6px; position:absolute; top:1px; z-index:999; display:none;}
 	.suggestion	li	{ width: 100%; list-style-type:none;}
 	.suggestion	li:hover	{background-color: #fcfae5;}
 	.suggestion	li:active	{background-color: #dff3fb;}
