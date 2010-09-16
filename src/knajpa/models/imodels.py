@@ -1,7 +1,6 @@
 import logging as log
 
 from google.appengine.ext.db.polymodel import PolyModel
-
 from knajpa.search.utils import AddDocumentToIndexQueue
 
 

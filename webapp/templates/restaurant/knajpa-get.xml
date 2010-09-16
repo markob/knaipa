@@ -7,9 +7,9 @@
 		</item>
 		{% endfor %}
 		{%for gcontent in knajpa.get_groups_list %}
-		<cgroup name="{{gcontent.name}}">
+		<cgroup id="{{gcontent.id}}" name="{{gcontent.name}}">
 			{%for item in gcontent.get_content_item_list %}
-			<citem name="{{item.name}}" value="{{item.value}}" />
+			<citem id="{{item.id}}" name="{{item.name}}" value="{{item.value}}" />
 			{% endfor %}
 		</cgroup>
 		{% endfor %}
