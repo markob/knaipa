@@ -195,7 +195,6 @@ $(function(){
 			 * @param {Document} xml Document who contained some data, for example "Knajpa" articles.
 			 */
 			function feelData (xml){ //TODO test this in IE;
-				alert(1);
 				_this.contentXML = xml;
 				$('#textInfo').xslt(_this.contentXML,'xsl/content-template.xsl');
 				feelMap($('item[type=address]',_this.contentXML));
@@ -219,8 +218,8 @@ $(function(){
 				$.ajax({
 					dataType: "xml",
 					url: 'search?'+$.address.path().replace('/',''),
-					success:function(xml){alert(1);feelData(xml)},
-					error: function(xml){alert(1);feelData(xml)}
+					success:function(xml){feelData(xml)},
+					error: function(xml){feelData(xml)}
 				});
 			}
 			else if ($.address.path() && $.address.path() != '/'){
