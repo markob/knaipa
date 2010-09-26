@@ -41,31 +41,6 @@ var suggestions = function (initObj){
 		38: 'Up',
 		40: 'Down'
 	}
-	/**
-	 * Events
-	 *  	select - When user select some item.
-	 *  	show - When showed suggestions
-	 *  	hide - When hided suggestions
-	 */
-	this.events={};
-	/**
-	 *
-	 * @param {String} ev Event name can use without "on" "onSelect" == "onselect" == "select"
-	 * @param {Function} fn
-	 */
-	this.bind = function (ev,fn){
-		var ev = ev.toLocaleLowerCase();
-		ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-		_this.events[ev] ? _this.events[ev].push(fn) : (_this.events[ev]=[]).push(fn)
-		return _this;
-	}
-
-	this.trigger = function (ev){
-		var ev = ev.toLocaleLowerCase();
-		ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-		for (var i=0; _this.events[ev] && i<_this.events[ev].length;i++){_this.events[ev][i](_this)}
-		return _this;
-	}
 
 	/**
 	 *
@@ -194,6 +169,14 @@ var suggestions = function (initObj){
 	}
 
 	this.init = function(){
+		/**
+		 * Events
+		 *  	select - When user select some item.
+		 *  	show - When showed suggestions
+		 *  	hide - When hided suggestions
+		 */
+		eventCommander.apply(this);
+
 		for (var tmp in initObj){_this[tmp]=initObj[tmp];}
 
 		$.ajax({

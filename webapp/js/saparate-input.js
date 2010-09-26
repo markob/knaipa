@@ -5,47 +5,9 @@
  * Time: 12:40:28 PM
  * To change this template use File | Settings | File Templates.
  */
-	var separateInput = function (initObj){
+
+	var editableArea = function (){
 		var _this = this;
-		//Events Commander
-			this.events = {};
-			this.eventsOne = {};
-
-			this.bind = function (ev,fn){
-					var ev = ev.toLocaleLowerCase();
-					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
-					return this;
-				}
-			this.trigger = function (ev,arg){
-					var ev = ev.toLocaleLowerCase();
-					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
-						{this.events[ev][i](this,arg)}
-					for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++)
-						{this.eventsOne[ev][i](this,arg);}
-					delete this.eventsOne[ev];
-
-					return this;
-				}
-			this.unbind = function (ev,fn){
-					var ev = ev.toLocaleLowerCase();
-					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					if (this.events[ev])
-						for (var i=0; i < this.events[ev].length ;i++)
-						if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
-
-					if (this.eventsOne[ev])
-						for (var i=0; i < this.eventsOne[ev].length ;i++)
-						if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
-					return this;
-				}
-			this.one = function (ev,fn){
-				var ev = ev.toLocaleLowerCase();
-				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
-				return this;
-			}
 
 		this.makeExtended = function (){
 			_this.container.data('position','extended');
@@ -59,7 +21,46 @@
 			_this.container.parent().stop().animate({ height: 14});
 		}
 
-		_this.setPointer = function(el, offset){
+		this.getCursorPosition = function(){
+			var pos = $(_this.insertElement('<em/>'))
+			var result = {top:pos.offset().top, left:pos.offset().left}
+			pos.remove();
+			return result;
+		}
+
+		/**
+		 *
+		 * @param el {String} HTML code of element
+		 * @return inserted node
+		 */
+		this.insertElement = function(el){
+			var sel = window.getSelection();
+			var selNode = _this.sel.anchorNode;
+			var selOffset = _this.sel.anchorOffset;
+
+			var newContent = ($(selNode).text().slice(0, selOffset)||'&nbsp;')+el+'<em id="insertedTemporaryElement"></em>'+($(selNode).text().slice(selOffset)||'&nbsp;');
+
+			$(selNode).replaceWith(newContent);
+			selNode = $('#insertedTemporaryElement')[0].previousSibling;
+			$('#insertedTemporaryElement').remove();
+
+			var range = document.createRange();
+			range.setStart(selNode.nextSibling, 0);
+			range.setEnd(selNode.nextSibling, 0);
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange(range);
+
+			return selNode;
+		}
+
+		this.init =
+
+	}
+
+	var separateInput = function (initObj){
+		var _this = this;
+
+		this.setPointer = function(el, offset){
 			if (! _this.sel)_this.sel = window.getSelection();
 
 			var range = document.createRange();
@@ -105,38 +106,10 @@
 			}
 		}
 
-		/**
-		 *
-		 * @param el {String} HTML code of element
-		 * @return inserted node
-		 */
-		this.insertElement = function(el){
-			var sel = window.getSelection();
-			var selNode = _this.sel.anchorNode;
-			var selOffset = _this.sel.anchorOffset;
-
-			var newContent = ($(selNode).text().slice(0, selOffset)||'&nbsp;')+el+'<em id="insertedTemporaryElement"></em>'+($(selNode).text().slice(selOffset)||'&nbsp;');
-
-			$(selNode).replaceWith(newContent);
-			selNode = $('#insertedTemporaryElement')[0].previousSibling;
-			$('#insertedTemporaryElement').remove();
-
-			var range = document.createRange();
-			range.setStart(selNode.nextSibling, 0);
-			range.setEnd(selNode.nextSibling, 0);
-			window.getSelection().removeAllRanges();
-			window.getSelection().addRange(range);
-
-			return selNode;
-		}
-		this.getCursorPosition = function(){
-			var pos = $(_this.insertElement('<em/>'))
-			var result = {top:pos.offset().top, left:pos.offset().left}
-			pos.remove();
-			return result;
-		}
-
 		this.init = function (initObj){
+			eventCommander.apply(_this);
+			editableArea.apply(_this);
+
 			if (initObj) for (parametr in initObj) _this[parametr] = initObj[parametr]
 
 			_this.container.wrapInner('<div style="float:left;" contenteditable="true"></div>');

@@ -2,34 +2,6 @@ var adminKnajpa= function (initObj){
 	var _this = this;
 	var initSuccess=false;
 
-	this.events={}
-	this.bind = function (ev,fn){
-		var ev = ev.toLocaleLowerCase();
-		ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-		_this.events[ev] ? _this.events[ev].push(fn) : (_this.events[ev]=[]).push(fn)
-		return _this;
-	}
-	/**
-	 *
-	 * @param {String} ev Event name
-	 * @param {Function} fn
-	 */
-	this.unbind = function (ev,fn){
-		var ev = ev.toLocaleLowerCase();
-		ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-		if (_this.events[ev])
-			for (var i=0; i < _this.events[ev].length ;i++)
-				if (_this.events[ev][i].toString() === fn.toString()) { _this.events[ev].splice(i,1); break;}
-		return _this;
-	}
-
-	this.trigger = function (ev){
-		var ev = ev.toLocaleLowerCase();
-		ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-		for (var i=0; _this.events[ev] && i<_this.events[ev].length;i++) _this.events[ev][i](_this)
-		return _this;
-	}
-
 	//Initialization parameters part;
 
 	this.knajpa = false;
@@ -59,6 +31,8 @@ var adminKnajpa= function (initObj){
 	}
 
 	this.init = function (initObj){
+		eventCommander.apply(this);
+
 		if (initObj)
 			for (parametr in initObj) _this[parametr] = initObj[parametr];
 

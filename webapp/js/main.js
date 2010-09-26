@@ -5,6 +5,49 @@
 
 String.prototype.trim = function (){ return this.replace(/^\s*(\S+(\s+\S+)*)\s*$/gim,"$1");}
 
+var eventCommander = function(){
+	var events = {};
+	var eventsOne = {};
+
+	this.bind = function (ev,fn){
+			var ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			events[ev] ? events[ev].push(fn) : (events[ev]=[]).push(fn)
+			return this;
+		}
+
+	this.one = function (ev,fn){
+		var ev = ev.toLocaleLowerCase();
+		ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+		eventsOne[ev] ? eventsOne[ev].push(fn) : (eventsOne[ev]=[]).push(fn)
+		return this;
+	}
+
+	this.trigger = function (ev,arg){
+			var ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			for (var i=0; events[ev] && i<events[ev].length;i++) {events[ev][i](this,arg)}
+			for (var i=0; eventsOne[ev] && i<eventsOne[ev].length;i++) {eventsOne[ev][i](this,arg);}
+			delete eventsOne[ev];
+
+			return this;
+		}
+
+	this.unbind = function (ev,fn){
+			var ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			if (events[ev])
+				for (var i=0; i < events[ev].length ;i++)
+				if (events[ev][i].toString() === fn.toString()) {events[ev].splice(i,1); break;}
+
+			if (eventsOne[ev])
+				for (var i=0; i < eventsOne[ev].length ;i++)
+				if (eventsOne[ev][i].toString() === fn.toString()) {eventsOne[ev].splice(i,1); break;}
+
+			return this;
+		}
+}
+
 /**
  * Global object for Knajpa.
  */
@@ -12,45 +55,6 @@ $(function(){
 	var Map = function (initObj){
 		var _this = this;
 		var geocoder = new google.maps.Geocoder();
-
-		this.events = {};
-		this.eventsOne = {};
-
-		this.bind = function (ev,fn){
-				var ev = ev.toLocaleLowerCase();
-				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
-				return this;
-			}
-		this.trigger = function (ev,arg){
-				var ev = ev.toLocaleLowerCase();
-				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
-					{this.events[ev][i](this,arg)}
-				for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++)
-					{this.eventsOne[ev][i](this,arg);}
-				delete this.eventsOne[ev];
-
-				return this;
-			}
-		this.unbind = function (ev,fn){
-				var ev = ev.toLocaleLowerCase();
-				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				if (this.events[ev])
-					for (var i=0; i < this.events[ev].length ;i++)
-					if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
-
-				if (this.eventsOne[ev])
-					for (var i=0; i < this.eventsOne[ev].length ;i++)
-					if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
-				return this;
-			}
-		this.one = function (ev,fn){
-			var ev = ev.toLocaleLowerCase();
-			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-			this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
-			return this;
-		}
 
 		var gMap = google.maps;
 		this.map = {}
@@ -117,7 +121,6 @@ $(function(){
 				_this.markers[id].setPosition(newLatLng);
 				_this.markers[newId] = _this.markers[id];
 				delete _this.markers[id];
-//				console.log(_this.markers);
 			}
 			return newId;
 		}
@@ -228,6 +231,7 @@ $(function(){
 		}
 
 		this.init = function(){
+			eventCommander.apply(this);
 
 			// init corners
 			$('img').wrap("<div class='img-wrapper corners corners-5 f-right'></div>");

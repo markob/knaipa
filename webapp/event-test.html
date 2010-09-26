@@ -14,109 +14,53 @@
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 	<script type="text/javascript">
 
-//		Object.prototype.bind = function (ev,fn){
-//			if (!this.events)this.events={};
-//			var ev = ev.toLocaleLowerCase();
-//			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-//
-//			this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
-//			return this;
-//		}
-//
-//		Object.prototype.one = function (ev,fn){
-//			if (!this.eventsOne)this.eventsOne={};
-//			var ev = ev.toLocaleLowerCase();
-//			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-//			this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
-//			return this;
-//		}
-//
-//		Object.prototype.trigger = function (ev){
-//					var ev = ev.toLocaleLowerCase();
-//					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-//					if (this.events)
-//						for (var i=0; this.events[ev] && i<this.events[ev].length;i++) this.events[ev][i](this)
-//
-//					if (this.eventsOne)
-//						for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++){
-//							this.eventsOne[ev][i](this);
-//							delete this.eventsOne[ev];
-//						}
-//
-//					return this;
-//				}
-//
-//		Object.prototype.unbind = function (ev,fn){
-//					var ev = ev.toLocaleLowerCase();
-//					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-//					if (this.events[ev])
-//						for (var i=0; i < this.events[ev].length ;i++)
-//						if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
-//
-//					if (this.eventsOne[ev])
-//						for (var i=0; i < this.eventsOne[ev].length ;i++)
-//						if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
-//
-//					return this;
-//				}
-
-//		var protoEvent = {}
-//		protoEvent.bind('protoEventTets', function(){ console.log('protoEventTets');})
-//		protoEvent.trigger('protoEventTets');
-//
-//		var protoEvent1 = {}
-//		protoEvent1.bind('protoEventTets', function(){ console.log('protoEventTets1');})
-//		protoEvent1.trigger('protoEventTets');
-
 		$(function(){
 			var latlng = new google.maps.LatLng(49.835657,24.048901);
 			var map = new google.maps.Map(document.getElementById("map"), { zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP});
 		})
 
 		var eventCommander = function(){
-			this.events = {};
-			this.eventsOne = {};
+			var events = {};
+			var eventsOne = {};
 
 			this.bind = function (ev,fn){
 					var ev = ev.toLocaleLowerCase();
 					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
+					events[ev] ? events[ev].push(fn) : (events[ev]=[]).push(fn)
 					return this;
 				}
 			this.trigger = function (ev){
 					var ev = ev.toLocaleLowerCase();
 					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
-						{this.events[ev][i](this)}
-					for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++)
-						{this.eventsOne[ev][i](this);}
-					delete this.eventsOne[ev];
+					for (var i=0; events[ev] && i<events[ev].length;i++) {events[ev][i](this)}
+					for (var i=0; eventsOne[ev] && i<eventsOne[ev].length;i++) {eventsOne[ev][i](this);}
+					delete eventsOne[ev];
 
 					return this;
 				}
 			this.unbind = function (ev,fn){
 					var ev = ev.toLocaleLowerCase();
 					ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-					if (this.events[ev])
-						for (var i=0; i < this.events[ev].length ;i++)
-						if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
+					if (events[ev])
+						for (var i=0; i < events[ev].length ;i++)
+						if (events[ev][i].toString() === fn.toString()) {events[ev].splice(i,1); break;}
 
-					if (this.eventsOne[ev])
-						for (var i=0; i < this.eventsOne[ev].length ;i++)
-						if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
+					if (eventsOne[ev])
+						for (var i=0; i < eventsOne[ev].length ;i++)
+						if (eventsOne[ev][i].toString() === fn.toString()) {eventsOne[ev].splice(i,1); break;}
 
 					return this;
 				}
 			this.one = function (ev,fn){
 				var ev = ev.toLocaleLowerCase();
 				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
+				eventsOne[ev] ? eventsOne[ev].push(fn) : (eventsOne[ev]=[]).push(fn)
 				return this;
 			}
 		}
 
 		var class = function(){
-			this.prototype = new eventCommander();
+			eventCommander.apply(this);
 		}
 
 		a = new eventCommander();
