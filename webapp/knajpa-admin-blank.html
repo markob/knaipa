@@ -19,7 +19,6 @@
 		<script type="text/javascript">
 			//test
 			window.getPosition = function (node){
-
 				Knajpa.map.identifyMarker({
 					address:$(node).text().trim(),
 					success: function (responce,status){
@@ -49,7 +48,7 @@
 
 					},
 					decline :function(){
-						 $(node).css ('border-bottom','2px dotted red');
+						 $(node).css ('border-bottom','2px dotted #f1a3a3');
 					}
 				})
 			}
@@ -79,7 +78,6 @@
 				var address = new separateInput({container: $('.description:first'),separator:';'})
 
 				address.container.bind('keydown',function(e){
-//					console.log(e);
 					function showPopup (){
 						suggestedPopup.show(address.getCursorPosition());
 					}
@@ -96,7 +94,9 @@
 
 				address
 					.bind('separate', function(_this,arg){
-							for (var i=0; i<arg.length; i++){ getPosition (arg[i][0]);}
+							for (var i=0; i<arg.length; i++){
+								getPosition (arg[i][0]);
+							}
 						})
 					.bind('change', function(_this, arg){
 							//Remove garbage markers
@@ -109,10 +109,10 @@
 							var sel = window.getSelection();
 							var selNode = _this.sel.anchorNode.parentNode;
 							var selOffset = _this.sel.anchorOffset;
-
+//							console.log(arg);
 							getPosition(arg);
 						})
-				var time = new separateInput({container: $('.description:eq(1)')})
+				var time = new editableArea({container: $('.description:eq(1)')})
 
 				// Controls init part
 				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
@@ -224,11 +224,12 @@
 								<h4>Адреса:</h4>
 								<span class="description" type="address"></span><!--Important! Do not put any space characters in editable element-->
 							</li>
-							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span> </li>
-							<li><h4>Телефон:</h4><span class="description">2-100-500</span> </li>
-							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>
-							<li><h4>Середній чек:</h4><span class="description">40-100 грн.</span> </li>
-							<li><h4>Форми розрахунку:</h4><span class="description">Бартер</span> </li>
+							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span></li>
+							<li><h4>Телефон:</h4><span class="description">2-100-500</span></li>
+							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span></li>
+							<li><h4>Середній чек:</h4><span class="description">40-100 грн.</span></li>
+							<li><h4>Форми розрахунку:</h4><span class="description">Бартер</span></li>
+							<li class="new-item"><h4>Новий пункт опису:</h4><span class="description">Опис</span></li>
 						</ul>
 
 						<h3>Додаткові послуги<span class="bottom"></span></h3>
