@@ -8,28 +8,37 @@ default_expiration: "3d"
 handlers:
 # css files handler
 - url: /css/(.*\.css)
-  static_files: css/\1
-  upload: css/.*\.css
+  static_files: client/css/\1
+  upload: client/css/.*\.css
 
-# css files handler
+# css framework images files handler
 - url: /css/(.*\.(png|gif))
-  static_files: css/\1
-  upload: css/.*\.(png|gif)
+  static_files: client/css/\1
+  upload: client/css/.*\.(png|gif)
 
 # javascript files handler
 - url: /js/(.*\.js)
-  static_files: js/\1
-  upload: js/.*\.js
+  static_files: client/js/\1
+  upload: client/js/.*\.js
+
+# content files handler
+- url: /content/(.*\.(png|gif|xml|xsl))
+  static_files: client/content/\1
+  upload: client/content/.*\.(png|gif|xml|xsl)
 
 # main entry point - index.html
 - url: /index\.html
-  static_files: content/index.html
-  upload: content/index\.html  
+  static_files: client/index.html
+  upload: client/index\.html  
 
 # work with articles (store, get and edit)
 - url: /article/.*
-  script: /apps/article.py
+  script: apps/article.py
 
 # test app which adds required data to datastore
 - url: /test/.*
-  script: /apps/tests.py  
+  script: apps/tests.py
+
+# simple test app - clock
+- url: /tests/clock
+  script: tests/clock.py
