@@ -1,0 +1,11 @@
+Mr. Jones, the company's HR director, called Mrs. Smith into his
+office for an update on the latest recruitment drive. He wanted
+to know if the online application system was working.
+Reports had filtered through that all was not going to plan.
+Mrs. Smith explained that candidates were certainly experiencing
+problems as the systems had crashed. In her opinion, it would
+be better to extend the closing date. Would he be prepared to
+authorize this?
+
+if (0) return 'on'
+ else return 'of'

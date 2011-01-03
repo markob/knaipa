@@ -59,13 +59,29 @@
 		}
 
 		this.setPointer = function(el, offset){
-			if (! _this.sel)_this.sel = window.getSelection();
+			_this.updateSelection();
+
+			var needFocus = false;
+
+			if (!offset && !el && $(_this.selNode).parent("div")[0] == _this.editabelEl[0]){
+				offset = _this.sel.anchorOffset;
+				el = _this.selNode;
+			} else {
+				el = el || _this.editabelEl[0];
+				offset = offset || 0;
+				needFocus = true;
+			}
+
+			console.log(_this.selNode, $(_this.selNode).find(":parent") , _this.editabelEl[0] == _this.selNode);
+
 
 			var range = document.createRange();
 			range.setStart(el, offset);
 			range.setEnd(el, offset);
+
 			_this.sel.removeAllRanges();
 			_this.sel.addRange(range);
+			if (needFocus) _this.editabelEl.trigger ('focus');
 
 			_this.updateSelection();
 		}
@@ -79,7 +95,7 @@
 
 			_this.container
 				.data('position','compact')
-				.bind('click', function(){ _this.editabelEl.trigger('focus')})
+				.bind('click', function(){ _this.setPointer();})
 				.bind('keydown',function(e){
 						window.setTimeout(function(){
 							if (_this.container.data('position') == 'compact' && (_this.editabelEl.height() > 20 || _this.container.width()-20 < _this.editabelEl.width())) {_this.makeExtended();}
@@ -89,6 +105,8 @@
 							}
 						}, 10)
 					})
+				.bind('focus',function(){_this.container.css({'z-index':99});})
+
 			_this.editabelEl
 				.bind('keydown',function(e){
 					if (e.keyCode == 13){ //Return
@@ -96,7 +114,6 @@
 						_this.container.trigger('keydown');
 						return false;
 					}})
-				.bind('focus',function(){_this.container.css({'z-index':99});})
 				.bind('blur',function(){_this.container.css({'z-index':0});})
 		}
 		this.init();

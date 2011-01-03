@@ -109,10 +109,12 @@
 							var sel = window.getSelection();
 							var selNode = _this.sel.anchorNode.parentNode;
 							var selOffset = _this.sel.anchorOffset;
-//							console.log(arg);
 							getPosition(arg);
 						})
-				var time = new editableArea({container: $('.description:eq(1)')})
+
+				$('li:not(.new-item) .description:not([type])').each(function(){
+					new editableArea({container: $(this)});
+				})
 
 				// Controls init part
 				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
@@ -153,6 +155,32 @@
 					window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
 				})
 
+				$(".new-item h4, .new-item span ").each(function(){
+					var newElement = $(this);
+					newElement.bind('click', function(){
+						var newInputs = newElement.parent()
+								.clone()
+								.removeClass('new-item')
+								.insertBefore(newElement.parent());
+
+						var title = new editableArea ({container: newInputs.find('h4')});
+						var description = new editableArea ({container: newInputs.find('span')});
+
+						title.editabelEl.one ('focus', function(){this.innerHTML="";})
+						description.editabelEl.one ('focus', function(){this.innerHTML="";})
+
+						//TODO: Fix memory leak (remove all editableArea objects)
+						newInputs.find('em.remove').bind('click',function(){newInputs.remove();});
+
+						if (this.tagName == "SPAN"){
+							description.setPointer();
+							//$(description.editabelEl).trigger('focus');
+						} else {
+							title.setPointer();
+						}
+					})
+				})
+
 				// Stuff of map's markers
 
 //				$("*[type=address] span").each(function(i){
@@ -174,7 +202,7 @@
 		</script>
 	</head>
 	<body>
-		<div id="globalWrapper" class="w-90">
+		<div id="globalWrapper" class="w-95">
 			<div id="header" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
 				<h1 id="logo">
 					<a href="/">Кнайпа</a>
@@ -229,7 +257,7 @@
 							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span></li>
 							<li><h4>Середній чек:</h4><span class="description">40-100 грн.</span></li>
 							<li><h4>Форми розрахунку:</h4><span class="description">Бартер</span></li>
-							<li class="new-item"><h4>Новий пункт опису:</h4><span class="description">Опис</span></li>
+							<li class="new-item"><h4>Новий пункт опису:</h4><span class="description">Опис</span><em class="remove"></em></li>
 						</ul>
 
 						<h3>Додаткові послуги<span class="bottom"></span></h3>
@@ -282,6 +310,7 @@
 								</li>
 								<li><h4>Додатково:</h4><span class="description">вздрожні ефєкт!</span> </li>
 						</ul>
+						<h3 class="new-item">Добавити новий розділ<span class="bottom"></span></h3>
 					</div>
 				</div>
 

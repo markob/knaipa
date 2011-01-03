@@ -47,8 +47,8 @@ a:active {  }
 /* Content elements
 ------------------------------ */
 
-.content h1, .content h2, .content h3, .content h4 { font: bold 1.7em Georgia, Arial, Helvetica, sans-serif; margin-bottom: .5em; }
-.content h2 { font-size: 1.5em; border-bottom: 1px solid #412905 }
+.content h1, .content h2, .content h3, .content h4 { font: 16px Georgia, Arial, Helvetica, sans-serif; margin-bottom: .5em; color:#333333;}
+.content h2 { font-size: 16px;}
 .content h3 { font-size: 1.3em; font-weight: bold; }
 .content h4 { font-size: 1.1em; font-weight: bold; }
 
@@ -61,7 +61,7 @@ sup, sub { vertical-align: baseline; position: relative; }
 sup { top: -0.4em; }
 sub { bottom: -0.3em; }
 
-hr { color: #ccc; background-color: #ccc; height: 1px; border-width: 0px; }
+hr	{background-color:#bfb9ac; border-width:0; color:#bfb9ac; height:1px; position:absolute; top:-11px; width:100%;}
 
 .em { font-style: italic; }
 .strong { font-weight: bold; }

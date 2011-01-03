@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/lib/xsl/jQuery.xslt.js"></script>
+		<script type="text/javascript" src="js/lib/adressing/jquery.address-1.1.min.js"></script>
+
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/saparate-input.js"></script>
+
+		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-base.css">
+		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-fsi-icons.css">
+		<link media="all" rel="stylesheet" href="css/style.css">
+
+		<style>
+
+			.knajpa-info	.description-block	{
+				background: none repeat scroll 0 0 #F1F1F1;
+				float: left;
+				font: 12px Tahoma;
+				margin: 0;
+				padding: 10px 0 20px;
+				width: 100%;
+			}
+			.knajpa-info	.description-block	.item{
+				float: left;
+				font: 12px Tahoma;
+				list-style: none outside none;
+				margin: 2px 0 0 17px;
+				overflow: visible !important;
+				position: relative;
+				width: 95%;
+			}
+
+			.knajpa-info	.description-block	.description	{
+				background: none repeat scroll 0 0 white;
+				border-radius: 7px 7px 7px 7px;
+				border-top: 1px solid #D9D9D9;
+				color: #1E1E1E;
+				font-size: 12px;
+				min-height: 16px;
+				float:left;
+				padding: 1px 8px 2px;
+
+				min-width: 55%;
+				max-width: 95%;
+			}
+
+			.knajpa-info	.description-block	h4	{
+				background: url("css/img/points-on-list.png") repeat-x scroll 0 bottom transparent;
+				margin-right: 4px;
+				float: left;
+				width: 40%;
+				color: #5F3217;
+				font: 12px Tahoma;
+				padding-right: 4px;}
+
+				.knajpa-info	.description-block	h4	span	{background-color: #F1F1F1}
+				.knajpa-info	.description-block	h4	span:after	{content:":";}
+				.knajpa-info	.description-block	h4	br	{display:none;}
+
+			.admin	.description-block	.item	em.remove	{background:url("css/img/main-back.png") repeat scroll -1px -372px transparent; display:none; height:23px; position:absolute; right:-8px; top:-7px; width:23px; z-index:100; cursor: pointer}
+			.admin	.description-block	.item:hover	em.remove	{display:block;}
+			.admin	.description-block	.new-item	em.remove	{display:none !important;}
+
+			.admin	.description-block .new-item	h4	{color:#bbbbbb;}
+			.admin	.description-block	.new-item	.description	{opacity: 0.5;}
+
+			.admin	h3.new-item	{opacity: 0.7;}
+
+			.admin	ul	li	.description	{ border-radius:7px; min-height:16px; -moz-border-radius:7px;
+				background:none repeat scroll 0 0 white; border-top:1px solid #D9D9D9; color:#1E1E1E; font-size:12px; padding:1px 8px 2px;
+				text-align:left; position:inherit;}
+					.admin	ul	li	.separator	div	span	{border-radius:3px; -moz-border-radius:3px; background:none repeat scroll 0 0 transparent; border:1px solid Silver; margin:2px; padding:0 5px; white-space:nowrap;}
+
+			.admin	.controls {background:url("css/img/horizontal-back-admin.png") repeat-y scroll 6px 0 transparent; height:31px; margin-top:-26px; position:absolute; right:-6px; top:60px; width:65px; z-index:99;}
+				.admin .controls em.t { background:url("css/img/main-back-admin.png") repeat scroll -168px 0 transparent; height:9px; position:absolute; top:-9px; width:100%; z-index:-1;}
+				.admin .controls em.b { background:url("css/img/main-back-admin.png") repeat scroll -168px -5px transparent; bottom:-20px; height:23px; overflow:visible; position:absolute; width:100%; z-index:-1;}
+
+				.admin	.controls	.button-save	{ background:url("css/img/main-back-admin.png") repeat scroll -120px 0 transparent; cursor:pointer; height:21px; margin-left:9px;margin-top:-5px; width:44px;}
+				.admin	.controls	.button-save:hover	{background-position:-120px -40px}
+
+				.admin	.controls	.button-cancel	{ background:url("css/img/main-back-admin.png") repeat scroll -120px -20px transparent; cursor:pointer; height:21px; margin-left:9px; width:44px;}
+				.admin	.controls	.button-cancel:hover	{background-position:-120px -60px}
+		</style>
+		<script>
+			$(function(){
+
+				$('#textInfo').xslt("content/knajpa.xml",'xsl/knajpa-admin.xsl', function(){
+					$(".description").attr('contenteditable',true);
+					$(".new-item").each(function(){
+
+						$(this).find('h4')
+									.attr('contenteditable','true')
+									.bind('focus',function(e){
+										var range = document.createRange();
+										range.selectNode(this.firstChild.firstChild);
+
+										var sel = window.getSelection();
+										sel.removeAllRanges();
+										sel.addRange(range);
+
+									})
+								.end()
+								.find('div.description')
+									.attr('contenteditable','true')
+									.bind('focus',function(){
+										var range = document.createRange();
+										range.selectNode(this.firstChild);
+
+										var sel = window.getSelection();
+										sel.removeAllRanges();
+										sel.addRange(range);
+									});
+
+						$(this).bind('click keypress', function(e){
+							if (e && !e.keyCode && !e.ctrlKey){
+
+								var newInputs = $(this)
+									.clone()
+									.removeClass('new-item')
+									.insertBefore(this);
+
+								var title = newInputs
+										.find('h4')
+										.bind('focus',function(e){
+											var range = document.createRange();
+											range.selectNodeContents(this.firstChild);
+
+											var sel = window.getSelection();
+											sel.removeAllRanges();
+											sel.addRange(range);
+
+											$(this).data('previousValue',$(this).html())
+
+										})
+										.bind("blur",function(){
+											if ($(this).data("previousValue") != $(this).html())
+												var data = {};
+												data.itemText = $(this).html();
+												data.itemGroup = $(this).parent().siblings("*[group-id]");
+												data.cmd = "update-item";
+
+												$.ajax({
+													type: "POST",
+													data: data,
+													url: 'knajpa',
+													success: function(msg){alert(msg);}
+												});
+												console.log("add or change item")
+										});
+
+								var description = newInputs
+										.find('div.description')
+										.bind('focus',function(){
+											var range = document.createRange();
+											range.selectNodeContents(this);
+
+											var sel = window.getSelection();
+											sel.removeAllRanges();
+											sel.addRange(range);
+										});
+
+								//TODO: Fix memory leak (remove all editableArea objects)
+								newInputs.find('em.remove').bind('click',function(){newInputs.remove();});
+
+								if (e.target.tagName == "DIV") description.focus();
+								else title.focus();
+							}
+						})
+					})
+
+					// Controls init part
+					var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
+							.bind('click',function(){
+								var data = {};
+
+								$("*[item-id]").each(function(){
+									var $this = $(this);
+									if ($this.find(".description")[0]) data[$this.attr("item-id")] = $this.find(".description").html();
+									else data[$this.attr("item-id")] = $this.html();
+								});
+
+								data.cmd = 'save';
+
+								$.ajax({
+										type: "POST",
+										data: data,
+										url: 'knajpa',
+										success: function(msg){alert(msg);}
+									});
+
+							})
+							.appendTo("#textInfo");
+
+					window.timeout=false;
+					$(document).bind("scroll",function (e){
+						if (window.timeout) clearTimeout(window.timeout);
+						var y = $(document).scrollTop() > 210 ? $(document).scrollTop() :210;
+						window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
+					})
+				});
+			})
+		</script>
+		<title>Knajpa - for your convenience </title>
+
+	</head>
+	<body>
+		<div id="globalWrapper" class="w-95">
+			<div id="header" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+				<h1 id="logo">
+					<a href="/">Кнайпа</a>
+				</h1>
+				<p id='Zamanilovo'>
+					Цей мего сервіс створений для вас
+					галактічєскі крутєйшими тіпами
+					і допоможе з вибором місця
+					для тусіння і знищеня піга.
+				</p>
+
+				<div id="search" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+					<form>
+						<span id='searchLegend'>пошук</span>
+						<div class="input corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+							<input class="icon i-search" type="text" name="search" value="Приклад: пиво 'Микулин'"/>
+						</div>
+						<a class="button corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+							Знайти
+						</a>
+					</form>
+				</div>
+				<span id="searchTips" class="w-40">
+					Тут мона навалити текст з підказкою, навіть і не одною, або просто додаткову інформацію.
+				</span>
+			</div>
+
+			<div id="content" class="columns content">
+
+				<div id="textInfo" class="admin"></div>
+
+				<div id="mediaInfo">
+					<h2 id='mediaTitle'>Кнайпа на мапі</h2>
+					<div id="map"></div>
+					<span id='mapTips'>Ще туту можна щось мінімальне написати</span>
+					<div class= "mediaContent corners corners-10"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+						Ще якась інфа
+					</div>
+				</div>
+			</div>
+
+			<div id="footer" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+				<p>Бла-бла-бла  бла-бла  бла-бла-бла-бла..</p>
+				<p>Хто шо зробив, хто як допоміг, а хто зайопував. Респекти у всі сторони</p>
+				<p>Копірайтед бай “Туса муділ” :D </p>
+			</div>
+
+		<!-- These extra divs/spans may be used as catch-alls to add extra imagery. -->
+			<div id="extraDiv1"><span></span></div>
+			<div id="extraDiv2"><span></span></div>
+			<div id="extraDiv3"><span></span></div>
+			<div id="extraDiv4"><span></span></div>
+			<div id="extraDiv5"><span></span></div>
+			<div id="extraDiv6"><span></span></div>
+		</div>
+
+	</body>
+</html>
