@@ -32,6 +32,8 @@
 			<em class="tr"></em><em class="tl"></em>  <!--Corners-->
 		</h3>
 		<div class="description-block">
+			<xsl:attribute name="group-id"><xsl:value-of select="@group-id"/></xsl:attribute>
+
 			<xsl:apply-templates select="item"/>
 
 			<div class="item new-item">

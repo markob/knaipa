@@ -138,10 +138,12 @@
 
 										})
 										.bind("blur",function(){
-											if ($(this).data("previousValue") != $(this).html())
+											if ($(this).data("previousValue") != $(this).html()){
+
 												var data = {};
-												data.itemText = $(this).html();
-												data.itemGroup = $(this).parent().siblings("*[group-id]");
+												data.itemText = $(this).text();
+												data.itemType=""
+												data.itemGroup = $(this).parents("[group-id]:first").attr('group-id');
 												data.cmd = "update-item";
 
 												$.ajax({
@@ -150,7 +152,7 @@
 													url: 'knajpa',
 													success: function(msg){alert(msg);}
 												});
-												console.log("add or change item")
+											}
 										});
 
 								var description = newInputs
