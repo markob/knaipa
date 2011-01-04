@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knajpa name="Гасафа Лямпо" id="000001" item-id="0000000">
+<knajpa id="000001">
+	<item item-id="0000000" name="name">Гасафа Лямпо</item>
 	<item item-id="0000022" name="тип кнайпи">ресторан</item>
 	<group group-id="000001" name="Загальні дані">
 		<item name="Адреса" item-id="0000002" type="address" ia="49.857131626112476" ja="24.020319380737302"> Кульпарківська 45 </item>

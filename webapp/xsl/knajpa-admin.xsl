@@ -8,13 +8,13 @@
 					<xsl:attribute name="knajpa-id"><xsl:value-of select="@id"/></xsl:attribute>
 
 					<div contenteditable="true" class="f-left">
-						<xsl:attribute name="item-id"><xsl:value-of select="@item-id"/></xsl:attribute>
-						<xsl:value-of select="@name"/>
+						<xsl:attribute name="item-id"><xsl:value-of select="./item[1]/@item-id"/></xsl:attribute>
+						<xsl:value-of select="./item[1]"/>
 					</div>
 
 					<span  contenteditable="true" class="f-left">
-						<xsl:attribute name="item-id"><xsl:value-of select="./item/@item-id"/></xsl:attribute>
-						<xsl:value-of select="./item"/>
+						<xsl:attribute name="item-id"><xsl:value-of select="./item[2]/@item-id"/></xsl:attribute>
+						<xsl:value-of select="./item[2]"/>
 					</span>
 					<em class="tr"></em><em class="tl"></em>
 				</h2>
