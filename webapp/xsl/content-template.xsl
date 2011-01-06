@@ -2,6 +2,64 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output encoding="utf-8" method="html"></xsl:output>
 
+	<!--List-->
+	<xsl:template match="request[@type = 'list']">
+			<xsl:apply-templates select="knajpa|article" mode="list"/>
+	</xsl:template>
+
+	<xsl:template match="article" mode="list">
+
+		<div class='articleItem'><hr/>
+			<h2>
+				<span class="index"><xsl:value-of select="position()"></xsl:value-of></span>
+				<xsl:value-of select="title"/>
+			</h2>
+			<div class="img-wrapper corners corners-5 f-right">
+				<img src="content/img/armenian-yard.png" class="f-right"/>
+			</div>
+			<article><xsl:copy-of select="description//*"/></article>
+			<a href="#"><xsl:value-of select="cut"/></a>
+		</div>
+
+	</xsl:template>
+
+	<xsl:template match="knajpa" mode="list">
+		<div class='knajpaItem'><hr/>
+			<h2><span class="index"><xsl:value-of select="position()"></xsl:value-of></span>Просто Кнайпа</h2>
+
+			<div class="img-wrapper corners corners-5 f-right">
+				<img src="content/img/man-on-stairs.png" class="f-right"/>
+			</div>
+
+			<div class="knajpa-info-wraper">
+				<p>
+					Нічний клюб<br/>
+					8:00 - 22:00<br/>
+					вулю Героїв Упаб 72<br/>
+				</p>
+				<p>
+					Телефон: <br/>
+					(032) 226-18-34<br/>
+					моб.: 097 123-45-67
+				</p>
+				<p>
+					Цінова категорія:<br/>
+					будні 100-200 грн.<br/>
+					свята 150 - 500 грн.<br/>
+				</p>
+				<p class="tags">
+					<a>Wi-Fi</a><span class="separator"></span>
+					<a>TB</a><span class="separator"></span>
+					<a>Зал для курців</a><span class="separator"></span>
+					<a>Стриптиз</a><span class="separator"></span>
+					<a>Face control</a><span class="separator"></span>
+					<a>Розважальні автомати</a>
+				</p>
+			</div>
+
+		</div>
+	</xsl:template>
+
 	<xsl:template match="item">
 		<div class='knajpaItem'>
 			<h2>
