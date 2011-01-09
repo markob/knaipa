@@ -7,58 +7,50 @@
 			<xsl:apply-templates select="knajpa|article" mode="list"/>
 	</xsl:template>
 
-	<xsl:template match="article" mode="list">
-
-		<div class='articleItem'><hr/>
-			<h2>
-				<span class="index"><xsl:value-of select="position()"></xsl:value-of></span>
-				<xsl:value-of select="title"/>
-			</h2>
-			<div class="img-wrapper corners corners-5 f-right">
-				<img src="content/img/armenian-yard.png" class="f-right"/>
+		<!--Articles in list-->
+		<xsl:template match="article" mode="list">
+			<div class='articleItem'><hr/>
+				<h2>
+					<span class="index"><xsl:value-of select="position()"></xsl:value-of></span>
+					<xsl:value-of select="title"/>
+				</h2>
+				<div class="img-wrapper corners corners-5 f-right">
+					<img src="content/img/armenian-yard.png" class="f-right"/>
+				</div>
+				<xsl:copy-of select="description//*"/>
+				<a href="#"><xsl:value-of select="cut"/></a>
 			</div>
-			<article><xsl:copy-of select="description//*"/></article>
-			<a href="#"><xsl:value-of select="cut"/></a>
-		</div>
+		</xsl:template>
 
-	</xsl:template>
-
-	<xsl:template match="knajpa" mode="list">
-		<div class='knajpaItem'><hr/>
-			<h2><span class="index"><xsl:value-of select="position()"></xsl:value-of></span>Просто Кнайпа</h2>
-
-			<div class="img-wrapper corners corners-5 f-right">
-				<img src="content/img/man-on-stairs.png" class="f-right"/>
+		<!--Knajpas in list-->
+		<xsl:template match="knajpa" mode="list">
+			<div class='knajpaItem'><hr/>
+				<h2>
+					<span class="index"><xsl:value-of select="position()"></xsl:value-of></span>
+					<xsl:value-of select="name"/>
+				</h2>
+				<div class="img-wrapper corners corners-5 f-right">
+					<img src="content/img/man-on-stairs.png" class="f-right"/>
+				</div>
+				<div class="knajpa-info-wraper">
+					<xsl:for-each select="description">
+						<p>
+							<xsl:for-each select="item">
+								<xsl:value-of select="."/><br/>
+							</xsl:for-each>
+						</p>
+					</xsl:for-each>
+					<p class="tags">
+						<xsl:for-each select="tags/item">
+							<a><xsl:value-of select="."/></a>
+							<span class="separator"></span>
+						</xsl:for-each>
+					</p>
+				</div>
 			</div>
+		</xsl:template>
 
-			<div class="knajpa-info-wraper">
-				<p>
-					Нічний клюб<br/>
-					8:00 - 22:00<br/>
-					вулю Героїв Упаб 72<br/>
-				</p>
-				<p>
-					Телефон: <br/>
-					(032) 226-18-34<br/>
-					моб.: 097 123-45-67
-				</p>
-				<p>
-					Цінова категорія:<br/>
-					будні 100-200 грн.<br/>
-					свята 150 - 500 грн.<br/>
-				</p>
-				<p class="tags">
-					<a>Wi-Fi</a><span class="separator"></span>
-					<a>TB</a><span class="separator"></span>
-					<a>Зал для курців</a><span class="separator"></span>
-					<a>Стриптиз</a><span class="separator"></span>
-					<a>Face control</a><span class="separator"></span>
-					<a>Розважальні автомати</a>
-				</p>
-			</div>
 
-		</div>
-	</xsl:template>
 
 	<xsl:template match="item">
 		<div class='knajpaItem'>
@@ -198,5 +190,4 @@
 						</li>
 					</xsl:if>
 				</xsl:template>
-
 </xsl:stylesheet>
