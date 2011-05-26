@@ -5,6 +5,49 @@
 
 String.prototype.trim = function (){ return this.replace(/^\s*(\S+(\s+\S+)*)\s*$/gim,"$1");}
 
+var eventCommander = function(){
+	var events = {};
+	var eventsOne = {};
+
+	this.bind = function (ev,fn){
+			var ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			events[ev] ? events[ev].push(fn) : (events[ev]=[]).push(fn)
+			return this;
+		}
+
+	this.one = function (ev,fn){
+		var ev = ev.toLocaleLowerCase();
+		ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+		eventsOne[ev] ? eventsOne[ev].push(fn) : (eventsOne[ev]=[]).push(fn)
+		return this;
+	}
+
+	this.trigger = function (ev,arg){
+			var ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			for (var i=0; events[ev] && i<events[ev].length;i++) {events[ev][i](this,arg)}
+			for (var i=0; eventsOne[ev] && i<eventsOne[ev].length;i++) {eventsOne[ev][i](this,arg);}
+			delete eventsOne[ev];
+
+			return this;
+		}
+
+	this.unbind = function (ev,fn){
+			var ev = ev.toLocaleLowerCase();
+			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
+			if (events[ev])
+				for (var i=0; i < events[ev].length ;i++)
+				if (events[ev][i].toString() === fn.toString()) {events[ev].splice(i,1); break;}
+
+			if (eventsOne[ev])
+				for (var i=0; i < eventsOne[ev].length ;i++)
+				if (eventsOne[ev][i].toString() === fn.toString()) {eventsOne[ev].splice(i,1); break;}
+
+			return this;
+		}
+}
+
 /**
  * Global object for Knajpa.
  */
@@ -12,45 +55,6 @@ $(function(){
 	var Map = function (initObj){
 		var _this = this;
 		var geocoder = new google.maps.Geocoder();
-
-		this.events = {};
-		this.eventsOne = {};
-
-		this.bind = function (ev,fn){
-				var ev = ev.toLocaleLowerCase();
-				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				this.events[ev] ? this.events[ev].push(fn) : (this.events[ev]=[]).push(fn)
-				return this;
-			}
-		this.trigger = function (ev,arg){
-				var ev = ev.toLocaleLowerCase();
-				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				for (var i=0; this.events[ev] && i<this.events[ev].length;i++)
-					{this.events[ev][i](this,arg)}
-				for (var i=0; this.eventsOne[ev] && i<this.eventsOne[ev].length;i++)
-					{this.eventsOne[ev][i](this,arg);}
-				delete this.eventsOne[ev];
-
-				return this;
-			}
-		this.unbind = function (ev,fn){
-				var ev = ev.toLocaleLowerCase();
-				ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-				if (this.events[ev])
-					for (var i=0; i < this.events[ev].length ;i++)
-					if (this.events[ev][i].toString() === fn.toString()) { this.events[ev].splice(i,1); break;}
-
-				if (this.eventsOne[ev])
-					for (var i=0; i < this.eventsOne[ev].length ;i++)
-					if (this.eventsOne[ev][i].toString() === fn.toString()) { this.eventsOne[ev].splice(i,1); break;}
-				return this;
-			}
-		this.one = function (ev,fn){
-			var ev = ev.toLocaleLowerCase();
-			ev = (ev.indexOf('on') != 0) ? 'on'+ev : ev;
-			this.eventsOne[ev] ? this.eventsOne[ev].push(fn) : (this.eventsOne[ev]=[]).push(fn)
-			return this;
-		}
 
 		var gMap = google.maps;
 		this.map = {}
@@ -100,8 +104,6 @@ $(function(){
 				if (arguments[2]) initObj.icon = arguments[2];
 			}
 
-			console.log(_this.markers);
-
 			var latlng = new google.maps.LatLng(initObj.ia,initObj.ja);
 
 			if (!_this.markers[initObj.ia+'_'+initObj.ja]){
@@ -119,7 +121,6 @@ $(function(){
 				_this.markers[id].setPosition(newLatLng);
 				_this.markers[newId] = _this.markers[id];
 				delete _this.markers[id];
-//				console.log(_this.markers);
 			}
 			return newId;
 		}
@@ -205,7 +206,6 @@ $(function(){
 			//TODO: move to normal path
 				//content/content-article-template.xml
 				//content/content-list-template.xml
-
 			if (/blank/gim.test(window.location)){}
 			else if (/admin/gim.test(window.location)){ //TODO:Remove this temporary admin check
 				$.ajax({
@@ -217,12 +217,21 @@ $(function(){
 			else if (/knajpa/gim.test(window.location)){
 				$.ajax({ dataType: "xml", url: 'content/knajpa.xml', success: feelData});
 			}
+			else if ($.address.path() && $.address.path().indexOf('query')+1){
+				$.ajax({
+					dataType: "xml",
+					url: 'search?'+$.address.path().replace('/',''),
+					success:function(xml){feelData(xml)},
+					error: function(xml){feelData(xml)}
+				});
+			}
 			else if ($.address.path() && $.address.path() != '/'){
 				$.ajax({ dataType: "xml", url: 'article?cmd=get;id='+$.address.path().replace('/',''), success: feelData});}
 			else { $.ajax({ dataType: "xml", url: 'article?cmd=list', success: feelData}); }
 		}
 
 		this.init = function(){
+			eventCommander.apply(this);
 
 			// init corners
 			$('img').wrap("<div class='img-wrapper corners corners-5 f-right'></div>");
@@ -250,5 +259,16 @@ $(function(){
 		this.init();
 		return this;
 	})();
-
+	
+	var Search = (function (){
+		_this = this;
+		this.init = function(){
+			$("#search a").bind('click',function(e){
+				$(this).attr('href','#query='+$("#search input").attr('value'));
+				e.stopPropagation();
+			})
+		}
+		this.init();
+		return this
+	})();
 });

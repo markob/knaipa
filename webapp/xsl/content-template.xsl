@@ -2,6 +2,56 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output encoding="utf-8" method="html"></xsl:output>
 
+	<!--List-->
+	<xsl:template match="request[@type = 'list']">
+			<xsl:apply-templates select="knajpa|article" mode="list"/>
+	</xsl:template>
+
+		<!--Articles in list-->
+		<xsl:template match="article" mode="list">
+			<div class='articleItem'><hr/>
+				<h2>
+					<span class="index"><xsl:value-of select="position()"></xsl:value-of></span>
+					<xsl:value-of select="title"/>
+				</h2>
+				<div class="img-wrapper corners corners-5 f-right">
+					<img src="content/img/armenian-yard.png" class="f-right"/>
+				</div>
+				<xsl:copy-of select="description//*"/>
+				<a href="#"><xsl:value-of select="cut"/></a>
+			</div>
+		</xsl:template>
+
+		<!--Knajpas in list-->
+		<xsl:template match="knajpa" mode="list">
+			<div class='knajpaItem'><hr/>
+				<h2>
+					<span class="index"><xsl:value-of select="position()"></xsl:value-of></span>
+					<xsl:value-of select="name"/>
+				</h2>
+				<div class="img-wrapper corners corners-5 f-right">
+					<img src="content/img/man-on-stairs.png" class="f-right"/>
+				</div>
+				<div class="knajpa-info-wraper">
+					<xsl:for-each select="description">
+						<p>
+							<xsl:for-each select="item">
+								<xsl:value-of select="."/><br/>
+							</xsl:for-each>
+						</p>
+					</xsl:for-each>
+					<p class="tags">
+						<xsl:for-each select="tags/item">
+							<a><xsl:value-of select="."/></a>
+							<span class="separator"></span>
+						</xsl:for-each>
+					</p>
+				</div>
+			</div>
+		</xsl:template>
+
+
+
 	<xsl:template match="item">
 		<div class='knajpaItem'>
 			<h2>
@@ -140,5 +190,4 @@
 						</li>
 					</xsl:if>
 				</xsl:template>
-
 </xsl:stylesheet>

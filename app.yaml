@@ -1,5 +1,5 @@
-application: knajpa
-version: 1
+application: knaipa-ua
+version: 13-search-dev
 runtime: python
 api_version: 1
 
@@ -53,14 +53,16 @@ handlers:
 - url: /static
   script: main.py
 
-
 ####################################################################
 # Script Handlers Section
 ####################################################################
 
 # work with articles (store, get and edit)
-- url: /articles.*
+- url: /article.*
   script: src/knajpa/handlers/articles.py
+  
+- url: /knajpa.*
+  script: src/knajpa/handlers/restaurant.py
 
 # handles search engine requests (to index and search)
 - url: /search.*
@@ -79,9 +81,9 @@ handlers:
   script: src/knajpa/handlers/services.py
 
 # documents indexing service url
-- url: /tasks/index
-  script: src/knajpa/handlers/search.py
-  login: admin
+- url: /index
+  script: src/knajpa/handlers/index.py
+#  login: admin # temporary commented
 
 # test app which adds required data to datastore
 - url: /test/.*

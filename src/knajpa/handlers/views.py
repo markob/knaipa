@@ -19,5 +19,5 @@ def admin_pages(request):
 
 def articles(request):
     article_handler = ArticleHandler
-    article_handler.initialize(request,response)
+    #article_handler.initialize(request,response)
     return article_handler.response

@@ -1,3 +1,4 @@
-from knajpa.utils import update_lib_path
+from knajpa.registry import Registry
 
-update_lib_path()
+Registry['datastore'] = 'knajpa'
+Registry['docs_to_index_queue_max_size'] = 1

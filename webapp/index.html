@@ -17,7 +17,7 @@
 		<title>Knajpa - for your convenience </title>
 	</head>
 	<body>
-		<div id="globalWrapper" class="w-90">
+		<div id="globalWrapper" class="w-95">
 			<div id="header" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
 				<h1 id="logo">
 					<a href="/">Кнайпа</a>
@@ -30,15 +30,13 @@
 				</p>
 				
 				<div id="search" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
-					<form>
 						<span id='searchLegend'>пошук</span>
 						<div class="input corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
 							<input class="icon i-search" type="text" name="search" value="Приклад: пиво 'Микулин'"/>
 						</div>
-						<a class="button corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
+						<a href="#query=''" class="button corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
 							Знайти
 						</a>
-					</form>
 				</div>
 				<span id="searchTips" class="w-40">
 					Тут мона навалити текст з підказкою, навіть і не одною, або просто додаткову інформацію.
@@ -46,6 +44,24 @@
 			</div>
 			
 			<div id="content" class="columns content">
+
+				<div class="navigation">
+
+					<a href="#articles" class="menu-item activ-menu">Статті<em class="r"></em><em class="l"></em></a>
+					<a href="#knajpas" class="menu-item">Кнайпи<em class="r"></em><em class="l"></em></a>
+					<a  href="#all" class="menu-item">Все<em class="r"></em><em class="l"></em></a>
+
+					<div class="pager">
+						<span class="count">всього сторінок <b>8</b></span>
+
+						<span class="current">
+							<a href="#prev" class="left"></a>
+							2
+							<a href="#next" class="right"></a>
+						</span>
+					</div>
+				</div>
+
 				<div id="textInfo">
 				</div>
 				
@@ -55,6 +71,18 @@
 					<span id='mapTips'>Ще туту можна щось мінімальне написати</span>
 					<div class= "mediaContent corners corners-10"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
 						Ще якась інфа
+					</div>
+				</div>
+
+				<div class="navigation">
+					<div class="pager">
+						<span class="count">всього сторінок <b>8</b></span>
+
+						<span class="current">
+							<a href="#prev" class="left"></a>
+							2
+							<a href="#next" class="right"></a>
+						</span>
 					</div>
 				</div>
 			</div>

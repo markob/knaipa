@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC  "-//W3C//DTD XHTML 1.0 Strict//EN" "www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -8,8 +8,8 @@
 
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
-		<script src="js/main.js"></script>
-		<script src="js/saparate-input.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/saparate-input.js"></script>
 
 		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-base.css">
 		<link media="all" rel="stylesheet" href="css/css-framework/css/cssf-fsi-icons.css">
@@ -19,7 +19,6 @@
 		<script type="text/javascript">
 			//test
 			window.getPosition = function (node){
-
 				Knajpa.map.identifyMarker({
 					address:$(node).text().trim(),
 					success: function (responce,status){
@@ -27,8 +26,10 @@
 
 							var result = ''
 							for (var i=0; i<responce.length; i++){
+								result += '<li>'
 								for (var j=0; j < responce[i].address_components.length ;j++)
-									result += (responce[i].address_components[j].long_name) +', '
+									result += (responce[i].address_components[j].long_name)
+								result += '</li>'
 								 result +="<br/>";
 							}
 							suggestedPopup.setData(result);
@@ -47,32 +48,10 @@
 
 					},
 					decline :function(){
-						 $(node).css ('border-bottom','2px dotted red');
+						 $(node).css ('border-bottom','2px dotted #f1a3a3');
 					}
 				})
 			}
-
-			// http://maps-api-ssl.google.com/maps/suggest?
-			//		q=%D0%9B%D0%B8%D1%87&
-			// 		cp=3&
-			// 		ll=37.0625,-95.677068&
-			// 		spn=34.122306,114.169922&
-			// 		hl=en&gl=&v=2&json=a&auth=4c3a4cf1QzGfLMD5aUDw7ou3Sm-XFWaO4uw&src=1,2&num=10&numps=5&callback=_xdc_._5gbihlrj7
-
-			//https://maps-api-ssl.google.com/maps/suggest?
-			// 		q=New&cp=3&
-			// 		ll=37.0625,-95.677068&
-			// 		spn=34.122306,114.169922&
-			// 		hl=en&
-			// 		gl=&
-			// 		v=2&
-			// 		json=a&
-			// 		auth=4c3a5419UKXiKdsdX290LpVHb72YACjESlw&
-			// 		src=1,2&
-			// 		num=10&
-			// 		numps=5&
-			// 		callback=_xdc_._6gbiipngp
-
 
 			var suggestedPopup = {
 				show:function (initObj){
@@ -81,9 +60,11 @@
 						this.container.append ('<em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em><em class="r"></em><em class="l"></em><em class="t"></em><em class="b"></em>')
 					}
 					this.container.css({top: initObj.top, left: initObj.left, display: 'block'});
+					this.isShowed = true;
 				},
 				hide: function(){
 					this.container.css({display: 'none'});
+					this.isShowed = false;
 				},
 				setData: function(content){
 					if (!this.container){this.container = $('<div class="suggestion">test</div>').appendTo(document.body);}
@@ -94,11 +75,28 @@
 			}
 
 			$(function(){
-				var address = new separateInput({container: $('.description:first')})
+				var address = new separateInput({container: $('.description:first'),separator:';'})
+
+				address.container.bind('keydown',function(e){
+					function showPopup (){
+						suggestedPopup.show(address.getCursorPosition());
+					}
+
+					if (e.keyCode == 27 && suggestedPopup.isShowed ){ //27 - esc
+						suggestedPopup.hide();
+						address.unbind('change',showPopup);
+					}
+					if (e.ctrlKey && e.keyCode == 32 && !suggestedPopup.isShowed){ // 32 - space;
+						showPopup();
+						address.bind('change',showPopup);
+					}
+				})
 
 				address
 					.bind('separate', function(_this,arg){
-							for (var i=0; i<arg.length; i++){ getPosition (arg[i][0]);}
+							for (var i=0; i<arg.length; i++){
+								getPosition (arg[i][0]);
+							}
 						})
 					.bind('change', function(_this, arg){
 							//Remove garbage markers
@@ -111,28 +109,43 @@
 							var sel = window.getSelection();
 							var selNode = _this.sel.anchorNode.parentNode;
 							var selOffset = _this.sel.anchorOffset;
-
-							$(selNode).html($(selNode).text().slice(0, selOffset)+'<em class="coordinates"></em>'+$(selNode).text().slice(selOffset));
-
-							var pos = $('.coordinates');
-							suggestedPopup.show({top:pos.offset().top, left:pos.offset().left});
-							pos.remove()
-
-							$(selNode).html($(selNode).text());
-							var range = document.createRange();
-							range.setStart(selNode.firstChild, selOffset);
-							range.setEnd(selNode.firstChild, selOffset);
-							sel.removeAllRanges();
-							sel.addRange(range);
-
 							getPosition(arg);
 						})
 
-				var time = new separateInput({container: $('.description:eq(1)')})
+				$('li:not(.new-item) .description:not([type])').each(function(){
+					new editableArea({container: $(this)});
+				})
 
 				// Controls init part
 				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
-						.bind('click',function(){alert('save')})
+						.bind('click',function(){
+							window.data = {};
+							data.knajpaName = $('#textInfo h2:first div:first').text()
+							data.knajpaType = $('#textInfo h2:first div:eq(1)').text()
+//							data.address=[{name:'Личаківська 1, Львів', ia:'49.840088', ja:'24.044469'},{name:'Смольського 3,Львів', ia:'49.840372', ja:'24.040047'}, ]
+							$('#textInfo li').each(function(){
+								var item = $(this)
+								if (item.find('span.description').attr('type') == 'address'){
+									data[item.find('h4').text()] = []
+									item.find('span[id]').each(function(){
+										var location = {}
+										location.name = $(this).text()
+										location.ia = $(this).attr('id').match(/[^_]+/gim)[0]
+										location.ja = $(this).attr('id').match(/[^_]+/gim)[1]
+										data[item.find('h4').text()].push(location);
+									})
+								}else { data[item.find('h4').text()] = item.find('span.description').text();}
+							})
+
+							data.cmd = 'save';
+							$.ajax({
+									type: "POST",
+									data: data,
+									url: 'knajpa',
+									success: function(msg){alert(msg);}
+								});
+
+						})
 						.appendTo("#textInfo");
 
 				window.timeout=false;
@@ -140,6 +153,32 @@
 					if (window.timeout) clearTimeout(window.timeout);
 					var y = $(document).scrollTop() > 210 ? $(document).scrollTop() :210;
 					window.timeout = setTimeout(function(){controls.animate({top:y-140});},150)
+				})
+
+				$(".new-item h4, .new-item span ").each(function(){
+					var newElement = $(this);
+					newElement.bind('click', function(){
+						var newInputs = newElement.parent()
+								.clone()
+								.removeClass('new-item')
+								.insertBefore(newElement.parent());
+
+						var title = new editableArea ({container: newInputs.find('h4')});
+						var description = new editableArea ({container: newInputs.find('span')});
+
+						title.editabelEl.one ('focus', function(){this.innerHTML="";})
+						description.editabelEl.one ('focus', function(){this.innerHTML="";})
+
+						//TODO: Fix memory leak (remove all editableArea objects)
+						newInputs.find('em.remove').bind('click',function(){newInputs.remove();});
+
+						if (this.tagName == "SPAN"){
+							description.setPointer();
+							//$(description.editabelEl).trigger('focus');
+						} else {
+							title.setPointer();
+						}
+					})
 				})
 
 				// Stuff of map's markers
@@ -163,7 +202,7 @@
 		</script>
 	</head>
 	<body>
-		<div id="globalWrapper" class="w-90">
+		<div id="globalWrapper" class="w-95">
 			<div id="header" class="corners"><em class="tl"></em><em class="tr"></em><em class="bl"></em><em class="br"></em>
 				<h1 id="logo">
 					<a href="/">Кнайпа</a>
@@ -198,8 +237,8 @@
 						<em class="bl"></em><em class="br"></em>
 
 						<h2 class="corners corners-10">
-							Гасафа Лямпо
-							<span>ресторан</span>
+							<div contenteditable="true" class="f-left">Гасафа Лямпо</div>
+							<div contenteditable="true" class="f-left"><span>ресторан</span></div>
 							<em class="tr"></em><em class="tl"></em>
 						</h2>
 
@@ -213,11 +252,12 @@
 								<h4>Адреса:</h4>
 								<span class="description" type="address"></span><!--Important! Do not put any space characters in editable element-->
 							</li>
-							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span> </li>
-							<li><h4>Телефон:</h4><span class="description">2-100-500</span> </li>
-							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span> </li>
-							<li><h4>Середній чек:</h4><span class="description">40-100 грн.</span> </li>
-							<li><h4>Форми розрахунку:</h4><span class="description">Бартер</span> </li>
+							<li><h4>Години роботи:</h4><span class="description">11:00 - 02:00</span></li>
+							<li><h4>Телефон:</h4><span class="description">2-100-500</span></li>
+							<li><h4>Вебсайт:</h4><span class="description"><a href="#">www.gasovaLaeeeempa.lviv.ua</a></span></li>
+							<li><h4>Середній чек:</h4><span class="description">40-100 грн.</span></li>
+							<li><h4>Форми розрахунку:</h4><span class="description">Бартер</span></li>
+							<li class="new-item"><h4>Новий пункт опису:</h4><span class="description">Опис</span><em class="remove"></em></li>
 						</ul>
 
 						<h3>Додаткові послуги<span class="bottom"></span></h3>
@@ -270,6 +310,7 @@
 								</li>
 								<li><h4>Додатково:</h4><span class="description">вздрожні ефєкт!</span> </li>
 						</ul>
+						<h3 class="new-item">Добавити новий розділ<span class="bottom"></span></h3>
 					</div>
 				</div>
 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knajpa name="Гасафа Лямпо" id="000001" type="ресторан">
-	<group name="Загальні дані">
-		<item name="Адреса" type="address" ia="49.857131626112476" ja="24.020319380737302"> Кульпарківська 45 </item>
+<knajpa id="000001">
+	<item item-id="0000000" name="name">Гасафа Лямпо</item>
+	<item item-id="0000022" name="тип кнайпи">ресторан</item>
+	<group group-id="000001" name="Загальні дані">
+		<item name="Адреса" item-id="0000002" type="address" ia="49.857131626112476" ja="24.020319380737302"> Кульпарківська 45 </item>
 
 		<!--
 		Also you can use second structure, when you have more than 1 address.
@@ -11,36 +13,36 @@
 			<item ia="50.857131626112476" ja="24.020319380737302">Кульпарківська 47</item>
 		</item>
 		-->
-		<item name="Години роботи">11:00 - 02:00</item>
-		<item name="Телефон">2-100-500</item>
-		<item name="Вебсайт"><a href="http://google.com"> www.gasovaLaeeeempa.lviv.ua</a></item>
-		<item name="Середній чек">40-100 грн.</item>
-		<item name="Форми розрахунку">Бартер</item>
+		<item item-id="0000021" name="Години роботи">11:00 - 02:00</item>
+		<item item-id="0000003" name="Телефон">2-100-500</item>
+		<item item-id="0000004" name="Вебсайт"><a href="http://google.com"> www.gasovaLaeeeempa.lviv.ua</a></item>
+		<item item-id="0000005"  name="Середній чек">40-100 грн.</item>
+		<item item-id="0000006"  name="Форми розрахунку">Бартер</item>
 	</group>
-	<group name="Додаткові послуги">
-		<item name="Доставка їжі">-</item>
-		<item name="Парковка">-</item>
-		<item name="Організація бенкетів">-</item>
-		<item name="Кількість посадочних мість">120-160</item>
-		<item name="Кількість залів">5</item>
-		<item name="особливості" type="tags">
+	<group group-id="000002" name="Додаткові послуги">
+		<item item-id="0000007" name="Доставка їжі">-</item>
+		<item item-id="0000008" name="Парковка">-</item>
+		<item item-id="0000009" name="Організація бенкетів">-</item>
+		<item item-id="0000010"  name="Кількість посадочних мість">120-160</item>
+		<item item-id="0000011" name="Кількість залів">5</item>
+		<item item-id="0000012" name="особливості" type="tags">
 			<a href="#">замовлення столиків</a>,
 			<a href="#">зал для курців</a>,
 			<a href="#">літній майдан</a>
 		</item>
 	</group>
-	<group name="Кухня">
-		<item name="Тип кухні">Українська</item>
-		<item name="Фірмова страва/напій">Жорчіг</item>
-		<item name="Додатково">Сочні пяні воєнам!</item>
+	<group group-id="000003" name="Кухня">
+		<item item-id="0000013" name="Тип кухні">Українська</item>
+		<item item-id="0000014" name="Фірмова страва/напій">Жорчіг</item>
+		<item item-id="0000015" name="Додатково">Сочні пяні воєнам!</item>
 	</group>
-	<group name="Медіа та розваги">
-		<item name="Медіа та розваги">Українська</item>
-		<item name="Тип музики та напрямок">мітооол \m/</item>
-		<item name="Додатково">вздрожні ефєкт!</item>
+	<group group-id="000004" name="Медіа та розваги">
+		<item item-id="0000016" name="Медіа та розваги">Українська</item>
+		<item item-id="0000017" name="Тип музики та напрямок">мітооол \m/</item>
+		<item item-id="0000018" name="Додатково">вздрожні ефєкт!</item>
 	</group>
-	<group name="Інше">
-		<item name="Медіа та розваги">Українська</item>
+	<group group-id="000005" name="Інше">
+		<item item-id="0000019" name="Медіа та розваги">Українська</item>
 		<item name="Хвото" type="img">
 			<item src="content/img/lampa-1.png" alt="lampa-1"/>
 			<item src="content/img/lampa-2.png" alt="lampa-2"/>
@@ -50,6 +52,6 @@
 			<item src="content/img/lampa-6.png" alt="lampa-6"/>
 			<item src="content/img/lampa-7.png" alt="lampa-7"/>
 		</item>
-		<item name="Додатково">вздрожні ефєкт!</item>
+		<item item-id="0000020" name="Додатково">вздрожні ефєкт!</item>
 	</group>
 </knajpa>

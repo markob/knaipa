@@ -1,35 +1,30 @@
-""" Checks base functionality of the services engine """
+'''
+Created on Aug 7, 2010
+
+@author: apetrenko
+'''
 import unittest
-import urllib
+from knajpa.models.articles import Article
+from knajpa.models.restaurant import Knajpa, Address
+import logging
 
-from xml.dom import minidom
 
-# List of test cases
+class TestServiceKnajpa(unittest.TestCase):
 
-# 1) valid add/update/remove cases:
-#   a) add a new base service
-#   b) add a new extended service
-#   c) update an existing service data
-#   d) remove an existing service
 
-# 2) invalid cases:
-#   a) add a new base service with bad data
-#   b) add a new extended service with bad data
-#   c) update an existing service with bad data
-#   d) remove nonexisting service
-
-# 3) get list of services
-#   a) get list of services
-class GetListTest(unittest.TestCase):
-    """ Checks getting a list of services """
-    
-    def testListSyntax(self):
-        """ services?cmd=list should return a list of services or empty list """
-        http = urllib.urlopen('http://localhost:8080/services?cmd=list')
-        dom = minidom.parse(http)
+    def testAddNewKnajpa(self):
         
-        print(dom)
+        knajpa = Knajpa(name= 'TestKnajpa')
+        knajpa.put()
+        
+        Address(knajpa,ja=0.098,ia=0.13 ,address='123 First Ave., Seattle, WA, 98101').put()
+        
+        
+        for item in Knajpa.all():
+            logging.info('Knajpa name'+item.name);
+        
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    #import sys;sys.argv = ['', 'Test.testAddNewKnajpa']
     unittest.main()

@@ -17,11 +17,11 @@
 
 		<script type="text/javascript">
 			$(function(){
-				var articleKnajpa =  new separateInput({container: $('#knajpa')});
-				var articleTitle = new separateInput({container: $('#title')});
-				var articleDescription = new separateInput({container: $('#description')});
-				var articleCut = new separateInput({container: $('#cut')});
-				var articleArticle = new separateInput({container: $('#article')});
+				var articleKnajpa =  new editableArea({container: $('#knajpa')});
+				var articleTitle = new editableArea({container: $('#title')});
+				var articleDescription = new editableArea({container: $('#description')});
+				var articleCut = new editableArea({container: $('#cut')});
+				var articleArticle = new editableArea({container: $('#article')});
 
 				// Controls init part
 				var controls = $("<div class='controls'><em class='t'></em><em class='b'></em><div class='button-save'></div><div class='button-cancel'></div></div>")
@@ -102,24 +102,19 @@
 							</h3>
 							<ul>
 								<li>
-									<h4>Knajpa name:</h4><!--<input class="w-40" name="knajpa-name" id="knajpa-name" type="text"/>-->
-									<span class="description" type="address" id="knajpa" >Гасафо Лямпо</span><!--Important! Do not put any space characters in editable element-->
+									<h4>Knajpa name:</h4><span class="description" type="address" id="knajpa" >Гасафо Лямпо</span><!--Important! Do not put any space characters in editable element-->
 								</li>
 								<li>
-									<h4>Title</h4>	<!--<input class="w-40" type="text" name="knajpa-title" id="knajpa-title"/>-->
-									<span class="description" id="title">Гіпер Мєго крута кнайпа</span>
+									<h4>Title</h4><span class="description" id="title">Гіпер Мєго крута кнайпа</span>
 								</li>
 								<li>
-									<h4>Description:</h4><!--<textarea class="w-40" name="knajpa-description" id="knajpa-description"> Description</textarea>-->
-									<span class="description" id="description">Descriptions</span>
+									<h4>Description:</h4><span class="description" id="description">Descriptions</span>
 								</li>
 								<li>
-									<h4>Cut</h4><!--<input class="w-40" type="text" name="knajpa-cut" id="knajpa-cut" />-->
-									<span class="description" id="cut">читати далі</span>
+									<h4>Cut</h4><span class="description" id="cut">читати далі</span>
 								</li>
 								<li>
-									<h4>Full article</h4><!--<textarea class="w-40" name="knajpa-article" id="knajpa-article"> Full article</textarea>-->
-									<span class="description" id="article">Купа тексту</span>
+									<h4>Full article</h4><span class="description" id="article">Купа тексту</span>
 								</li>
 							</ul>
 						</div>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<content>
+<request type="list">
+
+<!--Old template-->
 {% for article in instances_list %}
-	<item id="{{ article.id }}">
+	<article id="{{ article.id }}">
 		<title>{{ article.title }}</title>
 		<modified>{{ article.modified }}</modified>
 		<description><p>{{ article.description }}</p></description>
@@ -11,6 +13,39 @@
 			<item type="address" ia="49.857131626112476" ja="24.020319380737302">Володимира Великого 45</item>
 		</knajpa>
 
-	</item>
+	</article>
 {% endfor %}
-</content>
+
+<!--New template [1.4/11]-->
+	<knajpa>
+		<name>Просто Кнайпа</name>
+		<addresses>
+			<item type="address" ia="49.857131626112476" ja="24.020319380737302">Володимира Великого 45</item>
+		</addresses>
+
+		<description>
+			<item>Нічний клюб</item>
+			<item>8:00 - 22:00</item>
+			<item>вул. Героїв Упаб 72</item>
+		</description>
+		<description>
+			<item>Телефон:</item>
+			<item>(032) 226-18-34</item>
+			<item>моб.: 097 123-45-67</item>
+		</description>
+		<description>
+			<item>Цінова категорія:</item>
+			<item>будні 100-200 грн.</item>
+			<item>свята 150 - 500 грн.</item>
+		</description>
+
+		<tags>
+			<item>Wi-Fi</item>
+			<item>TB</item>
+			<item>Зал для курців</item>
+			<item>Стриптиз</item>
+			<item>Face control</item>
+			<item>Розважальні автомати</item>
+		</tags>
+	</knajpa>
+</request>

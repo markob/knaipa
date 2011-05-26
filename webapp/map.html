@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Map Test</title>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+	<script type="text/javascript">
+		var eventCommander = function() {
+			var events = {};
+			var eventsOne = {};
+
+			this.bind = function (ev, fn) {
+				var ev = ev.toLocaleLowerCase();
+				ev = (ev.indexOf('on') != 0) ? 'on' + ev : ev;
+				events[ev] ? events[ev].push(fn) : (events[ev] = []).push(fn)
+				return this;
+			}
+
+			this.one = function (ev, fn) {
+				var ev = ev.toLocaleLowerCase();
+				ev = (ev.indexOf('on') != 0) ? 'on' + ev : ev;
+				eventsOne[ev] ? eventsOne[ev].push(fn) : (eventsOne[ev] = []).push(fn)
+				return this;
+			}
+
+			this.trigger = function (ev, arg) {
+				var ev = ev.toLocaleLowerCase();
+				ev = (ev.indexOf('on') != 0) ? 'on' + ev : ev;
+				for (var i = 0; events[ev] && i < events[ev].length; i++) {
+					events[ev][i](this, arg)
+				}
+				for (var i = 0; eventsOne[ev] && i < eventsOne[ev].length; i++) {
+					eventsOne[ev][i](this, arg);
+				}
+				delete eventsOne[ev];
+
+				return this;
+			}
+
+			this.unbind = function (ev, fn) {
+				var ev = ev.toLocaleLowerCase();
+				ev = (ev.indexOf('on') != 0) ? 'on' + ev : ev;
+				if (events[ev])
+					for (var i = 0; i < events[ev].length; i++)
+						if (events[ev][i].toString() === fn.toString()) {
+							events[ev].splice(i, 1);
+							break;
+						}
+
+				if (eventsOne[ev])
+					for (var i = 0; i < eventsOne[ev].length; i++)
+						if (eventsOne[ev][i].toString() === fn.toString()) {
+							eventsOne[ev].splice(i, 1);
+							break;
+						}
+
+				return this;
+			}
+		}
+
+	var markerEvent = function(){
+		var _this = this;
+
+		this.bind = function(ev, func){
+			google.maps.event.addListener(_this,ev,func);
+		}
+	}
+
+	var Map = function (initObj) {
+			var _this = this;
+			var geocoder = new google.maps.Geocoder();
+
+			var gMap = google.maps;
+			this.map = {}
+			this.markers = [];
+
+			/**
+			 * You can use both of two methods initializing markers
+			 * 1. parameter initializing
+			 *
+			 * @param ia
+			 * @param ja
+			 * @param {String} icon item from {@link Map.markerIcons} object
+			 *
+			 * 2. object initializing
+			 * @param {
+			* ia: {Integer},
+			 * ja: {Integer},
+			 * draggable: {Boolean}
+			 * }
+			 * @return {String} marker id
+			 */
+			this.addMarker = function() {
+				var initObj = {draggable: false};
+
+				if (arguments[0] instanceof Object) {
+					for (var par in arguments[0]) initObj[par] = arguments[0][par];
+				} else {
+					initObj.ia = arguments[0];
+					initObj.ja = arguments[1];
+				}
+
+				var latlng = new google.maps.LatLng(initObj.ia, initObj.ja);
+				var marker = new gMap.Marker ({
+						map :_this.map,
+						position: latlng,
+						draggable:initObj.draggable
+				})
+				markerEvent.apply(marker);
+
+				_this.markers.push(marker);
+				return marker;
+			};
+
+			this.init = function(initObj) {
+				eventCommander.apply(_this);
+				for (var tmp in initObj) _thisp[tmp] = initObj.tmp;
+				//TODO: Move this in config part, or
+				var latlng = new gMap.LatLng(49.835657, 24.048901);
+				_this.map = new gMap.Map(document.getElementById("map"), {
+					zoom: 13,
+					center: latlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				});
+				google.maps.event.addListener(_this.map,'click',function(e){
+					_this.trigger('click',e)
+				});
+			}
+			this.init(initObj);
+			return this
+		}
+
+		window.addEventListener('load', function() {
+			var map = new Map();
+			var marker1 = map.addMarker({ia:49.835657, ja:24.048901, draggable:true})
+
+			//marker1.bind('dragend',function(e){console.log(e);});
+			marker1.bind('click',function(e){});
+
+
+			document.getElementById('set').addEventListener('click',function(){
+				document.body.addEventListener("mousemove",function(e){
+					document.getElementById('pointer').style.top = (e.clientY-30) +"px";
+					document.getElementById('pointer').style.left =  (e.clientX-30) +"px";
+				},false)
+				map.bind('click',function(_this,data){
+					_this.addMarker({ia:data.latLng.b, ja:data.latLng.c, draggable:true});
+					_this.unbind('click',arguments.callee);
+				})
+			},false)
+		}, false)
+	</script>
+
+	<style type=text/css>
+		html, body {height: 100%; width: 100%; margin: 0; padding: 0}
+		#map { position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; z-index: 1 }
+		form { position: absolute; z-index: 2; top: 20px; left: 90px;}
+		#pointer	{position:absolute; z-index:99; height:20px; width:20px; background:black;}
+	</style>
+</head>
+<body>
+<div id="map"></div>
+<form action="map.html#">
+	<button id="set">set</button>
+</form>
+<div id="pointer" ></div>
+</body>
+</html>

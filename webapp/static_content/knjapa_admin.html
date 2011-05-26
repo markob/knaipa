@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC  "-//W3C//DTD XHTML 1.0 Strict//EN" "www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<form action="/knajpa" method="post">
+<input type="hidden" name="cmd" value="add" />
+<ul>
+	<li>id <input type="text" name="id" value="-1"/> </li>
+	<li>title<input type="text" name="title" /></li>
+	<li>address : <input type="text" name="address" /></li>
+	<li>ia:<input type="text" name="ia" /></li>
+	<li>ja:<input type="text" name="ja" /></li>
+	<li>PhoneNumber: <input type="text" name="phoneNumber" /> type: <input type="text" name="phone_type" /></li>
+	<li>id <input type="text" name="g1_id" value="-1"/> group1: <input type="text" name="g1" />
+			 <ul>
+				<li>id <input type="text" name="g1_item1_id" value="-1"/> item1: <input type="text" name="g1_item1_name" />=<input type="text" name="g1_item1_value" /></li> 
+			 	<li>id <input type="text" name="g1_item2_id" value="-1"/> item2: <input type="text" name="g1_item2_name" />= <input type="text" name="g1_item2_value" /></li>
+			 </ul>	
+	</li>
+	<li>id <input type="text" name="g2_id" value="-1"/> group2: <input type="text" name="g2" />
+			<ul>
+				<li>id <input type="text" name="g2_item1_id" value="-1"/> item1:<input type="text" name="g2_item1_name" />=<input type="text" name="g2_item1_value" /></li>
+				<li>id <input type="text" name="g2_item2_id" value="-1"/> item2:<input type="text" name="g2_item2_name" />=<input type="text" name="g2_item2_value" /></li>
+				<li>id <input type="text" name="g2_item3_id" value="-1"/> item3:<input type="text" name="g2_item3_name" />=<input type="text" name="g2_item3_value" /></li>
+			</ul>
+	</li>
+</ul>
+
+<input type="submit" value="add" />
+</form>
+
+<hr/>
+
+<form action="/knajpa" method="post">
+<input type="hidden" name="cmd" value="list" />
+<input type="submit" value="get list" />
+</form>
+
+<hr/>
+
+<form action="/knajpa" method="post">
+<input type="hidden" name="cmd" value="get" />
+<input type="text" name="id"  />
+<input type="submit" value="get" />
+</form>
+
+
+</body>
+</html>

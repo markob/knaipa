@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+	<knajpa id="{{knajpa.id }}" name="{{knajpa.name}}" >
+		{% for address in knajpa.get_address_list %}
+		<item ia="{{address.ia}}" ja="{{address.ja}}">
+			<street>{{address.completeAddress}}</street>
+		</item>
+		{% endfor %}
+		{%for gcontent in knajpa.get_groups_list %}
+		<cgroup id="{{gcontent.id}}" name="{{gcontent.name}}">
+			{%for item in gcontent.get_content_item_list %}
+			<citem id="{{item.id}}" name="{{item.name}}" value="{{item.value}}" />
+			{% endfor %}
+		</cgroup>
+		{% endfor %}
+	</knajpa>
+</content>

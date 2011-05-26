@@ -35,7 +35,7 @@ class ArticleHandler(ObjectHandler):
             raise(InvalidRequestError('invalid command requested'))
 
     
-        
+
 application = webapp.WSGIApplication([('/article', ArticleHandler)], debug = True)
 
         
